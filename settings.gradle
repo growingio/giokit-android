@@ -1,0 +1,5 @@
+rootProject.name = "GioKit"
+include ':app'
+include ':giokit'
+include ':uikit'
+include ':giokit-plugin'

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="hover_primary">#fc5f3a</color>
+    <color name="hover_accent">#ff9167</color>
+    <color name="hover_dark">#c22a0d</color>
+
+</resources>
