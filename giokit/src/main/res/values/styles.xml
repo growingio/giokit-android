@@ -7,4 +7,11 @@
     <style name="GioSdkBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="GioHoverTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/hover_primary</item>
+        <item name="colorPrimaryDark">@color/hover_dark</item>
+        <item name="colorAccent">@color/hover_accent</item>
+    </style>
 </resources>

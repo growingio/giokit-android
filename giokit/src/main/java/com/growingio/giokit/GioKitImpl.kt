@@ -1,7 +1,7 @@
 package com.growingio.giokit
 
 import android.app.Application
-import com.growingio.giokit.launch.GioKitLifecycleManager
+import com.growingio.giokit.hover.GioKitHoverManager
 import com.growingio.giokit.launch.db.DatabaseCreator
 import com.growingio.giokit.launch.db.GioKitDatabase
 
@@ -13,7 +13,7 @@ import com.growingio.giokit.launch.db.GioKitDatabase
 internal object GioKitImpl {
 
     lateinit var APPLICATION: Application
-    lateinit var gioKitLifecycleManager: GioKitLifecycleManager
+    lateinit var gioKitHoverManager: GioKitHoverManager
 
     fun install(app: Application) {
         APPLICATION = app
@@ -23,7 +23,7 @@ internal object GioKitImpl {
 
         DatabaseCreator.createDb(app){GioKitDatabase.initDb(app)}
 
-        gioKitLifecycleManager = GioKitLifecycleManager(app)
+        gioKitHoverManager = GioKitHoverManager(app)
     }
 
     //由插件注入配置信息

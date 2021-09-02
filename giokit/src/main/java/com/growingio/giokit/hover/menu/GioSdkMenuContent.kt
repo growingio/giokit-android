@@ -1,15 +1,18 @@
 package com.growingio.giokit.hover.menu
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
+import com.growingio.giokit.GioKit
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.UniversalActivity
 import io.mattcarroll.hover.Content
+import io.mattcarroll.hover.overlay.OverlayPermission
 
 /**
  * <p>
@@ -30,6 +33,9 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
 
         val sdkDataLayout = findViewById(R.id.sdkDataLayout) as View
         sdkDataLayout.setOnClickListener(this)
+
+        val sdkTrackLayout = findViewById(R.id.sdkTrackLayout) as View
+        sdkTrackLayout.setOnClickListener(this)
 
     }
 
@@ -52,22 +58,38 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
     override fun onClick(v: View) {
         when (v.id) {
             R.id.sdkInfoLayout -> {
+                GioKit.getGioKitHoverManager().hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKINFO_PAGE)
                 })
             }
             R.id.sdkCodeLayout -> {
+                GioKit.getGioKitHoverManager().hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKCODE_PAGE)
                 })
             }
             R.id.sdkDataLayout -> {
+                GioKit.getGioKitHoverManager().hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKDATA_PAGE)
                 })
+            }
+            R.id.sdkTrackLayout -> {
+                if (OverlayPermission.hasRuntimePermissionToDrawOverlay(context)) {
+                    GioKit.getGioKitHoverManager().hoverView?.collapse()
+                    GioKit.getGioKitHoverManager().notifyOverlay(context)
+                    Toast.makeText(context, "有权限", Toast.LENGTH_SHORT).show()
+                } else {
+                    val intent = OverlayPermission.createIntentToRequestOverlayPermission(context)
+                    if (context !is Activity) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    context.startActivity(intent)
+                }
             }
         }
     }

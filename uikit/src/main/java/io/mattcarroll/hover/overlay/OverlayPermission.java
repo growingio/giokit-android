@@ -55,13 +55,15 @@ public class OverlayPermission {
      * @param context context
      * @return Intent to launch permission prompt
      */
-    @RequiresApi(Build.VERSION_CODES.M)
     @NonNull
     public static Intent createIntentToRequestOverlayPermission(@NonNull Context context) {
-        return new Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:" + context.getPackageName())
-        );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return new Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + context.getPackageName())
+            );
+        }
+        return new Intent();
     }
 
     private OverlayPermission() {

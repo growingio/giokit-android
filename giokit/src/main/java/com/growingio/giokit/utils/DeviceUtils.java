@@ -62,6 +62,16 @@ public class DeviceUtils {
     private static String PHONE_NUMBER = null;
     private static Boolean ROOTED = null;
 
+    public static int dp2Px(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
+    }
+
+    public static int sp2Px(Context context, float sp) {
+        final float scale = context.getResources().getDisplayMetrics().scaledDensity;
+        return (int) (sp * scale + 0.5f);
+    }
+
     /**
      * 获取CPU个数
      */
