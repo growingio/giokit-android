@@ -53,12 +53,17 @@ object CheckSelfUtils {
     fun getProjectStatus(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.TrackerContext")) {
             val hasInited = TrackerContext.get() != null
+            val lazyInit = GioPluginConfig.isInitLazy
             return CheckItem(
                 index,
                 "正在获取SDK初始化状态",
                 "初始化",
-                if (hasInited) "已初始化" else "未初始化",
-                !hasInited
+                if (hasInited) {
+                    if (lazyInit) "已初始化(延迟)" else "初始化"
+                } else {
+                    "未初始化"
+                },
+                !hasInited || lazyInit
             )
         }
         return CheckItem(
@@ -77,8 +82,8 @@ object CheckSelfUtils {
                 return CheckItem(
                     index,
                     "正在校对URLScheme",
-                    "URLScheme",
-                    "AndroidManifest 中未配置URLScheme",
+                    "URL Scheme",
+                    "AndroidManifest 中未配置URL Scheme",
                     true
                 )
             }
@@ -86,16 +91,16 @@ object CheckSelfUtils {
                 return CheckItem(
                     index,
                     "正在校对URLScheme",
-                    "URLScheme",
-                    "AndroidManifest与初始化传入的URLScheme不匹配",
+                    "URL Scheme",
+                    "AndroidManifest与初始化传入的URL Scheme不匹配",
                     true
                 )
             }
             if (urlScheme == xmlScheme) {
                 return CheckItem(
                     index,
-                    "正在校对URLScheme",
-                    "URLScheme",
+                    "正在校对URL Scheme",
+                    "URL Scheme",
                     urlScheme,
                     false
                 )
@@ -104,8 +109,8 @@ object CheckSelfUtils {
         }
         return CheckItem(
             index,
-            "正在校对URLScheme",
-            "URLScheme", "未集成SDK", true
+            "正在校对URL Scheme",
+            "URL Scheme", "未集成SDK", true
         )
     }
 
@@ -155,13 +160,13 @@ object CheckSelfUtils {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return CheckItem(
                 index,
-                "正在获取ProjectId",
-                "ProjectId",
+                "正在获取Project ID",
+                "Project ID",
                 ConfigurationProvider.core().projectId,
                 false
             )
         }
-        return CheckItem(index, "正在获取ProjectId", "ProjectId", "未集成SDK", true)
+        return CheckItem(index, "正在获取Project ID", "Project ID", "未集成SDK", true)
     }
 
     @JvmStatic
@@ -170,14 +175,14 @@ object CheckSelfUtils {
             return with(ConfigurationProvider.core().dataCollectionServerHost) {
                 CheckItem(
                     index,
-                    "正在获取DataServerHost",
-                    "DataServerHost",
+                    "正在获取ServerHost",
+                    "ServerHost",
                     if (isNullOrEmpty()) "未配置" else this,
                     isNullOrEmpty()
                 )
             }
         }
-        return CheckItem(index, "正在获取DataServerHost", "DataServerHost", "未集成SDK", true)
+        return CheckItem(index, "正在获取ServerHost", "ServerHost", "未集成SDK", true)
     }
 
     @JvmStatic
@@ -186,8 +191,8 @@ object CheckSelfUtils {
             return with(ConfigurationProvider.core().isDataCollectionEnabled) {
                 CheckItem(
                     index,
-                    "正在获取数据收集是否打开",
-                    "数据收集",
+                    "正在获取数据采集是否打开",
+                    "数据采集",
                     if (this) "打开" else "关闭",
                     !this
                 )
@@ -202,14 +207,14 @@ object CheckSelfUtils {
             return with(ConfigurationProvider.core().isDebugEnabled) {
                 CheckItem(
                     index,
-                    "正在处于Debug测试状态",
-                    "测试状态",
+                    "正在处于Debug调试模式",
+                    "调试模式",
                     if (this) "是" else "否",
                     this
                 )
             }
         }
-        return CheckItem(index, "正在处于Debug测试状态", "测试状态", "未集成SDK", true)
+        return CheckItem(index, "正在处于Debug调试模式", "调试模式", "未集成SDK", true)
     }
 
     @JvmStatic
@@ -237,6 +242,14 @@ object CheckSelfUtils {
             "共有 ${GioTrackInfo.trackList.size} 处（不包括自动埋点）",
             GioTrackInfo.trackList.size <= 0
         )
+    }
+
+    fun checkSdkInit(): Boolean {
+        if (hasClass("com.growingio.android.sdk.TrackerContext")) {
+            val hasInited = TrackerContext.get() != null
+            return hasInited
+        }
+        return false
     }
 
     private fun hasClass(className: String): Boolean {

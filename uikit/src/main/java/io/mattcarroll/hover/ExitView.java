@@ -51,7 +51,6 @@ class ExitView extends RelativeLayout {
         LayoutInflater.from(getContext()).inflate(R.layout.view_hover_menu_exit, this, true);
 
         mExitIcon = findViewById(R.id.view_exit);
-
         mExitRadiusInPx = getResources().getDimensionPixelSize(R.dimen.hover_exit_radius);
     }
 

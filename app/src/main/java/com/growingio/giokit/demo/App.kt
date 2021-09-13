@@ -19,6 +19,17 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        //initGioSdk()
+
+        GioKit.Builder(this).build()
+    }
+
+    fun onTest() {
+        GrowingAutotracker.get().trackCustomEvent("test")
+        TrackerContext.initializedSuccessfully()
+    }
+
+    fun initGioSdk() {
         val config = CdpAutotrackConfiguration("91eaf9b283361032", "growing.8226cee4b794ebd0")
             .setDataSourceId("951f87ed30c9d9a3")
             .setDebugEnabled(true)
@@ -30,12 +41,5 @@ class App : Application() {
 
 
         GrowingAutotracker.startWithConfiguration(this, config)
-
-        GioKit.Builder(this).build()
-    }
-
-    fun onTest() {
-        GrowingAutotracker.get().trackCustomEvent("test")
-        TrackerContext.initializedSuccessfully()
     }
 }

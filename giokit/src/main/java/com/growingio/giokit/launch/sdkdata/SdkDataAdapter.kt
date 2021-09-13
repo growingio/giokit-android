@@ -51,7 +51,12 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
         if (holder is EventViewHolder) {
             holder.gsidTv.text = event?.gsid.toString()
             holder.typeTv.text = event?.type
-            holder.pathTv.text = event?.path
+            if(event?.path.isNullOrEmpty()){
+                holder.pathTv.visibility = View.GONE
+            }else {
+                holder.pathTv.visibility = View.VISIBLE
+                holder.pathTv.text = event?.path
+            }
             holder.statusTv.text = when (event?.status) {
                 0 -> {
                     holder.statusTv.setTextColor(

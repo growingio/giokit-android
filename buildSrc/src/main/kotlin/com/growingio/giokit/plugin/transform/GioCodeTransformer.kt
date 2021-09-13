@@ -11,10 +11,10 @@ import org.objectweb.asm.tree.*
  *     审查所有代码，获取调用埋点代码的位置
  * @author cpacm 2021/8/18
  */
-class GioTrackTransformer() : ClassTransformer {
+class GioCodeTransformer() : ClassTransformer {
 
     override fun isTransformLatest(klass: ClassNode): Boolean {
-        if (klass.className == "com.growingio.giokit.GioKitImpl") {
+        if (klass.className == "com.growingio.giokit.hook.GioTrackInfo") {
             klass.methods?.find { it.name == "initGioTrack" }
                 .let {
                     return true
@@ -24,7 +24,7 @@ class GioTrackTransformer() : ClassTransformer {
     }
 
     override fun transformLatest(context: TransformContext, klass: ClassNode): ClassNode {
-        if (klass.className == "com.growingio.giokit.GioKitImpl") {
+        if (klass.className == "com.growingio.giokit.hook.GioTrackInfo") {
             klass.methods?.find { it.name == "initGioTrack" }
                 .let { methodNode ->
                     methodNode?.instructions?.insert(createGioTrackInsnList())

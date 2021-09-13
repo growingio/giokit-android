@@ -16,14 +16,45 @@ class GioInjectTransformer : ClassTransformer {
 
     override fun transform(context: TransformContext, klass: ClassNode): ClassNode {
         val className = klass.className
-        if (className == "com.growingio.giokit.GioKitImpl") {
+        if (className == "com.growingio.giokit.hook.GioPluginConfig") {
             klass.methods.find { it.name == "initGioKitConfig" }
                 .let { methodNode ->
                     methodNode?.instructions?.insert(createPluginConfigInsnList())
                 }
+            return klass
+        }
+        if (isAssignable(context, className)) {
+            className.println()
+            klass.methods.find { it.name == "onCreate" }.let { method ->
+                //插入代码到return前
+                var node = method?.instructions?.last
+                while (node != null) {
+                    if (node.opcode == Opcodes.RETURN) {
+                        method?.instructions?.insertBefore(node, addApplicationTailInsnList())
+                        break
+                    }
+                    node = node.previous
+                }
+            }
+            return klass
         }
 
         return klass
+    }
+
+    private fun addApplicationTailInsnList(): InsnList {
+        return with(InsnList()) {
+            add(
+                MethodInsnNode(
+                    Opcodes.INVOKESTATIC,
+                    "com/growingio/giokit/hook/GioPluginConfig",
+                    "checkSdkHasInit",
+                    "()V",
+                    false
+                )
+            )
+            this
+        }
     }
 
     private fun createPluginConfigInsnList(): InsnList {
@@ -102,5 +133,17 @@ class GioInjectTransformer : ClassTransformer {
 
             this
         }
+    }
+
+    private fun isAssignable(context: TransformContext, className: String): Boolean {
+        try {
+            val targetClass =
+                context.klassPool.classLoader.loadClass("android.app.Application")
+            val findClass = context.klassPool.classLoader.loadClass(className)
+            return targetClass.isAssignableFrom(findClass)
+        } catch (e: ClassNotFoundException) {
+        } catch (e: NoClassDefFoundError) {
+        }
+        return false
     }
 }

@@ -50,9 +50,11 @@ dependencies {
 
     kapt rootProject.ext.dependencies["room-compiler"]
 
-
     compileOnly rootProject.ext.growingio["autotracker-cdp"]
     compileOnly rootProject.ext.growingio["tracker-cdp"]
+    compileOnly rootProject.ext.dependencies["appcompat-v7"]
+    compileOnly rootProject.ext.dependencies["recyclerview-v7"]
+
     implementation project(':uikit')
 
 

@@ -59,7 +59,7 @@ public class GioHoverMenuService extends HoverMenuService {
         hoverView.setMenu(createHoverMenu());
         hoverView.collapse();
 
-        GioKit.Companion.getGioKitHoverManager().setHoverView(hoverView);
+        GioKit.Companion.getGioKitHoverManager().setupHoverView(hoverView);
     }
 
     private HoverMenu createHoverMenu() {

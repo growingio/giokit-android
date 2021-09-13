@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import com.growingio.giokit.GioKit
 import com.growingio.giokit.R
+import com.growingio.giokit.circle.CircleAnchorView
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.UniversalActivity
 import io.mattcarroll.hover.Content
@@ -82,7 +83,9 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                 if (OverlayPermission.hasRuntimePermissionToDrawOverlay(context)) {
                     GioKit.getGioKitHoverManager().hoverView?.collapse()
                     GioKit.getGioKitHoverManager().notifyOverlay(context)
-                    Toast.makeText(context, "有权限", Toast.LENGTH_SHORT).show()
+
+                    GioKit.getGioKitHoverManager().startCircle(context)
+
                 } else {
                     val intent = OverlayPermission.createIntentToRequestOverlayPermission(context)
                     if (context !is Activity) {

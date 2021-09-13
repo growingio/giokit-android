@@ -32,23 +32,6 @@ class SdkDataFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val eventFlow = Pager(
-            config = PagingConfig(
-                pageSize = 30,
-                enablePlaceholders = false,
-                initialLoadSize = 30
-            ),
-            pagingSourceFactory = {
-                SdkDataSource()
-            }
-        ).flow
-
-        lifecycleScope.launch {
-            eventFlow.collectLatest {
-                sdkDataAdapter.submitData(it)
-            }
-        }
-
     }
 
     fun onEventClick(id: Int) {
@@ -78,6 +61,21 @@ class SdkDataFragment : BaseFragment() {
             sdkDataAdapter.refresh()
         }
 
+        lifecycleScope.launch {
+            val eventFlow = Pager(
+                config = PagingConfig(
+                    pageSize = 30,
+                    enablePlaceholders = false,
+                    initialLoadSize = 30
+                ),
+                pagingSourceFactory = {
+                    SdkDataSource()
+                }
+            ).flow
+            eventFlow.collectLatest {
+                sdkDataAdapter.submitData(it)
+            }
+        }
     }
 
     override fun onGetTitle(): String {

@@ -17,4 +17,9 @@ object GioTrackInfo {
         trackList.addAll(list)
         Log.d("GioTrackInfo", trackList.toString())
     }
+
+    //由插件注入埋点代码位置
+    fun initGioTrack() {
+
+    }
 }

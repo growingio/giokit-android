@@ -13,8 +13,9 @@ class GioKitTrackTransform(androidProject: Project) : GioKitBaseTransform(androi
         GioDelegateTransformer(
             transformers = listOf(
                 GioInjectTransformer(),
-                GioTrackTransformer(),
-                GioDatabaseTransformer()
+                GioCodeTransformer(),
+                GioDatabaseTransformer(),
+                GioWebViewTransformer()
             )
         )
     )

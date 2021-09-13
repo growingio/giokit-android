@@ -1,9 +1,14 @@
 package com.growingio.giokit
 
+import android.app.Activity
 import android.app.Application
+import android.view.View
+import com.growingio.giokit.hook.GioPluginConfig
+import com.growingio.giokit.hook.GioTrackInfo
 import com.growingio.giokit.hover.GioKitHoverManager
 import com.growingio.giokit.launch.db.DatabaseCreator
 import com.growingio.giokit.launch.db.GioKitDatabase
+import java.lang.ref.WeakReference
 
 /**
  * <p>
@@ -14,27 +19,19 @@ internal object GioKitImpl {
 
     lateinit var APPLICATION: Application
     lateinit var gioKitHoverManager: GioKitHoverManager
+    lateinit var curActivity: WeakReference<Activity>
+    lateinit var webView: WeakReference<View>
 
     fun install(app: Application) {
         APPLICATION = app
+        curActivity = WeakReference<Activity>(null)
 
-        initGioKitConfig()
-        initGioTrack()
+        GioPluginConfig.initGioKitConfig()
+        GioTrackInfo.initGioTrack()
 
-        DatabaseCreator.createDb(app){GioKitDatabase.initDb(app)}
+        DatabaseCreator.createDb(app) { GioKitDatabase.initDb(app) }
 
         gioKitHoverManager = GioKitHoverManager(app)
     }
-
-    //由插件注入配置信息
-    private fun initGioKitConfig() {
-
-    }
-
-    //由插件注入埋点代码位置
-    private fun initGioTrack() {
-
-    }
-
 
 }

@@ -10,7 +10,9 @@ import com.didiglobal.booster.gradle.SCOPE_FULL_WITH_FEATURES
 import com.didiglobal.booster.gradle.SCOPE_PROJECT
 import com.didiglobal.booster.gradle.getAndroid
 import com.didiglobal.booster.transform.AbstractKlassPool
+import com.didiglobal.booster.transform.Klass
 import com.google.common.collect.ImmutableSet
+import com.growingio.giokit.plugin.utils.println
 import org.gradle.api.Project
 
 /**

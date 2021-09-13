@@ -1,6 +1,8 @@
 package com.growingio.giokit.hook
 
 import android.util.Log
+import com.growingio.android.sdk.TrackerContext
+import com.growingio.giokit.utils.CheckSelfUtils
 import java.lang.StringBuilder
 
 /**
@@ -14,6 +16,7 @@ object GioPluginConfig {
     var hasGioPlugin: Boolean = false
     var dependLibs: List<String> = arrayListOf()
     var isAutoTrack = true
+    var isInitLazy = true
 
     @JvmStatic
     fun inject(config: Map<String, Any>) {
@@ -21,6 +24,18 @@ object GioPluginConfig {
         hasGioPlugin = config.get("gioPlugin") as Boolean
         val dependStr = config.get("gioDepend") as String
         dependLibs = dependStr.split("::")
+    }
+
+    //由插件注入配置信息
+    fun initGioKitConfig() {
+
+    }
+
+    @JvmStatic
+    fun checkSdkHasInit() {
+        if (CheckSelfUtils.checkSdkInit()) {
+            isInitLazy = false
+        }
     }
 
     fun analyseDepend(): Triple<String, String, Boolean> {
