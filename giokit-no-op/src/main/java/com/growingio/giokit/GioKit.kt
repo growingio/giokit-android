@@ -19,9 +19,7 @@ public class GioKit private constructor() {
     }
 
     class Builder(private val app: Application) {
-
         fun build() {
-            GioKitImpl.install(app)
         }
     }
 }

@@ -30,10 +30,10 @@ class App : Application() {
     }
 
     fun initGioSdk() {
-        val config = CdpAutotrackConfiguration("91eaf9b283361032", "growing.8226cee4b794ebd0")
-            .setDataSourceId("951f87ed30c9d9a3")
+        val config = CdpAutotrackConfiguration("xxxxxxxx", "growing.xxxxxxxx")
+            .setDataSourceId("xxxxxxxx")
             .setDebugEnabled(true)
-            .setDataCollectionServerHost("http://117.50.105.254:8080")
+            .setDataCollectionServerHost("http://localhost:8080")
             .setExcludeEvent(EventExcludeFilter.FORM_SUBMIT)
             .setExcludeEvent(EventExcludeFilter.VIEW_CHANGE)
             .setIgnoreField(FieldIgnoreFilter.NETWORK_STATE)
