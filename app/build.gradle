@@ -36,6 +36,7 @@ android {
 }
 
 giokitExt {
+    debugMode true
     trackFinder {
         domain = ["com.growingio.giokit.demo"]
     }
@@ -54,7 +55,8 @@ dependencies {
     implementation rootProject.ext.dependencies["constraintLayout"]
 
     implementation rootProject.ext.growingio["autotracker-cdp"]
-    implementation project(":giokit")
+    implementation "com.growingio.giokit:giokit:1.0.0"
+    //implementation project(":giokit")
 
     testImplementation rootProject.ext.dependencies["junit"]
     androidTestImplementation rootProject.ext.dependencies["androidx-junit"]

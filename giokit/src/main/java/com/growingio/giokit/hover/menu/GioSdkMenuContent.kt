@@ -6,10 +6,8 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.Toast
-import com.growingio.giokit.GioKit
+import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.R
-import com.growingio.giokit.circle.CircleAnchorView
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.UniversalActivity
 import io.mattcarroll.hover.Content
@@ -24,7 +22,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
 
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.view_content_menu, this, true)
+        LayoutInflater.from(context).inflate(R.layout.giokit_view_content_menu, this, true)
 
         val sdkInfoPage = findViewById(R.id.sdkInfoLayout) as View
         sdkInfoPage.setOnClickListener(this)
@@ -59,21 +57,21 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
     override fun onClick(v: View) {
         when (v.id) {
             R.id.sdkInfoLayout -> {
-                GioKit.getGioKitHoverManager().hoverView?.collapse()
+                GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKINFO_PAGE)
                 })
             }
             R.id.sdkCodeLayout -> {
-                GioKit.getGioKitHoverManager().hoverView?.collapse()
+                GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKCODE_PAGE)
                 })
             }
             R.id.sdkDataLayout -> {
-                GioKit.getGioKitHoverManager().hoverView?.collapse()
+                GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKDATA_PAGE)
@@ -81,10 +79,10 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
             }
             R.id.sdkTrackLayout -> {
                 if (OverlayPermission.hasRuntimePermissionToDrawOverlay(context)) {
-                    GioKit.getGioKitHoverManager().hoverView?.collapse()
-                    GioKit.getGioKitHoverManager().notifyOverlay(context)
+                    GioKitImpl.gioKitHoverManager.hoverView?.collapse()
+                    GioKitImpl.gioKitHoverManager.notifyOverlay(context)
 
-                    GioKit.getGioKitHoverManager().startCircle(context)
+                    GioKitImpl.gioKitHoverManager.startCircle(context)
 
                 } else {
                     val intent = OverlayPermission.createIntentToRequestOverlayPermission(context)

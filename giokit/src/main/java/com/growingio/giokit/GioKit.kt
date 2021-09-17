@@ -12,10 +12,6 @@ public class GioKit private constructor() {
 
     companion object {
         const val TAG = "GIOKIT"
-
-        fun getGioKitHoverManager(): GioKitHoverManager {
-            return GioKitImpl.gioKitHoverManager
-        }
     }
 
 

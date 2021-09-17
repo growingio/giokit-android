@@ -37,7 +37,7 @@ class SdkDataInfoFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_gio_sdkdata_info, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_giokit_sdkdata_info, container, false)
         return rootView
     }
 

@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textColor="@color/hover_dark"
-        android:textSize="@dimen/text_body"
+        android:textSize="@dimen/giokit_text_body"
         tools:text="正在获取SDK版本" />
 
 

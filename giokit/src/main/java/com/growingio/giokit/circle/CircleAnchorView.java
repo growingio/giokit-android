@@ -4,21 +4,18 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.growingio.giokit.R;
 import com.growingio.giokit.utils.DeviceUtils;
@@ -62,7 +59,7 @@ public class CircleAnchorView extends FloatViewContainer {
 
     public void init() {
         ANCHOR_VIEW_SIZE = DeviceUtils.dp2Px(getContext(), 48);
-        setBackgroundResource(R.drawable.circle_anchor_bg);
+        setBackgroundResource(R.drawable.giokit_circle_anchor_bg);
         mMinMoveDistance = DeviceUtils.dp2Px(getContext(), 4);
         initMaskView();
         mMagnifierView = new CircleMagnifierView(getContext());

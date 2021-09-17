@@ -28,13 +28,13 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/check_button_bg" />
+                android:src="@drawable/giokit_check_button_bg" />
 
             <ImageView
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_tab_self_check" />
+                android:src="@drawable/ic_giokit_tab_self_check" />
 
         </FrameLayout>
 
@@ -49,19 +49,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:gravity="center"
-                android:text="@string/gio_checkself"
+                android:text="@string/giokit_checkself"
                 android:textAllCaps="true"
                 android:textColor="@color/hover_accent"
-                android:textSize="@dimen/text_title"
+                android:textSize="@dimen/giokit_text_title"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/gio_check_content"
+                android:text="@string/giokit_check_content"
                 android:textAllCaps="true"
-                android:textSize="@dimen/text_caption"
+                android:textSize="@dimen/giokit_text_caption"
                 android:textStyle="bold" />
 
             <TextView
@@ -70,9 +70,9 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="@string/gio_check_author"
+                android:text="@string/giokit_check_author"
                 android:textAllCaps="true"
-                android:textSize="@dimen/text_tag" />
+                android:textSize="@dimen/giokit_text_tag" />
 
 
         </LinearLayout>
@@ -105,10 +105,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="@string/gio_check_goal"
+            android:text="@string/giokit_check_goal"
             android:textAllCaps="true"
             android:textColor="@color/hover_accent"
-            android:textSize="@dimen/text_caption"
+            android:textSize="@dimen/giokit_text_caption"
             android:textStyle="bold" />
 
         <TextView
@@ -116,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:gravity="center"
-            android:text="@string/gio_check_service"
+            android:text="@string/giokit_check_service"
             android:textSize="12sp" />
     </LinearLayout>
 

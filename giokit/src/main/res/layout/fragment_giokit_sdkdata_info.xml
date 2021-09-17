@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sdk_sheet_background"
+    android:background="@drawable/giokit_sheet_background"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -19,7 +19,7 @@
             android:padding="12dp"
             app:tint="@android:color/black"
             app:tintMode="multiply"
-            android:src="@drawable/ic_sdk_close" />
+            android:src="@drawable/ic_giokit_close" />
 
         <TextView
             android:id="@+id/title"
@@ -32,7 +32,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/hover_accent"
-            android:textSize="@dimen/text_title"
+            android:textSize="@dimen/giokit_text_title"
             android:textStyle="bold"
             tools:text="又双叒叕一个Android客户端" />
 

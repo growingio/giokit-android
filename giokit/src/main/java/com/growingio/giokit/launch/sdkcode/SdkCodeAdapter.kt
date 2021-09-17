@@ -29,7 +29,7 @@ class SdkCodeAdapter(val context: Context) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SdkCodeViewHolder {
         val view =
-            LayoutInflater.from(context).inflate(R.layout.recycler_sdkcode_content, parent, false)
+            LayoutInflater.from(context).inflate(R.layout.giokit_recycler_sdkcode_content, parent, false)
         return SdkCodeViewHolder(view)
     }
 
@@ -42,7 +42,7 @@ class SdkCodeAdapter(val context: Context) :
         if (methodListCount > maxCount) {
             for (index in maxCount until methodListCount) {
                 val newView = TextView(context)
-                newView.setTextSize(TypedValue.COMPLEX_UNIT_PX,context.resources.getDimensionPixelSize(R.dimen.text_caption) *1.0f)
+                newView.setTextSize(TypedValue.COMPLEX_UNIT_PX,context.resources.getDimensionPixelSize(R.dimen.giokit_text_caption) *1.0f)
                 holder.methodContainer.addView(newView, index)
             }
         } else if (maxCount > methodListCount) {

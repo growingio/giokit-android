@@ -81,10 +81,10 @@ class GioHoverMenu(val context: Context, val theme: GioHoverTheme) : HoverMenu()
     private fun createTab(sectionId: String): View {
         when (sectionId) {
             SELF_CHECK -> {
-                return createTab(R.drawable.ic_sdk_g, theme.accentColor, null);
+                return createTab(R.drawable.ic_giokit_g, theme.accentColor, null);
             }
             GIO_MENU->{
-                return createTab(R.drawable.ic_sdk_menu, theme.accentColor, null);
+                return createTab(R.drawable.ic_giokit_menu, theme.accentColor, null);
             }
             else -> {
                 throw RuntimeException("Unknown tab selected: " + sectionId)
@@ -103,7 +103,7 @@ class GioHoverMenu(val context: Context, val theme: GioHoverTheme) : HoverMenu()
 
         val tabView = GioTabView(
             context,
-            ResourcesCompat.getDrawable(resource, R.drawable.tab_background, null),
+            ResourcesCompat.getDrawable(resource, R.drawable.giokit_tab_background, null),
             ResourcesCompat.getDrawable(resource, tabBitmapRes, null)
         )
         tabView.setTabBackgroundColor(backgroundColor)

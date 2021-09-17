@@ -19,7 +19,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        //initGioSdk()
+        initGioSdk()
 
         GioKit.Builder(this).build()
     }

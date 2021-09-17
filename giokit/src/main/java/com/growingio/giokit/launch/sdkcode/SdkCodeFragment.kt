@@ -1,7 +1,6 @@
 package com.growingio.giokit.launch.sdkcode
 
 import android.view.View
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.growingio.giokit.R
@@ -18,7 +17,7 @@ class SdkCodeFragment :BaseFragment() {
     private val sdkCodeAdapter by lazy { SdkCodeAdapter(requireContext()) }
 
     override fun layoutId(): Int {
-        return R.layout.fragment_gio_sdkcode
+        return R.layout.fragment_giokit_sdkcode
     }
 
     override fun onViewCreated(view: View?) {
@@ -31,6 +30,6 @@ class SdkCodeFragment :BaseFragment() {
     }
 
     override fun onGetTitle(): String {
-        return getString(R.string.gio_menu_code)
+        return getString(R.string.giokit_menu_code)
     }
 }

@@ -18,7 +18,7 @@ class SdkInfoFragment : BaseFragment() {
 
     private val sdkInfoAdapter: SdkInfoAdapter by lazy { SdkInfoAdapter(requireContext()) }
     override fun layoutId(): Int {
-        return R.layout.fragment_gio_sdkinfo
+        return R.layout.fragment_giokit_sdkinfo
     }
 
     override fun onViewCreated(view: View?) {
@@ -35,6 +35,6 @@ class SdkInfoFragment : BaseFragment() {
     }
 
     override fun onGetTitle(): String {
-        return getString(R.string.gio_menu_info)
+        return getString(R.string.giokit_menu_info)
     }
 }

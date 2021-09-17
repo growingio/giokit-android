@@ -26,11 +26,11 @@ class SdkInfoAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.V
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == 1) {
             val view = LayoutInflater.from(context)
-                .inflate(R.layout.recycler_sdkinfo_header, parent, false)
+                .inflate(R.layout.giokit_recycler_sdkinfo_header, parent, false)
             return SdkHeaderViewHolder(view)
         } else {
             val view = LayoutInflater.from(context)
-                .inflate(R.layout.recycler_sdkinfo_content, parent, false)
+                .inflate(R.layout.giokit_recycler_sdkinfo_content, parent, false)
             return SdkInfoViewHolder(view)
         }
 

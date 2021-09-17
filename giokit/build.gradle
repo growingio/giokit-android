@@ -62,3 +62,5 @@ dependencies {
     androidTestImplementation rootProject.ext.dependencies["androidx-junit"]
     androidTestImplementation rootProject.ext.dependencies["espresso-core"]
 }
+
+apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"

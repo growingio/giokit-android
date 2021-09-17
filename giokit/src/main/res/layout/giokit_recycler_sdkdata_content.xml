@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:gravity="center"
-            android:textSize="@dimen/text_body"
+            android:textSize="@dimen/giokit_text_body"
             tools:text="GSID" />
 
     </FrameLayout>
@@ -40,7 +40,7 @@
             android:layout_gravity="start"
             android:gravity="center"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/text_body"
+            android:textSize="@dimen/giokit_text_body"
             tools:text="类型" />
 
         <TextView
@@ -51,7 +51,7 @@
             android:ellipsize="start"
             android:gravity="center"
             android:singleLine="true"
-            android:textSize="@dimen/text_caption"
+            android:textSize="@dimen/giokit_text_caption"
             tools:text="路径" />
 
     </LinearLayout>
@@ -70,7 +70,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/text_body"
+            android:textSize="@dimen/giokit_text_body"
             tools:text="状态" />
     </FrameLayout>
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="@dimen/text_body"
+            android:textSize="@dimen/giokit_text_body"
             tools:text="时间" />
     </FrameLayout>
 

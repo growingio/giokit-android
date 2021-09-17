@@ -38,7 +38,7 @@ abstract class BaseFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_gio_base, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_giokit_base, container, false)
         inflater.inflate(
             layoutId(),
             rootView!!.findViewById<View>(R.id.contentContainer) as FrameLayout,

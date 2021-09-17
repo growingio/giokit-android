@@ -36,7 +36,7 @@ class CircleExitView extends FloatViewContainer {
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.view_circle_exit, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.giokit_view_circle_exit, this, true);
         mNodeTv = findViewById(R.id.view_circle_node);
     }
 

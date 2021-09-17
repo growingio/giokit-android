@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_subtitle"
+        android:textSize="@dimen/giokit_text_subtitle"
         tools:text="12月01日" />
 
 

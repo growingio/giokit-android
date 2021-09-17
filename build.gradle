@@ -12,7 +12,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.ext.android.kotlin_version}"
 
         classpath growingio["autotracker-plugin"]
-
+        classpath "com.growingio.giokit:giokit-plugin:${rootProject.ext.android.versionName}"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -30,4 +30,28 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+/**
+ * 删除指定目录下的文件
+ */
+task deleteSource(type: Delete) {
+    doLast {
+        println("===delete Plugin Source start===")
+        delete "${project.rootDir}/giokit-plugin/src/main/"
+        println("===delete Plugin Source end===")
+    }
+}
+
+/**
+ * 将buildSrc中的代码同步到giokit-plugin中
+ */
+task copyPluginSource(type: Copy, dependsOn: deleteSource) {
+    doLast {
+        println("===copy Plugin Source start===")
+        from "${project.rootDir}/buildSrc/src/main/"
+        into "${project.rootDir}/giokit-plugin/src/main/"
+        include('**/*')
+        println("===copy Plugin Source end===")
+    }
 }

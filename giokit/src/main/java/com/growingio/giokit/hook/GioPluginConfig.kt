@@ -43,20 +43,20 @@ object GioPluginConfig {
         var coreLibrary: String? = null
         var autoCoreLibrary: String? = null
         for (depend in dependLibs) {
-            if (depend.startsWith("com.growingio.android:autotracker-cdp:")) {
-                return Triple("无埋点SDK", depend.substringAfter(":"), false)
-            } else if (depend.startsWith("com.growingio.android:tracker-cdp:")) {
-                isAutoTrack = false
-                return Triple("埋点SDK", depend.substringAfter(":"), false)
-            } else if (depend.startsWith("com.growingio.android:autotracker:")) {
-                return Triple("无埋点SDK", depend.substringAfter(":"), false)
-            } else if (depend.startsWith("com.growingio.android:tracker:")) {
-                isAutoTrack = false
-                return Triple("埋点SDK", depend.substringAfter(":"), false)
-            } else if (depend.startsWith("com.growingio.android:tracker-core:")) {
-                coreLibrary = depend.substringAfter(":")
-            } else if (depend.startsWith("com.growingio.android:autotracker-core:")) {
-                autoCoreLibrary = depend.substringAfter(":")
+            if (depend.startsWith("com.growingio.android:")
+                || depend.contains(":gio-sdk:")
+                || depend.contains(":growingio")
+            ) {
+                if (depend.contains(":autotracker-cdp:") || depend.contains(":autotracker:")) {
+                    return Triple("无埋点SDK", depend.substringAfter(":"), false)
+                } else if (depend.contains(":tracker-cdp:") || depend.contains(":tracker:")) {
+                    isAutoTrack = false
+                    return Triple("埋点SDK", depend.substringAfter(":"), false)
+                } else if (depend.contains("tracker-core:")) {
+                    coreLibrary = depend.substringAfter(":")
+                } else if (depend.contains("autotracker-core:")) {
+                    autoCoreLibrary = depend.substringAfter(":")
+                }
             }
         }
         if (autoCoreLibrary != null) return Triple("无埋点SDK核心", autoCoreLibrary, false)

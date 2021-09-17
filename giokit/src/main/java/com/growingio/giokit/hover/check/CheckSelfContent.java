@@ -47,7 +47,7 @@ public class CheckSelfContent extends FrameLayout implements Content {
     }
 
     private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.view_content_checkself, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.giokit_view_content_checkself, this, true);
 
         checkButton = findViewById(R.id.checkButton);
         descLayout = findViewById(R.id.descLayout);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/menuList"
@@ -21,9 +21,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/gio_menu_common"
+            android:text="@string/giokit_menu_common"
             android:textColor="@android:color/black"
-            android:textSize="@dimen/text_title"
+            android:textSize="@dimen/giokit_text_title"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -36,7 +36,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:paddingTop="8dp"
@@ -45,17 +44,17 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@drawable/check_menu_button_bg"
+                    android:background="@drawable/giokit_check_menu_button_bg"
                     android:padding="8dp"
-                    android:src="@drawable/ic_sdk_menu_phone" />
+                    android:src="@drawable/ic_giokit_menu_phone" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/gio_menu_info"
+                    android:text="@string/giokit_menu_info"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/text_body" />
+                    android:textSize="@dimen/giokit_text_body" />
 
             </LinearLayout>
 
@@ -64,7 +63,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:paddingTop="8dp"
@@ -73,17 +71,17 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@drawable/check_menu_button_bg"
+                    android:background="@drawable/giokit_check_menu_button_bg"
                     android:padding="8dp"
-                    android:src="@drawable/ic_sdk_menu_code" />
+                    android:src="@drawable/ic_giokit_menu_code" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/gio_menu_code"
+                    android:text="@string/giokit_menu_code"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/text_body" />
+                    android:textSize="@dimen/giokit_text_body" />
 
             </LinearLayout>
 
@@ -92,7 +90,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:paddingTop="8dp"
@@ -101,17 +98,17 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@drawable/check_menu_button_bg"
+                    android:background="@drawable/giokit_check_menu_button_bg"
                     android:padding="8dp"
-                    android:src="@drawable/ic_sdk_menu_database" />
+                    android:src="@drawable/ic_giokit_menu_database" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/gio_menu_data"
+                    android:text="@string/giokit_menu_data"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/text_body" />
+                    android:textSize="@dimen/giokit_text_body" />
 
             </LinearLayout>
 
@@ -120,7 +117,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:paddingTop="8dp"
@@ -129,17 +125,17 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@drawable/check_menu_button_bg"
+                    android:background="@drawable/giokit_check_menu_button_bg"
                     android:padding="8dp"
-                    android:src="@drawable/ic_sdk_menu_track" />
+                    android:src="@drawable/ic_giokit_menu_track" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/gio_menu_track"
+                    android:text="@string/giokit_menu_track"
                     android:textColor="@android:color/black"
-                    android:textSize="@dimen/text_body" />
+                    android:textSize="@dimen/giokit_text_body" />
 
             </LinearLayout>
 
@@ -150,4 +146,4 @@
     </LinearLayout>
 
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>

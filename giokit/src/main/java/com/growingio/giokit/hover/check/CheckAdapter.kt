@@ -54,11 +54,11 @@ class CheckAdapter(private val context: Context) : RecyclerView.Adapter<Recycler
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == 0) {
             val view =
-                LayoutInflater.from(context).inflate(R.layout.recycler_check_loading, parent, false)
+                LayoutInflater.from(context).inflate(R.layout.giokit_recycler_check_loading, parent, false)
             return LoadingViewHolder(view)
         } else {
             val view =
-                LayoutInflater.from(context).inflate(R.layout.recycler_check_content, parent, false)
+                LayoutInflater.from(context).inflate(R.layout.giokit_recycler_check_content, parent, false)
             return ContentViewHolder(view)
         }
     }

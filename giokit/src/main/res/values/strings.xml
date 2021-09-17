@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="gio_checkself">CHECK-SELF</string>
-    <string name="gio_check_content">点击检查埋点 SDK 是否集成成功</string>
-    <string name="gio_check_author">By GrowingIO</string>
-    <string name="gio_check_goal">Goals</string>
-    <string name="gio_check_service">为用户提供最好的埋点服务</string>
+    <string name="giokit_checkself">CHECK-SELF</string>
+    <string name="giokit_check_content">点击检查埋点 SDK 是否集成成功</string>
+    <string name="giokit_check_author">By GrowingIO</string>
+    <string name="giokit_check_goal">Goals</string>
+    <string name="giokit_check_service">为用户提供最好的埋点服务</string>
 
-    <string name="gio_menu_common">常用工具</string>
-    <string name="gio_menu_info">SDK信息</string>
-    <string name="gio_menu_code">代码埋点</string>
-    <string name="gio_menu_data">埋点数据</string>
-    <string name="gio_menu_track">埋点跟踪</string>
+    <string name="giokit_menu_common">常用工具</string>
+    <string name="giokit_menu_info">SDK信息</string>
+    <string name="giokit_menu_code">代码埋点</string>
+    <string name="giokit_menu_data">埋点数据</string>
+    <string name="giokit_menu_track">埋点跟踪</string>
 </resources>

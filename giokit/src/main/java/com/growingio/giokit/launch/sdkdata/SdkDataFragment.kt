@@ -27,7 +27,7 @@ class SdkDataFragment : BaseFragment() {
     private val swipeLayout: SwipeRefreshLayout by lazy { findViewById(R.id.swipeLayout) }
 
     override fun layoutId(): Int {
-        return R.layout.fragment_gio_sdkdata
+        return R.layout.fragment_giokit_sdkdata
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +79,6 @@ class SdkDataFragment : BaseFragment() {
     }
 
     override fun onGetTitle(): String {
-        return getString(R.string.gio_menu_code)
+        return getString(R.string.giokit_menu_code)
     }
 }

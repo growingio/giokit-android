@@ -22,6 +22,7 @@ import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
 
 import com.growingio.giokit.GioKit;
+import com.growingio.giokit.GioKitImpl;
 import com.growingio.giokit.R;
 
 import io.mattcarroll.hover.HoverMenu;
@@ -58,8 +59,7 @@ public class GioHoverMenuService extends HoverMenuService {
     protected void onHoverMenuLaunched(@NonNull Intent intent, @NonNull HoverView hoverView) {
         hoverView.setMenu(createHoverMenu());
         hoverView.collapse();
-
-        GioKit.Companion.getGioKitHoverManager().setupHoverView(hoverView);
+        GioKitImpl.gioKitHoverManager.setupHoverView(hoverView);
     }
 
     private HoverMenu createHoverMenu() {

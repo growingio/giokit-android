@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        (application as App).initGioSdk()
+        //(application as App).initGioSdk()
 
         val tv = findViewById<TextView>(R.id.track)
         tv.setOnClickListener {

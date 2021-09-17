@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.paging.CombinedLoadStates
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -28,13 +27,13 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
         if (viewType == 1) {
             val view =
                 LayoutInflater.from(context)
-                    .inflate(R.layout.recycler_sdkdata_header, parent, false)
+                    .inflate(R.layout.giokit_recycler_sdkdata_header, parent, false)
             return DateViewHolder(view)
 
         } else {
             val view =
                 LayoutInflater.from(context)
-                    .inflate(R.layout.recycler_sdkdata_content, parent, false)
+                    .inflate(R.layout.giokit_recycler_sdkdata_content, parent, false)
             return EventViewHolder(view)
         }
     }
