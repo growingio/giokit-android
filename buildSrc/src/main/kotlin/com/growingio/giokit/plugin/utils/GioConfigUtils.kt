@@ -15,13 +15,20 @@ object GioConfigUtils {
         return GIOKIT_LOG_ENABLE || this.gioKitExt.debugMode
     }
 
-    var defaultDomain: String? = null
-    val dependLibs = mutableSetOf<DependLib>()
-    var xmlScheme: String? = null
-    var gioSdks = mutableSetOf<DependLib>()
-    var hasGioPlugin = false
-    var gioTracks = mutableSetOf<GioTrackHook>()
+    //v3
+    var v3Domain: String = ""
+    var v3XmlScheme: String = ""
+    var gioV3Sdks = mutableSetOf<DependLib>()
+    var hasGioPluginV3 = false
 
+    //saas
+    var saasDomain: String = ""
+    var saasXmlScheme: String = ""
+    var gioSaasSdks = mutableSetOf<DependLib>()
+    var hasGioPluginSaas = false
+
+
+    var gioTracks = mutableSetOf<GioTrackHook>()
     var gioKitExt = GioKitExtension()
         private set
 
@@ -29,11 +36,11 @@ object GioConfigUtils {
         this.gioKitExt = ext
     }
 
-    fun getGioDepend(): String {
+    fun getGioDepend(sdks: Set<DependLib>): String {
         val sb = StringBuilder()
-        gioSdks.forEach { dependLib ->
+        sdks.forEach { dependLib ->
             sb.append(dependLib.variant)
-            if (gioSdks.last() != dependLib) {
+            if (sdks.last() != dependLib) {
                 sb.append("::")
             }
         }

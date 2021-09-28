@@ -24,6 +24,12 @@ ext {
             "autotracker-cdp"   : "com.growingio.android:autotracker-cdp:${android.growingio}",
             "tracker-cdp"       : "com.growingio.android:tracker-cdp:${android.growingio}",
             "autotracker-plugin": "com.growingio.android:autotracker-gradle-plugin:${android.growingio}",
+
+            //sass-v2.0
+            "autotrack-saas":"com.growingio.android:vds-android-agent:autotrack-2.9.7",
+            "track-saas":"com.growingio.android:vds-android-agent:track-2.9.7",
+            "track-saas-cdp":"com.growingio.android:vds-android-agent:cdp-1.2.8",
+            "autotrack-saas-plugin":"com.growingio.android:vds-gradle-plugin:autotrack-2.9.7",
     ]
 
     dependencies = [

@@ -52,6 +52,8 @@ dependencies {
 
     compileOnly rootProject.ext.growingio["autotracker-cdp"]
     compileOnly rootProject.ext.growingio["tracker-cdp"]
+    compileOnly rootProject.ext.growingio["autotrack-saas"]
+    compileOnly rootProject.ext.growingio["track-saas-cdp"]
     compileOnly rootProject.ext.dependencies["appcompat-v7"]
     compileOnly rootProject.ext.dependencies["recyclerview-v7"]
 

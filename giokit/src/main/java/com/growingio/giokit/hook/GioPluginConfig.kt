@@ -1,9 +1,7 @@
 package com.growingio.giokit.hook
 
 import android.util.Log
-import com.growingio.android.sdk.TrackerContext
 import com.growingio.giokit.utils.CheckSelfUtils
-import java.lang.StringBuilder
 
 /**
  * <p>
@@ -17,16 +15,21 @@ object GioPluginConfig {
     var dependLibs: List<String> = arrayListOf()
     var isAutoTrack = true
     var isInitLazy = true
+    var isSaasSdk: Boolean = false
 
     @JvmStatic
     fun inject(config: Map<String, Any>) {
-        xmlScheme = config.get("xmlScheme") as String
-        hasGioPlugin = config.get("gioPlugin") as Boolean
-        val dependStr = config.get("gioDepend") as String
+        Log.d("GioPluginConfig",config.toString())
+        xmlScheme = config.getOrElse("xmlScheme"){""} as String
+        hasGioPlugin = config.getOrElse("gioPlugin"){true} as Boolean
+        isSaasSdk = config.getOrElse("isSaasSdk"){ false } as Boolean
+        val dependStr = config.getOrElse("gioDepend"){""} as String
         dependLibs = dependStr.split("::")
+        Log.d("GioPluginConfig","$xmlScheme-$hasGioPlugin-$isSaasSdk-$dependLibs")
     }
 
     //由插件注入配置信息
+    @JvmStatic
     fun initGioKitConfig() {
 
     }
@@ -39,6 +42,11 @@ object GioPluginConfig {
     }
 
     fun analyseDepend(): Triple<String, String, Boolean> {
+        if (!isSaasSdk) return analyseDependV3()
+        return analyseDependSaas()
+    }
+
+    private fun analyseDependV3(): Triple<String, String, Boolean> {
         if (dependLibs.isEmpty()) return Triple("SDK版本", "未集成GrowingIO SDK，请按照官方文档集成", true)
         var coreLibrary: String? = null
         var autoCoreLibrary: String? = null
@@ -64,10 +72,30 @@ object GioPluginConfig {
         return Triple("SDK版本", "未集成GrowingIO SDK，请按照官方文档集成", true)
     }
 
+    private fun analyseDependSaas(): Triple<String, String, Boolean> {
+        if (dependLibs.isEmpty()) return Triple("SDK版本", "未集成GrowingIO SDK，请按照官方文档集成", true)
+        for (depend in dependLibs) {
+            if (depend.startsWith("com.growingio.android:")
+                || depend.contains(":vds-observable")
+            ) {
+                if (depend.contains(":autotrack") || depend.contains(":autoburry")) {
+                    return Triple("无埋点SDK", depend.substringAfter(":"), false)
+                } else if (depend.contains(":track") || depend.contains(":burry")) {
+                    isAutoTrack = false
+                    return Triple("埋点SDK", depend.substringAfter(":"), false)
+                } else if (depend.contains(":cdp")) {
+                    isAutoTrack = false
+                    return Triple("CDP SDK", depend.substringAfter(":"), false)
+                }
+            }
+        }
+        return Triple("SDK版本", "未集成GrowingIO SDK，请按照官方文档集成", true)
+    }
+
     fun hasSdkPlugin(): Pair<String, Boolean> = when {
         isAutoTrack && hasGioPlugin -> Pair("已启用", false)
         isAutoTrack && !hasGioPlugin -> Pair("未启用,请在主项目Gradle文件中配置", true)
-        !isAutoTrack && hasGioPlugin -> Pair("埋点SDK不需要插件", false)
+        !isAutoTrack -> Pair("埋点SDK不需要插件", false)
         else -> Pair("无", false)
     }
 

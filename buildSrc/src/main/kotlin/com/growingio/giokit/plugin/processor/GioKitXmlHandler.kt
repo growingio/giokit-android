@@ -1,7 +1,5 @@
 package com.growingio.giokit.plugin.processor
 
-import com.growingio.giokit.plugin.utils.GioConfigUtils
-import com.growingio.giokit.plugin.utils.println
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 
@@ -9,7 +7,7 @@ const val ATTR_NAME = "android:name"
 
 const val MANIFEST_ATTR_NAME = "package"
 
-class GioKitXmlHandler : DefaultHandler() {
+class GioKitXmlHandler(val setUrlScheme:(String)->Unit) : DefaultHandler() {
     var appPackageName: String = ""
     val applications = mutableSetOf<String>()
     val activities = mutableSetOf<String>()
@@ -46,7 +44,9 @@ class GioKitXmlHandler : DefaultHandler() {
             }
             "data" -> {
                 attributes.getValue("android:scheme")?.let {
-                    if (it.startsWith("growing")) GioConfigUtils.xmlScheme = it
+                    if (it.startsWith("growing")) {
+                        setUrlScheme(it)
+                    }
                 }
             }
 

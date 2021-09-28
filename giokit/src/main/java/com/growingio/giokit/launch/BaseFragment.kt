@@ -14,10 +14,6 @@ import androidx.fragment.app.Fragment
 import com.growingio.giokit.R
 
 
-/**
- * @author wanglikun
- * @date 2018/10/26
- */
 abstract class BaseFragment : Fragment() {
     @JvmField
     val TAG = this.javaClass.simpleName

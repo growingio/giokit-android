@@ -31,6 +31,9 @@ interface GioKitEventDao {
     @Query("UPDATE events SET status=1 WHERE status=0 AND gsid<=:gsid")
     fun updateLastGsid(gsid: Long)
 
+    @Query("UPDATE events SET status=1 WHERE extra=:extra")
+    fun updateLastExtra(extra: String)
+
     @Delete
     fun delete(entity: GioKitEventBean)
 

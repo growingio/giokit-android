@@ -1,15 +1,14 @@
 package com.growingio.giokit.utils
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.os.Build
 import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.CdpAutotrackConfig
+import com.growingio.android.sdk.collection.*
 import com.growingio.android.sdk.track.CdpConfig
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hook.GioTrackInfo
 import com.growingio.giokit.hover.check.CheckItem
+import java.lang.Exception
 
 /**
  * <p>
@@ -17,25 +16,6 @@ import com.growingio.giokit.hover.check.CheckItem
  * @author cpacm 2021/8/16
  */
 object CheckSelfUtils {
-    @JvmStatic
-    fun getDeviceInfo(context: Context, index: Int): CheckItem {
-        val sb = StringBuilder()
-        sb.append("设备:").append(Build.MANUFACTURER).append("-").append(Build.BRAND).append("\n")
-            .append("系统版本:Android ").append(Build.VERSION.RELEASE).append(", SDK ")
-            .append(Build.VERSION.SDK_INT).append("\n")
-            .append("网络状态:").append(if (getActiveNetworkState(context)) "联网" else "未联网")
-        return CheckItem(index, "正在获取设备信息", "设备信息", sb.toString())
-    }
-
-    private fun getActiveNetworkState(context: Context): Boolean {
-        val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = manager.activeNetworkInfo
-        return if (networkInfo == null) {
-            false
-        } else {
-            networkInfo.isConnected
-        }
-    }
 
     @JvmStatic
     fun getSdkDepend(index: Int): CheckItem {
@@ -51,6 +31,15 @@ object CheckSelfUtils {
 
     @JvmStatic
     fun getProjectStatus(index: Int): CheckItem {
+        if (GioPluginConfig.isSaasSdk) {
+            return getProjectStatusSaas(index)
+        } else {
+            return getProjectStatusV3(index)
+        }
+    }
+
+
+    private fun getProjectStatusV3(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.TrackerContext")) {
             val hasInited = TrackerContext.get() != null
             val lazyInit = GioPluginConfig.isInitLazy
@@ -59,7 +48,7 @@ object CheckSelfUtils {
                 "正在获取SDK初始化状态",
                 "初始化",
                 if (hasInited) {
-                    if (lazyInit) "已初始化(延迟)" else "初始化"
+                    if (lazyInit) "已初始化(延迟)" else "已初始化"
                 } else {
                     "未初始化"
                 },
@@ -73,12 +62,55 @@ object CheckSelfUtils {
         )
     }
 
+
+    private fun getProjectStatusSaas(index: Int): CheckItem {
+        if (hasClass("com.growingio.android.sdk.collection.GInternal")) {
+            val hasInited = !GInternal.getInstance().featuresVersionJson.isNullOrEmpty()
+            val lazyInit = GioPluginConfig.isInitLazy
+            return CheckItem(
+                index,
+                "正在获取SDK初始化状态",
+                "初始化",
+                if (hasInited) {
+                    if (lazyInit) "已初始化(延迟)" else "已初始化"
+                } else {
+                    "未初始化"
+                },
+                !hasInited || lazyInit
+            )
+        }
+        return CheckItem(
+            index,
+            "正在获取SDK初始化状态",
+            "初始化", "未集成SDK", true
+        )
+    }
+
+
     @JvmStatic
     fun getURLScheme(index: Int): CheckItem {
+        if (GioPluginConfig.isSaasSdk) {
+            return getURLSchemeSaas(index)
+        } else {
+            return getURLSchemeV3(index)
+        }
+    }
+
+    private fun getURLSchemeV3(index: Int): CheckItem {
         val xmlScheme = GioPluginConfig.xmlScheme
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             val urlScheme = ConfigurationProvider.core().urlScheme
-            if (xmlScheme == null) {
+            // 插件未找到 urlscheme 时不做校验
+            if (xmlScheme.isNullOrEmpty() || urlScheme == xmlScheme) {
+                return CheckItem(
+                    index,
+                    "正在校对URL Scheme",
+                    "URL Scheme",
+                    urlScheme,
+                    false
+                )
+            }
+            if (!xmlScheme.startsWith("growing.")) {
                 return CheckItem(
                     index,
                     "正在校对URLScheme",
@@ -96,13 +128,44 @@ object CheckSelfUtils {
                     true
                 )
             }
-            if (urlScheme == xmlScheme) {
+        }
+        return CheckItem(
+            index,
+            "正在校对URL Scheme",
+            "URL Scheme", "未集成SDK", true
+        )
+    }
+
+    private fun getURLSchemeSaas(index: Int): CheckItem {
+        val xmlScheme = GioPluginConfig.xmlScheme
+        if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            val urlScheme = CoreInitialize.config().getsGrowingScheme()
+            // 插件未找到 urlscheme 时不做校验
+            if (xmlScheme.isNullOrEmpty() || urlScheme == xmlScheme) {
                 return CheckItem(
                     index,
                     "正在校对URL Scheme",
                     "URL Scheme",
                     urlScheme,
                     false
+                )
+            }
+            if (!xmlScheme.startsWith("growing.")) {
+                return CheckItem(
+                    index,
+                    "正在校对URLScheme",
+                    "URL Scheme",
+                    "AndroidManifest 中未配置URL Scheme",
+                    true
+                )
+            }
+            if (urlScheme != xmlScheme) {
+                return CheckItem(
+                    index,
+                    "正在校对URLScheme",
+                    "URL Scheme",
+                    "AndroidManifest与初始化传入的URL Scheme不匹配",
+                    true
                 )
             }
 
@@ -116,6 +179,49 @@ object CheckSelfUtils {
 
     @JvmStatic
     fun getDataSourceID(index: Int): CheckItem {
+        if (GioPluginConfig.isSaasSdk) {
+            return getDataSourceIDSaas(index)
+        } else {
+            return getDataSourceIDV3(index)
+        }
+    }
+
+    private fun getDataSourceIDSaas(index: Int): CheckItem {
+        if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            if (hasClass("com.growingio.android.sdk.collection.ICfgCDPImpl")) {
+                val coreAppState = CoreInitialize.coreAppState()
+                val coreClass = coreAppState.javaClass
+                try {
+                    val dataSourceID =
+                        coreClass.getDeclaredMethod("getDataSourceId").invoke(coreAppState)
+                    return CheckItem(
+                        index,
+                        "正在获取数据源ID",
+                        "Datasource ID",
+                        dataSourceID?.toString() ?: "未配置",
+                        dataSourceID == null
+                    )
+                } catch (e: Exception) {
+                }
+            }
+            return CheckItem(
+                index,
+                "正在获取数据源ID",
+                "Datasource ID",
+                "非Cdp无需配置",
+                false
+            )
+        }
+        return CheckItem(
+            index,
+            "正在获取数据源ID",
+            "Datasource ID",
+            "未集成SDK",
+            true
+        )
+    }
+
+    private fun getDataSourceIDV3(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             if (hasClass("com.growingio.android.sdk.autotrack.CdpAutotrackConfig")) {
                 val config = ConfigurationProvider.get()
@@ -157,6 +263,14 @@ object CheckSelfUtils {
 
     @JvmStatic
     fun getProjectID(index: Int): CheckItem {
+        if (GioPluginConfig.isSaasSdk) {
+            return getProjectIDSaas(index)
+        } else {
+            return getProjectIDV3(index)
+        }
+    }
+
+    private fun getProjectIDV3(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return CheckItem(
                 index,
@@ -169,8 +283,30 @@ object CheckSelfUtils {
         return CheckItem(index, "正在获取Project ID", "Project ID", "未集成SDK", true)
     }
 
+    private fun getProjectIDSaas(index: Int): CheckItem {
+        if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            return CheckItem(
+                index,
+                "正在获取Project ID",
+                "Project ID",
+                CoreInitialize.coreAppState().getProjectId(),
+                false
+            )
+        }
+        return CheckItem(index, "正在获取Project ID", "Project ID", "未集成SDK", true)
+    }
+
     @JvmStatic
     fun getDataServerHost(index: Int): CheckItem {
+        if (GioPluginConfig.isSaasSdk) {
+            return getDataServerHostSaas(index)
+        } else {
+            return getDataServerHostV3(index)
+        }
+    }
+
+
+    private fun getDataServerHostV3(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return with(ConfigurationProvider.core().dataCollectionServerHost) {
                 CheckItem(
@@ -185,8 +321,31 @@ object CheckSelfUtils {
         return CheckItem(index, "正在获取ServerHost", "ServerHost", "未集成SDK", true)
     }
 
+    private fun getDataServerHostSaas(index: Int): CheckItem {
+        if (hasClass("com.growingio.android.sdk.collection.NetworkConfig")) {
+            return with(NetworkConfig.getInstance().apiEndPoint()) {
+                CheckItem(
+                    index,
+                    "正在获取Data Host",
+                    "DataHost",
+                    if (isNullOrEmpty()) "未配置" else this,
+                    isNullOrEmpty()
+                )
+            }
+        }
+        return CheckItem(index, "正在获取DataHost", "DataHost", "未集成SDK", true)
+    }
+
     @JvmStatic
     fun getDataCollectionEnable(index: Int): CheckItem {
+        if (GioPluginConfig.isSaasSdk) {
+            return getDataCollectionEnableSaas(index)
+        } else {
+            return getDataCollectionEnableV3(index)
+        }
+    }
+
+    private fun getDataCollectionEnableV3(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return with(ConfigurationProvider.core().isDataCollectionEnabled) {
                 CheckItem(
@@ -201,8 +360,31 @@ object CheckSelfUtils {
         return CheckItem(index, "正在获取数据收集是否打开", "数据收集", "未集成SDK", true)
     }
 
+    private fun getDataCollectionEnableSaas(index: Int): CheckItem {
+        if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            return with(CoreInitialize.config().isEnabled) {
+                CheckItem(
+                    index,
+                    "正在获取数据采集是否打开",
+                    "数据采集",
+                    if (this) "打开" else "关闭",
+                    !this
+                )
+            }
+        }
+        return CheckItem(index, "正在获取数据收集是否打开", "数据收集", "未集成SDK", true)
+    }
+
     @JvmStatic
     fun getSdkDebug(index: Int): CheckItem {
+        if (GioPluginConfig.isSaasSdk) {
+            return getSdkDebugSaas(index)
+        } else {
+            return getSdkDebugV3(index)
+        }
+    }
+
+    private fun getSdkDebugV3(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return with(ConfigurationProvider.core().isDebugEnabled) {
                 CheckItem(
@@ -217,8 +399,32 @@ object CheckSelfUtils {
         return CheckItem(index, "正在处于Debug调试模式", "调试模式", "未集成SDK", true)
     }
 
+    private fun getSdkDebugSaas(index: Int): CheckItem {
+        if (hasClass("com.growingio.android.sdk.collection.GConfig")) {
+            return with(GConfig.DEBUG) {
+                CheckItem(
+                    index,
+                    "正在处于Debug调试模式",
+                    "调试模式",
+                    if (this) "是" else "否",
+                    this
+                )
+            }
+        }
+        return CheckItem(index, "正在处于Debug调试模式", "调试模式", "未集成SDK", true)
+    }
+
     @JvmStatic
     fun getOaidEnabled(index: Int): CheckItem {
+        if (GioPluginConfig.isSaasSdk) {
+            return getOaidEnabledSaas(index)
+        } else {
+            return getOaidEnabledV3(index)
+        }
+    }
+
+
+    private fun getOaidEnabledV3(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return with(ConfigurationProvider.core().isOaidEnabled) {
                 CheckItem(
@@ -231,6 +437,23 @@ object CheckSelfUtils {
             }
         }
         return CheckItem(index, "正在查询oaid状态", "oaid采集", "未集成SDK", true)
+    }
+
+    private fun getOaidEnabledSaas(index: Int): CheckItem {
+        if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            try {
+                val oaid = CoreInitialize.deviceUUIDFactory().oaid
+                return CheckItem(
+                    index,
+                    "正在查询oaid状态",
+                    "oaid采集",
+                    if (oaid.isEmpty()) "未获取" else "已获取",
+                    false
+                )
+            } catch (e: Exception) {
+            }
+        }
+        return CheckItem(index, "正在查询oaid状态", "oaid采集", "未集成", false)
     }
 
     @JvmStatic
@@ -246,8 +469,10 @@ object CheckSelfUtils {
 
     fun checkSdkInit(): Boolean {
         if (hasClass("com.growingio.android.sdk.TrackerContext")) {
-            val hasInited = TrackerContext.get() != null
-            return hasInited
+            return TrackerContext.get() != null
+        }
+        if (hasClass("com.growingio.android.sdk.collection.GInternal")) {
+            return !GInternal.getInstance().featuresVersionJson.isNullOrEmpty()
         }
         return false
     }

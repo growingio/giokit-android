@@ -26,12 +26,17 @@ internal object GioKitImpl {
         APPLICATION = app
         curActivity = WeakReference<Activity>(null)
 
-        GioPluginConfig.initGioKitConfig()
-        GioTrackInfo.initGioTrack()
+        initGioKitConfig()
 
         DatabaseCreator.createDb(app) { GioKitDatabase.initDb(app) }
 
         gioKitHoverManager = GioKitHoverManager(app)
+    }
+
+    private fun initGioKitConfig() {
+        GioPluginConfig.initGioKitConfig()
+
+        GioTrackInfo.initGioTrack()
     }
 
 }

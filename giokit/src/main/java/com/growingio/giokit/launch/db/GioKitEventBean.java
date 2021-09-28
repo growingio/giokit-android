@@ -40,6 +40,9 @@ public class GioKitEventBean {
     @ColumnInfo(name = "path")
     private String path;//路径，可为空
 
+    @ColumnInfo(name = "extra")
+    private String extra;//额外信息
+
     @ColumnInfo(name = "time")
     private long time;
 
@@ -97,5 +100,13 @@ public class GioKitEventBean {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getExtra() {
+        return extra;
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
     }
 }

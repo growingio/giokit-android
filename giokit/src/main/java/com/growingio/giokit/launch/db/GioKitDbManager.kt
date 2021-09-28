@@ -16,26 +16,9 @@ import java.io.IOException
 class GioKitDbManager private constructor() {
 
     private val EVENT_VALID_PERIOD_MILLS = 7L * 24 * 60 * 60000
-    private var eventsInfoAuthority: String? = null
 
-    init {
-        eventsInfoAuthority = GioKitImpl.APPLICATION.packageName + ".EventsContentProvider"
-    }
-
-    fun insertEvent(event: GEvent) {
-        if (event is BaseEvent) {
-            val gioEvent = GioKitEventBean()
-            gioEvent.data = event.toJSONObject().toString()
-            gioEvent.gsid = event.globalSequenceId
-            gioEvent.status = GioKitEventBean.STATUS_READY
-            gioEvent.time = event.timestamp
-            gioEvent.type = event.eventType
-
-            val jsonObj = event.toJSONObject()
-            gioEvent.path = jsonObj.optString("path")
-
-            GioKitDatabase.instance.getEventDao().insert(gioEvent)
-        }
+    fun insertEvent(event: GioKitEventBean) {
+        GioKitDatabase.instance.getEventDao().insert(event)
     }
 
     fun deleteEvent(id: Long) {
@@ -61,6 +44,14 @@ class GioKitDbManager private constructor() {
     fun outdatedEvents() {
         GioKitDatabase.instance.getEventDao()
             .outdatedEvent(System.currentTimeMillis() - EVENT_VALID_PERIOD_MILLS)
+    }
+
+    // saas sdk 数据库中没有对照的gsid
+    // 所以直接删除对应所有类型所有事件
+    fun removeEvents(type: String, lastId: String) {
+        lastId.toLongOrNull()?.let { id ->
+            GioKitDatabase.instance.getEventDao().updateLastExtra(type)
+        }
     }
 
     fun removeEvents(lastId: Long) {

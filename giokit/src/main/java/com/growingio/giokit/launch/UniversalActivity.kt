@@ -4,8 +4,9 @@ import android.R
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+//import com.growingio.android.sdk.autoburry.page.GrowingIOPageIgnore
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_INDEX
-import com.growingio.giokit.utils.SdkInfoUtils
+import com.growingio.giokit.utils.SdkV3InfoUtils
 import java.util.ArrayDeque
 
 /**
@@ -13,13 +14,14 @@ import java.util.ArrayDeque
  *
  * @author cpacm 2021/8/26
  */
+//@GrowingIOPageIgnore
 class UniversalActivity : AppCompatActivity() {
 
     private val mFragments = ArrayDeque<BaseFragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SdkInfoUtils.ignoreActivity(this)
+        SdkV3InfoUtils.ignoreActivity(this)
         val bundle = intent.extras
         if (bundle == null) {
             finish()

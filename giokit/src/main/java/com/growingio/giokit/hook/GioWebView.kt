@@ -115,32 +115,6 @@ object GioWebView {
     }
 
     open class VdsBridge {
-
-        @JavascriptInterface
-        open fun webCircleHybridEvent(event: String?) {
-            Log.d("hybrid","webCircleHybridEvent")
-        }
-
-        @JavascriptInterface
-        open fun saveEvent(event: String?) {
-            Log.d("hybrid","saveEvent")
-        }
-
-        @JavascriptInterface
-        open fun setVisitor(event: String?) {
-            Log.d("hybrid","setVisitor")
-        }
-
-        @JavascriptInterface
-        open fun saveCustomEvent(event: String?) {
-            Log.d("hybrid","saveCustomEvent")
-        }
-
-        @JavascriptInterface
-        open fun onDOMChanged() {
-            Log.d("hybrid","onDOMChanged")
-        }
-
         @JavascriptInterface
         open fun hoverNodes(message: String?) {
             Log.d("hoverNodes",message?:"")

@@ -1,6 +1,5 @@
 package com.growingio.giokit.utils;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -23,8 +22,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import androidx.annotation.RequiresPermission;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileFilter;
@@ -38,14 +35,6 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
-
-import static android.Manifest.permission.ACCESS_WIFI_STATE;
-import static android.Manifest.permission.CHANGE_WIFI_STATE;
-import static android.content.Context.WIFI_SERVICE;
-
-/**
- * Created by zhangweida on 2018/6/26.
- */
 
 public class DeviceUtils {
     private static final String TAG = "DeviceUtils";

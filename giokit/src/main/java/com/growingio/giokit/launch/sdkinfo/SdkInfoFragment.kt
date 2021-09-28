@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.growingio.giokit.R
+import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.launch.BaseFragment
-import com.growingio.giokit.utils.SdkInfoUtils
+import com.growingio.giokit.utils.SdkSaasInfoUtils
+import com.growingio.giokit.utils.SdkV3InfoUtils
 
 /**
  * <p>
@@ -28,9 +30,15 @@ class SdkInfoFragment : BaseFragment() {
         sdkList.addItemDecoration(DividerItemDecoration(requireContext(), VERTICAL))
 
         val allInfos = arrayListOf<SdkInfo>()
-        allInfos.addAll(SdkInfoUtils.getSdkInfo(requireContext()))
-        allInfos.addAll(SdkInfoUtils.getAppInfo(requireContext()))
-        allInfos.addAll(SdkInfoUtils.getMobileInfo(requireContext()))
+        if (GioPluginConfig.isSaasSdk) {
+            allInfos.addAll(SdkSaasInfoUtils.getSdkInfo(requireContext()))
+            allInfos.addAll(SdkSaasInfoUtils.getAppInfo(requireContext()))
+            allInfos.addAll(SdkSaasInfoUtils.getMobileInfo(requireContext()))
+        } else {
+            allInfos.addAll(SdkV3InfoUtils.getSdkInfo(requireContext()))
+            allInfos.addAll(SdkV3InfoUtils.getAppInfo(requireContext()))
+            allInfos.addAll(SdkV3InfoUtils.getMobileInfo(requireContext()))
+        }
         sdkInfoAdapter.setData(allInfos)
     }
 
