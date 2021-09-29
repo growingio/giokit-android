@@ -9,7 +9,6 @@ import android.webkit.WebView
 import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.circle.ViewNode
 import com.growingio.giokit.circle.ViewNode.getWebNodesFromEvent
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.lang.ref.WeakReference
@@ -22,10 +21,10 @@ import java.lang.ref.WeakReference
 object GioWebView {
     private const val WEBVIEW_JS_TAG = 100 shl 24
 
-    private const val JS_HYBRID_LOCAL_URL="file:///android_asset/app_hybrid.js"
+    private const val JS_HYBRID_LOCAL_URL = "file:///android_asset/app_hybrid.js"
     const val JS_HYBRID_URL =
         "https://assets.giocdn.com/sdk/hybrid/2.0/gio_hybrid.min.js?sdkVer=autotrack-2.9.2-SNAPSHOT_e08f56f7&platform=Android"
-    private const val JS_CIRCLE_LOCAL_URL="file:///android_asset/app_circle_plugin.js"
+    private const val JS_CIRCLE_LOCAL_URL = "file:///android_asset/app_circle_plugin.js"
     private const val CIRCLE_JS_ADDRESS =
         "https://assets.giocdn.com/sdk/hybrid/1.1/vds_hybrid_circle_plugin.min.js?sdkVer=autotrack-2.9.2-SNAPSHOT_e08f56f7&platform=Android"
     private const val MIN_PROGRESS_FOR_HOOK = 60
@@ -34,15 +33,19 @@ object GioWebView {
     @SuppressLint("SetJavaScriptEnabled")
     @JvmStatic
     fun addCircleJsToWebView(webView: WebView, progress: Int) {
-        if (progress >= MIN_PROGRESS_FOR_HOOK) {
+        val oldView = GioKitImpl.webView.get()
+        if (oldView == null || oldView != webView) {
+            webView.addJavascriptInterface(VdsBridge(), "_vds_bridge")
             GioKitImpl.webView = WeakReference(webView)
+        }
+        if (progress >= MIN_PROGRESS_FOR_HOOK) {
             webView.handler?.removeMessages(0)
             webView.loadUrl(getInitPatternServer())
             webView.loadUrl(getVdsHybridConfig())
             //webView.evaluateJavascript(injectScriptFile("_gio_hybrid_js", JS_HYBRID_URL),null)
             val message = Message.obtain(webView.handler) {
-                webView.evaluateJavascript(getAssets(webView.context,"app_hybrid.js"),null)
-                webView.evaluateJavascript(getAssets(webView.context,"app_circle_plugin.js"),null)
+                webView.evaluateJavascript(getAssets(webView.context, "app_hybrid.js"), null)
+                webView.evaluateJavascript(getAssets(webView.context, "app_circle_plugin.js"), null)
                 //webView.loadUrl(injectScriptFile("_gio_hybrid_js", JS_HYBRID_LOCAL_URL))
                 //webView.loadUrl(injectScriptFile("_gio_circle_js", JS_CIRCLE_LOCAL_URL))
             }
@@ -111,13 +114,38 @@ object GioWebView {
             result = String(buffer)
         } catch (e: Exception) {
         }
-        return result?:""
+        return result ?: ""
     }
 
     open class VdsBridge {
         @JavascriptInterface
+        open fun webCircleHybridEvent(event: String?) {
+            Log.d("hybrid", "webCircleHybridEvent")
+        }
+
+        @JavascriptInterface
+        open fun saveEvent(event: String?) {
+            Log.d("hybrid", "saveEvent")
+        }
+
+        @JavascriptInterface
+        open fun setVisitor(event: String?) {
+            Log.d("hybrid", "setVisitor")
+        }
+
+        @JavascriptInterface
+        open fun saveCustomEvent(event: String?) {
+            Log.d("hybrid", "saveCustomEvent")
+        }
+
+        @JavascriptInterface
+        open fun onDOMChanged() {
+            Log.d("hybrid", "onDOMChanged")
+        }
+
+        @JavascriptInterface
         open fun hoverNodes(message: String?) {
-            Log.d("hoverNodes",message?:"")
+            Log.d("hoverNodes", message ?: "")
             try {
                 val `object` = JSONObject(message)
                 val type = `object`.getString("t")
@@ -125,7 +153,7 @@ object GioWebView {
                     val nodes: List<ViewNode> = getWebNodesFromEvent(`object`)
                     GioKitImpl.gioKitHoverManager.anchorView?.setCircleInfo(nodes)
                 }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }

@@ -1,5 +1,6 @@
 package com.growingio.giokit.saas
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -17,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val webBtn = findViewById<Button>(R.id.web)
-        //webBtn.setOnClickListener { startActivity(Intent(this, WebCircleHybridActivity::class.java)) }
+        webBtn.setOnClickListener { startActivity(Intent(this, WebCircleHybridActivity::class.java)) }
 
         GrowingIO.getInstance().setUserId("cpacm")
         GrowingIO.getInstance().setGeoLocation(100.0, 100.0)

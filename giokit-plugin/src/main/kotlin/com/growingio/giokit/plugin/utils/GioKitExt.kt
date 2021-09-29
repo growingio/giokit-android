@@ -16,9 +16,15 @@ fun BaseVariant.isRelease(): Boolean {
 }
 
 fun String.println() {
-    if (GioConfigUtils.isLogEnable()) {
+    if (isLogEnable()) {
         println("[giokit plugin]===>$this")
     }
+}
+
+var GIOKIT_LOG_ENABLE = false
+
+fun isLogEnable(): Boolean {
+    return GIOKIT_LOG_ENABLE
 }
 
 val ClassNode.className: String

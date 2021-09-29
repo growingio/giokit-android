@@ -1,4 +1,4 @@
-package com.growingio.giokit.v3;
+package com.growingio.giokit.saas;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -26,7 +26,6 @@ public class WebCircleHybridActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_circle);
         webView = findViewById(R.id.web_view);
-        //webView.addJavascriptInterface(new GioWebView.VdsBridge(), "_vds_bridge");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -37,7 +36,6 @@ public class WebCircleHybridActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                ViewHelper.callJavaScript(view, "_vds_hybrid.findElementAtPoint");
             }
 
             @Override
@@ -55,6 +53,5 @@ public class WebCircleHybridActivity extends Activity {
 
         });
         webView.loadUrl("https://www.baidu.com/");
-
     }
 }

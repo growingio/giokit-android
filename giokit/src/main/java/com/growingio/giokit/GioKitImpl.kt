@@ -24,7 +24,8 @@ internal object GioKitImpl {
 
     fun install(app: Application) {
         APPLICATION = app
-        curActivity = WeakReference<Activity>(null)
+        curActivity = WeakReference(null)
+        webView = WeakReference(null)
 
         initGioKitConfig()
 

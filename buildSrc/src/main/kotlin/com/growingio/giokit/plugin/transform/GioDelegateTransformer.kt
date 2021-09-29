@@ -1,8 +1,7 @@
 package com.growingio.giokit.plugin.transform
 
-import com.didiglobal.booster.transform.TransformContext
-import com.didiglobal.booster.transform.TransformListener
-import com.growingio.giokit.plugin.utils.println
+import com.growingio.giokit.plugin.utils.GioTransformContext
+import com.growingio.giokit.plugin.utils.GioTransformListener
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.tree.ClassNode
@@ -17,13 +16,13 @@ import java.lang.management.ThreadMXBean
  */
 class GioDelegateTransformer(
     internal val transformers: Iterable<ClassTransformer>
-) : TransformListener {
+) : GioTransformListener {
 
     private val threadMxBean = ManagementFactory.getThreadMXBean()
 
     private val durations = mutableMapOf<ClassTransformer, Long>()
 
-    override fun onPreTransform(context: TransformContext) {
+    override fun onPreTransform(context: GioTransformContext) {
         this.transformers.forEach { transformer ->
             this.threadMxBean.sumCpuTime(transformer) {
                 transformer.onPreTransform(context)
@@ -31,7 +30,7 @@ class GioDelegateTransformer(
         }
     }
 
-    override fun onPostTransform(context: TransformContext) {
+    override fun onPostTransform(context: GioTransformContext) {
         this.transformers.forEach { transformer ->
             this.threadMxBean.sumCpuTime(transformer) {
                 transformer.onPostTransform(context)
@@ -47,7 +46,7 @@ class GioDelegateTransformer(
     }
 
     fun transform(
-        context: TransformContext,
+        context: GioTransformContext,
         bytecode: ByteArray,
         hasLatest: (Boolean) -> Unit
     ): ByteArray {
@@ -65,7 +64,7 @@ class GioDelegateTransformer(
         }.toByteArray()
     }
 
-    fun transformLatest(context: TransformContext, bytecode: ByteArray): ByteArray {
+    fun transformLatest(context: GioTransformContext, bytecode: ByteArray): ByteArray {
         return ClassWriter(ClassWriter.COMPUTE_MAXS).also { writer ->
             this.transformers.fold(ClassNode().also { klass ->
                 ClassReader(bytecode).accept(klass, 0)

@@ -9,6 +9,8 @@ import com.didiglobal.booster.transform.ArtifactManager
 import com.didiglobal.booster.transform.TransformContext
 import com.didiglobal.booster.transform.artifacts
 import com.didiglobal.booster.transform.util.transform
+import com.growingio.giokit.plugin.utils.GioConfig
+import com.growingio.giokit.plugin.utils.GioTransformContext
 import com.growingio.giokit.plugin.utils.println
 import java.io.File
 import java.net.URI
@@ -21,12 +23,14 @@ import java.util.concurrent.*
  */
 internal class GioKitTransformInvocation(
     private val delegate: TransformInvocation,
-    internal val transform: GioKitBaseTransform
-) : TransformInvocation by delegate, TransformContext, ArtifactManager {
+    internal val transform: GioKitBaseTransform,
+) : TransformInvocation by delegate, GioTransformContext, ArtifactManager {
 
     private val project = transform.project
 
     private val outputs = CopyOnWriteArrayList<File>()
+
+    override val gioConfig = transform.gioConfig
 
     override val name: String = delegate.context.variantName
 

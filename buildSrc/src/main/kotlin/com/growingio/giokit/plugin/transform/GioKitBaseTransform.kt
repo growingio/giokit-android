@@ -12,6 +12,7 @@ import com.didiglobal.booster.gradle.getAndroid
 import com.didiglobal.booster.transform.AbstractKlassPool
 import com.didiglobal.booster.transform.Klass
 import com.google.common.collect.ImmutableSet
+import com.growingio.giokit.plugin.utils.GioConfig
 import com.growingio.giokit.plugin.utils.println
 import org.gradle.api.Project
 
@@ -20,7 +21,7 @@ import org.gradle.api.Project
  *
  * @author cpacm 2021/8/18
  */
-open class GioKitBaseTransform(val project: Project) : Transform() {
+open class GioKitBaseTransform(val project: Project,val gioConfig:GioConfig) : Transform() {
 
     private val android: BaseExtension = project.getAndroid()
 

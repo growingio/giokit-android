@@ -1,7 +1,8 @@
 package com.growingio.giokit.plugin.transform
 
 import com.didiglobal.booster.transform.TransformContext
-import com.didiglobal.booster.transform.TransformListener
+import com.growingio.giokit.plugin.utils.GioTransformContext
+import com.growingio.giokit.plugin.utils.GioTransformListener
 import org.objectweb.asm.tree.ClassNode
 import java.io.File
 
@@ -10,15 +11,15 @@ import java.io.File
  *
  * @author cpacm 2021/8/18
  */
-interface ClassTransformer : TransformListener {
+interface ClassTransformer : GioTransformListener {
 
     val name: String
         get() = javaClass.simpleName
 
-    fun getReportDir(context: TransformContext): File =
+    fun getReportDir(context: GioTransformContext): File =
         File(File(context.reportsDir, name), context.name)
 
-    fun getReport(context: TransformContext, name: String): File {
+    fun getReport(context: GioTransformContext, name: String): File {
         val report: File by lazy {
             val dir = getReportDir(context)
             if (!dir.exists()) {
@@ -40,9 +41,9 @@ interface ClassTransformer : TransformListener {
      * @param klass The class node to be transformed
      * @return The transformed class node
      */
-    fun transform(context: TransformContext, klass: ClassNode) = klass
+    fun transform(context: GioTransformContext, klass: ClassNode) = klass
 
-    fun transformLatest(context: TransformContext, klass: ClassNode): ClassNode {
+    fun transformLatest(context: GioTransformContext, klass: ClassNode): ClassNode {
         return klass
     }
 

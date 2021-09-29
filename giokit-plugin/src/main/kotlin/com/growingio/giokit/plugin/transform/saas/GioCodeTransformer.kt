@@ -1,7 +1,7 @@
-package com.growingio.giokit.plugin.transform
+package com.growingio.giokit.plugin.transform.saas
 
 import com.didiglobal.booster.kotlinx.asIterable
-import com.didiglobal.booster.transform.TransformContext
+import com.growingio.giokit.plugin.transform.ClassTransformer
 import com.growingio.giokit.plugin.utils.*
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
@@ -11,7 +11,7 @@ import org.objectweb.asm.tree.*
  *     审查所有代码，获取调用埋点代码的位置
  * @author cpacm 2021/8/18
  */
-class GioCodeTransformer() : ClassTransformer {
+class GioCodeTransformer : ClassTransformer {
 
     override fun isTransformLatest(klass: ClassNode): Boolean {
         if (klass.className == "com.growingio.giokit.hook.GioTrackInfo") {
@@ -23,28 +23,32 @@ class GioCodeTransformer() : ClassTransformer {
         return false
     }
 
-    override fun transformLatest(context: TransformContext, klass: ClassNode): ClassNode {
+    override fun transformLatest(context: GioTransformContext, klass: ClassNode): ClassNode {
         if (klass.className == "com.growingio.giokit.hook.GioTrackInfo") {
             klass.methods?.find { it.name == "initGioTrack" }
                 .let { methodNode ->
-                    methodNode?.instructions?.insert(createGioTrackInsnList())
+                    "GioCodeTransformer Latest".println()
+                    context.gioConfig.gioTracks.forEach {
+                        it.toString().println()
+                    }
+                    methodNode?.instructions?.insert(createGioTrackInsnList(context))
                 }
         }
         return klass
     }
 
 
-    override fun transform(context: TransformContext, klass: ClassNode): ClassNode {
-        with(GioConfigUtils.gioKitExt.trackFinder.domain) {
+    override fun transform(context: GioTransformContext, klass: ClassNode): ClassNode {
+        with(context.gioConfig.gioKitExt.trackFinder.domain) {
             if (this.isEmpty()) {
                 when {
-                    GioConfigUtils.defaultDomain.isNullOrEmpty() -> return klass
-                    else -> add(GioConfigUtils.defaultDomain!!)
+                    context.gioConfig.domain.isEmpty() -> return klass
+                    else -> add(context.gioConfig.domain)
                 }
             }
         }
 
-        if (ignoreClassName(klass.className)) {
+        if (ignoreClassName(context, klass.className)) {
             return klass
         }
 
@@ -54,6 +58,7 @@ class GioCodeTransformer() : ClassTransformer {
                 .filterIsInstance(MethodInsnNode::class.java).let { methodInsnNodes ->
                     methodInsnNodes.forEach { node ->
                         findTrackHook(
+                            context,
                             node.owner,
                             node.name,
                             klass.name,
@@ -62,7 +67,7 @@ class GioCodeTransformer() : ClassTransformer {
                         )?.apply {
                             this.toString().println()
                             index += 1
-                            GioConfigUtils.gioTracks.add(this)
+                            context.gioConfig.gioTracks.add(this)
                         }
                     }
                 }
@@ -70,7 +75,7 @@ class GioCodeTransformer() : ClassTransformer {
         return klass
     }
 
-    private fun createGioTrackInsnList(): InsnList {
+    private fun createGioTrackInsnList(context: GioTransformContext): InsnList {
         return with(InsnList()) {
             add(TypeInsnNode(Opcodes.NEW, "java/util/ArrayList"))
             add(InsnNode(Opcodes.DUP))
@@ -86,7 +91,7 @@ class GioCodeTransformer() : ClassTransformer {
             //保存变量
             add(VarInsnNode(Opcodes.ASTORE, 0))
 
-            GioConfigUtils.gioTracks.forEach { track ->
+            context.gioConfig.gioTracks.forEach { track ->
                 add(VarInsnNode(Opcodes.ALOAD, 0))
                 add(LdcInsnNode(track.className + "::" + track.methodName))
 
@@ -117,8 +122,8 @@ class GioCodeTransformer() : ClassTransformer {
         }
     }
 
-    fun ignoreClassName(className: String): Boolean {
-        for (domain in GioConfigUtils.gioKitExt.trackFinder.domain) {
+    fun ignoreClassName(context: GioTransformContext, className: String): Boolean {
+        for (domain in context.gioConfig.gioKitExt.trackFinder.domain) {
             if (className.startsWith(domain, true)) {
                 return false
             }
@@ -156,13 +161,12 @@ class GioCodeTransformer() : ClassTransformer {
 //    }
 
     val trackHooks = arrayListOf(
-        GioTrackHook("com.growingio.android.sdk.autotrack.CdpAutotracker", "trackCustomEvent"),
-        GioTrackHook("com.growingio.android.sdk.track.CdpTracker", "trackCustomEvent"),
-        GioTrackHook("com.growingio.android.sdk.autotrack.Autotracker", "trackCustomEvent"),
-        GioTrackHook("com.growingio.android.sdk.track.Tracker", "trackCustomEvent"),
+        GioTrackHook("com.growingio.android.sdk.collection.GrowingIO", "track"),
+        GioTrackHook("com.growingio.android.sdk.collection.GrowingIO", "trackPage"),
     )
 
     private fun findTrackHook(
+        context: GioTransformContext,
         owner: String,
         name: String,
         globalClass: String,
@@ -170,8 +174,8 @@ class GioCodeTransformer() : ClassTransformer {
         index: Int = 1
     ): GioTrackHook? {
 
-        val customClassHook = GioConfigUtils.gioKitExt.trackFinder.className
-        val customMethodHook = GioConfigUtils.gioKitExt.trackFinder.methodName
+        val customClassHook = context.gioConfig.gioKitExt.trackFinder.className
+        val customMethodHook = context.gioConfig.gioKitExt.trackFinder.methodName
         if (owner.formatDot == customClassHook && name.formatDot == customMethodHook) {
             return GioTrackHook(globalClass, globalMethod.let {
                 if (index > 1) "$it-$index"

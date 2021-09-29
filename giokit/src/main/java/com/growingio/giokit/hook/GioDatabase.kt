@@ -2,7 +2,6 @@ package com.growingio.giokit.hook
 
 import com.growingio.android.sdk.track.events.base.BaseEvent
 import com.growingio.android.sdk.track.middleware.GEvent
-import com.growingio.giokit.launch.db.GioKitDatabase
 import com.growingio.giokit.launch.db.GioKitDbManager
 import com.growingio.giokit.launch.db.GioKitEventBean
 import org.json.JSONArray
@@ -38,13 +37,13 @@ object GioDatabase {
             val type = jsonObj.optString("t")
             gioEvent.type = type
             gioEvent.path = jsonObj.optString("p")
-            gioEvent.extra = getSaasEventType(type)
+            gioEvent.extra = getSaasEventExtra(type)
         } catch (e: JSONException) {
         }
         GioKitDbManager.instance.insertEvent(gioEvent)
     }
 
-    private fun getSaasEventType(type: String): String {
+    private fun getSaasEventExtra(type: String): String {
         return when (type) {
             "activate", "reengage" -> "ctvt"
             "cstm", "pvar", "evar", "ppl", "vstr" -> "cstm"

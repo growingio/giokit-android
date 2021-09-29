@@ -1,9 +1,8 @@
-package com.growingio.giokit.plugin.transform
+package com.growingio.giokit.plugin.transform.v3
 
-import com.didiglobal.booster.transform.TransformContext
-import com.growingio.giokit.plugin.utils.GioConfigUtils
+import com.growingio.giokit.plugin.transform.ClassTransformer
+import com.growingio.giokit.plugin.utils.GioTransformContext
 import com.growingio.giokit.plugin.utils.className
-import com.growingio.giokit.plugin.utils.println
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
@@ -14,7 +13,7 @@ import org.objectweb.asm.tree.*
  */
 class GioDatabaseTransformer : ClassTransformer {
 
-    override fun transform(context: TransformContext, klass: ClassNode): ClassNode {
+    override fun transform(context: GioTransformContext, klass: ClassNode): ClassNode {
         val className = klass.className
         if (className == "com.growingio.android.sdk.track.middleware.EventsSQLite") {
             klass.methods.find { it.name == "insertEvent" }.let { methodNode ->
@@ -93,7 +92,7 @@ class GioDatabaseTransformer : ClassTransformer {
                 MethodInsnNode(
                     Opcodes.INVOKESTATIC,
                     "com/growingio/giokit/hook/GioDatabase",
-                    "insertEvent",
+                    "insertV3Event",
                     "(Lcom/growingio/android/sdk/track/middleware/GEvent;)V",
                     false
                 )

@@ -11,7 +11,7 @@ GioKit 代码已托管在 [Github](https://github.com/growingio/giokit-android) 
 
 > **Gradle插件版本**： 3.2.1及以上  
 > **Android系统版本**：Android 5.0及以上
-> **支持AndroidX**
+> **仅支持AndroidX**
 
 ### 添加依赖
 在 project 级别的build.gradle文件中添加autotracker-gradle-plugin依赖和maven仓库。
@@ -26,7 +26,7 @@ buildscript {
     }
     dependencies {
         
-        //GGioKit plugin
+        //GioKit plugin
         classpath "com.growingio.giokit:giokit-plugin:1.0.0-SNAPSHOT"
     }
 }
@@ -43,9 +43,12 @@ allprojects {
 在 app级别的 `build.gradle` 文件中添加 `com.growingio.giokit` 插件、`giokit`依赖。
 ```groovy
 apply plugin: 'com.android.application'
-//添加 GioKit 插件
-apply plugin: 'com.growingio.giokit'
 
+//添加 GioKit 插件，针对SDK 3.0
+apply plugin: 'com.growingio.giokit'
+//或者如果是SDK2.0
+apply plugin: 'com.growingio.giokit.saas'
+//以上二者根据相应的sdk选择对应的插件
 ...
 
 dependencies {
@@ -81,11 +84,13 @@ giokitExt {
     trackFinder {
         domain = ["com.growingio.giokit.demo"]
         // 若用户自己封装了SDK customEvent 方法，可通过在此设置来查找封装类调用的代码
-        //className "com.growingio.giokit.demo.AutotrackerUtil"
+        //className "com.growingio.giokit.demo.AutotrackerUtils"
         //methodName "trackCustomEvent"
     }
 }
 ```
+
+> 默认查找域名为项目的 `ApplicationId`
 
 ## 功能
 
@@ -113,7 +118,7 @@ giokitExt {
 ![sdk data detail](https://github.com/growingio/giokit-android/blob/master/ScreenShot/datadetail.jpg?raw=true)
 
 ### 埋点追踪
-使用该功能可以显示界面中控件的path路径，兼容Webview。
+使用该功能可以显示界面中控件的path路径，目前只兼容WebView。
 
 ![sdk path](https://github.com/growingio/giokit-android/blob/master/ScreenShot/circler.jpg?raw=true)
 

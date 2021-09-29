@@ -2,7 +2,7 @@ package com.growingio.giokit.plugin.transform.v3
 
 import com.didiglobal.booster.transform.TransformContext
 import com.growingio.giokit.plugin.transform.ClassTransformer
-import com.growingio.giokit.plugin.utils.GioConfigUtils
+import com.growingio.giokit.plugin.utils.GioTransformContext
 import com.growingio.giokit.plugin.utils.className
 import com.growingio.giokit.plugin.utils.println
 import org.objectweb.asm.Opcodes
@@ -15,12 +15,12 @@ import org.objectweb.asm.tree.*
  */
 class GioInjectTransformer : ClassTransformer {
 
-    override fun transform(context: TransformContext, klass: ClassNode): ClassNode {
+    override fun transform(context: GioTransformContext, klass: ClassNode): ClassNode {
         val className = klass.className
         if (className == "com.growingio.giokit.hook.GioPluginConfig") {
             klass.methods.find { it.name == "initGioKitConfig" }
                 .let { methodNode ->
-                    methodNode?.instructions?.insert(createPluginConfigInsnList())
+                    methodNode?.instructions?.insert(createPluginConfigInsnList(context))
                 }
             return klass
         }
@@ -58,7 +58,7 @@ class GioInjectTransformer : ClassTransformer {
         }
     }
 
-    private fun createPluginConfigInsnList(): InsnList {
+    private fun createPluginConfigInsnList(context: GioTransformContext): InsnList {
         return with(InsnList()) {
             //new HashMap
             add(TypeInsnNode(Opcodes.NEW, "java/util/HashMap"))
@@ -69,7 +69,7 @@ class GioInjectTransformer : ClassTransformer {
             //put("hasGioPlugin",true)
             add(VarInsnNode(Opcodes.ALOAD, 0))
             add(LdcInsnNode("gioPlugin"))
-            add(InsnNode(if (GioConfigUtils.hasGioPluginV3) Opcodes.ICONST_1 else Opcodes.ICONST_0))
+            add(InsnNode(if (context.gioConfig.hasGioPlugin) Opcodes.ICONST_1 else Opcodes.ICONST_0))
             add(
                 MethodInsnNode(
                     Opcodes.INVOKESTATIC,
@@ -93,7 +93,7 @@ class GioInjectTransformer : ClassTransformer {
             //put("xmlScheme","")
             add(VarInsnNode(Opcodes.ALOAD, 0))
             add(LdcInsnNode("xmlScheme"))
-            add(LdcInsnNode(GioConfigUtils.v3XmlScheme))
+            add(LdcInsnNode(context.gioConfig.xmlScheme))
             add(
                 MethodInsnNode(
                     Opcodes.INVOKEINTERFACE,
@@ -108,7 +108,7 @@ class GioInjectTransformer : ClassTransformer {
             //put("gioDepend","")
             add(VarInsnNode(Opcodes.ALOAD, 0))
             add(LdcInsnNode("gioDepend"))
-            add(LdcInsnNode(GioConfigUtils.getGioDepend(GioConfigUtils.gioV3Sdks)))
+            add(LdcInsnNode(context.gioConfig.getGioDepend(context.gioConfig.gioSdks)))
             add(
                 MethodInsnNode(
                     Opcodes.INVOKEINTERFACE,

@@ -28,7 +28,7 @@
             </intent-filter>
 
             <intent-filter>
-                <data android:scheme="growing.xxxxxxxx" />
+                <data android:scheme="growing.8226cee4b794ebd0" />
 
                 <action android:name="android.intent.action.VIEW" />
 
