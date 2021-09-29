@@ -48,7 +48,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.growingio.giokit'
 //或者如果是SDK2.0
 apply plugin: 'com.growingio.giokit.saas'
-//以上二者根据相应的sdk选择对应的插件
+//以上二者根据相应的sdk选择对应的插件，请不要一起使用！！
 ...
 
 dependencies {
@@ -59,7 +59,7 @@ dependencies {
 }
 
 ```
-> 为了避免在正式环境下出现不必要的错误，请务必只在Debug换件下使用 GioKit 工具。
+> 为了避免在正式环境下出现不必要的错误，请务必只在Debug环境下使用 GioKit 工具。
 
 ### 初始化
 请将 GioKit 的初始化代码放入 `Application` 的 `onCreate` 中。
