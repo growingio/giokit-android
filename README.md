@@ -54,8 +54,8 @@ apply plugin: 'com.growingio.giokit.saas'
 dependencies {
     ...
     //GioKit
-    debugImplementation "com.growingio.giokit:giokit:1.0.0-SNASHOT"
-    releaseImplementation "com.growingio.giokit:giokit-no-op:1.0.0-SNASHOT"
+    debugImplementation "com.growingio.giokit:giokit:1.0.0-SNAPSHOT"
+    releaseImplementation "com.growingio.giokit:giokit-no-op:1.0.0-SNAPSHOT"
 }
 
 ```
