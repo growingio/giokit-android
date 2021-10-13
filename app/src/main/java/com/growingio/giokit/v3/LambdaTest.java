@@ -38,6 +38,4 @@ public class LambdaTest {
         GrowingAutotracker.get().trackCustomEvent("double2");
         GrowingAutotracker.get().trackCustomEvent("double3");
     }
-
-
 }

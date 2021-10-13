@@ -9,10 +9,6 @@ import android.os.Build
 import com.growingio.android.sdk.autotrack.AutotrackConfig
 import com.growingio.android.sdk.autotrack.IgnorePolicy
 import com.growingio.android.sdk.autotrack.page.PageProvider
-import com.growingio.android.sdk.collection.CoreInitialize
-import com.growingio.android.sdk.collection.GConfig
-import com.growingio.android.sdk.collection.GrowingIO
-import com.growingio.android.sdk.collection.NetworkConfig
 import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
 import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
@@ -35,64 +31,62 @@ object SdkV3InfoUtils {
         val hasDepend = hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")
         if (hasDepend) {
             val (_, sdkVersion, _) = GioPluginConfig.analyseDepend()
-            list.add(SdkInfo("SDK版本", sdkVersion))
-            list.add(SdkInfo("ProjectId", ConfigurationProvider.core().projectId))
-            list.add(SdkInfo("URLScheme", ConfigurationProvider.core().urlScheme))
+            list.tryAdd { SdkInfo("SDK版本", sdkVersion) }
+            list.tryAdd { SdkInfo("ProjectId", ConfigurationProvider.core().projectId) }
+            list.tryAdd { SdkInfo("URLScheme", ConfigurationProvider.core().urlScheme) }
             val checkItem = CheckSelfUtils.getDataSourceID(0)
-            list.add(SdkInfo("DataSource ID", checkItem.content))
-            list.add(
+            list.tryAdd { SdkInfo("DataSource ID", checkItem.content) }
+            list.tryAdd {
                 SdkInfo(
                     "DataServerHost",
                     ConfigurationProvider.core().dataCollectionServerHost
                 )
-            )
-            list.add(
+            }
+            list.tryAdd {
                 SdkInfo(
                     "数据收集",
                     if (ConfigurationProvider.core().isDataCollectionEnabled) "打开" else "关闭"
                 )
-            )
-            list.add(
+            }
+            list.tryAdd {
                 SdkInfo(
                     "Debug测试",
                     if (ConfigurationProvider.core().isDebugEnabled) "是" else "否"
                 )
-            )
-            list.add(
+            }
+            list.tryAdd {
                 SdkInfo(
                     "oaid采集",
-                    if (ConfigurationProvider.core().isOaidEnabled) "开" else "关"
+                    CheckSelfUtils.getOaidEnabled(0).content
                 )
-            )
-            list.add(SdkInfo("分发渠道", ConfigurationProvider.core().channel))
-            list.add(
+            }
+            list.tryAdd { SdkInfo("分发渠道", ConfigurationProvider.core().channel) }
+            list.tryAdd {
                 SdkInfo(
                     "每日流量限制",
                     ConfigurationProvider.core().cellularDataLimit.toString() + "M"
                 )
-            )
-            list.add(
+            }
+            list.tryAdd {
                 SdkInfo(
                     "数据发送间隔",
                     ConfigurationProvider.core().dataUploadInterval.toString() + "S"
                 )
-            )
-            list.add(
+            }
+            list.tryAdd {
                 SdkInfo(
                     "访问会话时长",
                     ConfigurationProvider.core().sessionInterval.toString() + "S"
                 )
-            )
-            list.add(SdkInfo("事件过滤", getExcludeEvent()))
-            list.add(SdkInfo("事件属性过滤", getIgnoreFiled()))
+            }
+            list.tryAdd { SdkInfo("事件过滤", getExcludeEvent()) }
+            list.tryAdd { SdkInfo("事件属性过滤", getIgnoreFiled()) }
             val scale = getImpressionScale()
-            if (scale >= 0F) list.add(SdkInfo("曝光比例", scale.toString()))
+            if (scale >= 0F) list.tryAdd { SdkInfo("曝光比例", scale.toString()) }
 
-            list.add(SdkInfo("登录账户", getLoginUser()))
-            list.add(SdkInfo("位置信息", getLocation()))
-            list.add(SdkInfo("设备ID", DeviceInfoProvider.get().deviceId))
-
-
+            list.tryAdd { SdkInfo("登录账户", getLoginUser()) }
+            list.tryAdd { SdkInfo("位置信息", getLocation()) }
+            list.tryAdd { SdkInfo("设备ID", DeviceInfoProvider.get().deviceId) }
         } else {
             list.add(SdkInfo("SDK", "SDK未集成"))
         }
@@ -102,7 +96,7 @@ object SdkV3InfoUtils {
 
     private fun getExcludeEvent(): String {
         val excludeEventMask = ConfigurationProvider.core().excludeEvent
-        val events = EventExcludeFilter.getFilterEventLog(excludeEventMask)
+        val events = EventExcludeFilter.getEventFilterLog(excludeEventMask)
         if (events.isNullOrEmpty()) return "未设置"
         return events.substringAfter("[").substringBefore("]")
     }
@@ -186,84 +180,35 @@ object SdkV3InfoUtils {
         list.add(SdkInfo("设备信息", isHeader = true))
         list.add(SdkInfo("手机型号", Build.MANUFACTURER + " " + Build.MODEL))
         list.add(SdkInfo("系统版本", Build.VERSION.RELEASE + " (" + Build.VERSION.SDK_INT + ")"))
-        try {
-            list.add(SdkInfo("SD卡剩余空间", DeviceUtils.getSDCardSpace(context)))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-        try {
-            list.add(SdkInfo("系统剩余空间", DeviceUtils.getRomSpace(context)))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            list.add(
-                SdkInfo(
-                    "分辨率",
-                    "${DeviceUtils.getWidthPixels(context)}x${
-                        DeviceUtils.getRealHeightPixels(
-                            context
-                        )
-                    }"
-                )
+        list.tryAdd { SdkInfo("SD卡剩余空间", DeviceUtils.getSDCardSpace(context)) }
+        list.tryAdd { SdkInfo("系统剩余空间", DeviceUtils.getRomSpace(context)) }
+        list.tryAdd {
+            SdkInfo(
+                "分辨率",
+                "${DeviceUtils.getWidthPixels(context)}x${
+                    DeviceUtils.getRealHeightPixels(
+                        context
+                    )
+                }"
             )
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
         }
-
-        try {
-            if (context is Activity) {
-                list.add(SdkInfo("屏幕尺寸", DeviceUtils.getScreenInch(context).toString()))
+        if (context is Activity) {
+            list.tryAdd { SdkInfo("屏幕尺寸", DeviceUtils.getScreenInch(context).toString()) }
+        }
+        list.tryAdd { SdkInfo("ROOT", DeviceUtils.isRoot(context).toString()) }
+        list.tryAdd { SdkInfo("DENSITY", Resources.getSystem().displayMetrics.density.toString()) }
+        list.tryAdd { SdkInfo("IP", DeviceUtils.getIPAddress(true)) }
+        if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
+            list.tryAdd { SdkInfo("IMEI", DeviceInfoProvider.get().deviceId) }
+        }
+        if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
+            list.tryAdd { SdkInfo("AndroidId", DeviceInfoProvider.get().androidId) }
+        }
+        if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
+            DeviceInfoProvider.get().googleAdId?.let {
+                list.tryAdd { SdkInfo("GoogleId", it) }
             }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
         }
-
-        try {
-            list.add(SdkInfo("ROOT", DeviceUtils.isRoot(context).toString()))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            list.add(SdkInfo("DENSITY", Resources.getSystem().displayMetrics.density.toString()))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            list.add(SdkInfo("IP", DeviceUtils.getIPAddress(true)))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
-                list.add(SdkInfo("IMEI", DeviceInfoProvider.get().deviceId))
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
-                list.add(SdkInfo("AndroidId", DeviceInfoProvider.get().androidId))
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
-                DeviceInfoProvider.get().googleAdId?.let {
-                    list.add(SdkInfo("GoogleId", it))
-                }
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
         return list
     }
 

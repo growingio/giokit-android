@@ -29,7 +29,7 @@ internal object GioKitImpl {
 
         initGioKitConfig()
 
-        DatabaseCreator.createDb(app) { GioKitDatabase.initDb(app) }
+        GioKitDatabase.initDb(app)
 
         gioKitHoverManager = GioKitHoverManager(app)
     }

@@ -19,7 +19,6 @@ import java.util.concurrent.*
 /**
  * Represents a delegate of TransformInvocation
  *
- * @author johnsonlee
  */
 internal class GioKitTransformInvocation(
     private val delegate: TransformInvocation,

@@ -5,10 +5,10 @@ import com.growingio.android.sdk.autotrack.CdpAutotrackConfig
 import com.growingio.android.sdk.collection.*
 import com.growingio.android.sdk.track.CdpConfig
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
+import com.growingio.android.sdk.track.utils.OaidHelper
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hook.GioTrackInfo
 import com.growingio.giokit.hover.check.CheckItem
-import java.lang.Exception
 
 /**
  * <p>
@@ -426,12 +426,31 @@ object CheckSelfUtils {
 
     private fun getOaidEnabledV3(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            return with(ConfigurationProvider.core().isOaidEnabled) {
+            val isV320 = hasMethodNoParam(
+                ConfigurationProvider.core(),
+                "com.growingio.android.sdk.CoreConfiguration",
+                "isOaidEnabled"
+            )
+            if (isV320 != null) {
+                if (isV320 is Boolean) {
+                    return CheckItem(
+                        index,
+                        "正在查询oaid状态",
+                        "oaid采集",
+                        if (isV320) "开" else "关",
+                        false
+                    )
+                }
+            }
+        }
+        if (hasClass("com.growingio.android.sdk.TrackerContext") && hasClass("com.growingio.android.sdk.track.utils.OaidHelper")) {
+            //v3.3.0 oaid转为模块
+            return with(TrackerContext.get().registry.getModelLoader(OaidHelper::class.java)) {
                 CheckItem(
                     index,
                     "正在查询oaid状态",
-                    "oaid采集",
-                    if (this) "开" else "关",
+                    "oaid采集模块",
+                    if (this != null) "已注册" else "未注册",
                     false
                 )
             }
@@ -478,11 +497,27 @@ object CheckSelfUtils {
     }
 
     private fun hasClass(className: String): Boolean {
-        try {
+        return try {
             Class.forName(className)
-            return true
+            true
         } catch (e: ClassNotFoundException) {
-            return false
+            false
+        }
+    }
+
+    private fun hasMethodNoParam(obj: Any, className: String, method: String): Any? {
+        return try {
+            val clazz = Class.forName(className)
+            val m = clazz.getDeclaredMethod(method)
+            return m.invoke(obj)
+        } catch (e: ClassNotFoundException) {
+            null
+        } catch (e: NoSuchMethodException) {
+            null
+        } catch (e: SecurityException) {
+            null
+        } catch (e: Exception) {
+            null
         }
     }
 }

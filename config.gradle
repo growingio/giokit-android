@@ -3,7 +3,7 @@ ext {
             compileSdkVersion         : 30,
             suppotrSdkVersion         : "30.0.3",
             applicationId             : "com.growingio.giokit",
-            minSdkVersion             : 21,
+            minSdkVersion             : 17,
             targetSdkVersion          : 30,
             //app版本号
             versionCode               : 1,
@@ -16,7 +16,7 @@ ext {
             okhttp_v3                 : "3.14.7",
             okhttp_v4                 : "4.7.0",
             booster_version           : "3.5.0",
-            growingio                 : "3.2.2-SNAPSHOT",
+            growingio                 : "3.3.0",
     ]
 
     growingio = [

@@ -4,6 +4,7 @@ import com.didiglobal.booster.transform.TransformContext
 import com.growingio.giokit.plugin.transform.ClassTransformer
 import com.growingio.giokit.plugin.utils.GioTransformContext
 import com.growingio.giokit.plugin.utils.className
+import com.growingio.giokit.plugin.utils.println
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
 
@@ -11,9 +12,13 @@ class GioWebViewTransformer : ClassTransformer {
 
     override fun transform(context: GioTransformContext, klass: ClassNode): ClassNode {
         val className = klass.className
+        if (ignoreClassName(context, klass.className)) {
+            return klass
+        }
         if (!isAssignable(context, className)) {
             return klass
         }
+        "WebChromeClient-$className".println()
         klass.methods.find { it.name == "onProgressChanged" }.let { methodNode ->
             if (methodNode == null) {
                 generateProgressMethod(klass)
@@ -32,7 +37,6 @@ class GioWebViewTransformer : ClassTransformer {
             null,
             null
         )
-
         val superList = with(InsnList()) {
             add(VarInsnNode(Opcodes.ALOAD, 0))
             add(VarInsnNode(Opcodes.ALOAD, 1))
@@ -40,7 +44,7 @@ class GioWebViewTransformer : ClassTransformer {
             add(
                 MethodInsnNode(
                     Opcodes.INVOKESPECIAL,
-                    klass.className,
+                    klass.superName,
                     "onProgressChanged",
                     "(Landroid/webkit/WebView;I)V",
                     false
@@ -48,17 +52,17 @@ class GioWebViewTransformer : ClassTransformer {
             )
             this
         }
-        mn.instructions?.insert(superList)
-
         mn.instructions?.insert(createWebHookInsnList())
+        mn.instructions?.insert(superList)
 
         mn.visitInsn(Opcodes.RETURN)
         mn.maxStack = 3
         mn.maxLocals = 3
         mn.visitEnd()
         klass.methods.add(mn)
-
     }
+
+
 
     private fun isAssignable(context: TransformContext, className: String): Boolean {
         try {
@@ -89,4 +93,33 @@ class GioWebViewTransformer : ClassTransformer {
             this
         }
     }
+
+    fun ignoreClassName(context: GioTransformContext, className: String): Boolean {
+        for (domain in context.gioConfig.gioKitExt.trackFinder.domain) {
+            if (className.startsWith(domain, true)) {
+                return false
+            }
+        }
+
+        for (ignore in ignoreClassNames) {
+            if (className.startsWith(ignore, true)) {
+                return true
+            }
+        }
+        return false
+    }
+
+
+    val ignoreClassNames = arrayListOf(
+        "kotlin",
+        "android",
+        "com.growingio",
+        "androidx",
+        "com.google",
+        "okhttp3",
+        "okio",
+        "com.github.ybq.android",
+        "io.mattcarroll.hover",
+        "org.intellij"
+    )
 }

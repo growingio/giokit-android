@@ -1,10 +1,10 @@
 package com.growingio.giokit.saas
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.growingio.android.sdk.collection.GrowingIO
 
 class MainActivity : AppCompatActivity() {

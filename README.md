@@ -14,7 +14,7 @@ GioKit 代码已托管在 [Github](https://github.com/growingio/giokit-android) 
 > **仅支持AndroidX**
 
 ### 添加依赖
-在 project 级别的build.gradle文件中添加autotracker-gradle-plugin依赖和maven仓库。
+在 project 级别的build.gradle文件中添加giokit-plugin依赖和maven仓库。
 
 ```groovy
 buildscript {

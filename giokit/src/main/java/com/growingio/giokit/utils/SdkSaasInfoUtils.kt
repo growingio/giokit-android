@@ -36,27 +36,27 @@ object SdkSaasInfoUtils {
         val hasDepend = hasClass("com.growingio.android.sdk.collection.CoreInitialize")
         if (hasDepend) {
             val (_, sdkVersion, _) = GioPluginConfig.analyseDepend()
-            list.add(SdkInfo("SDK版本", sdkVersion))
-            list.add(SdkInfo("ProjectId", CoreInitialize.coreAppState().projectId))
-            list.add(SdkInfo("URLScheme", CoreInitialize.config().getsGrowingScheme()))
-            list.add(SdkInfo("DataServerHost", NetworkConfig.getInstance().endPoint))
+            list.tryAdd { SdkInfo("SDK版本", sdkVersion) }
+            list.tryAdd { SdkInfo("ProjectId", CoreInitialize.coreAppState().projectId) }
+            list.tryAdd { SdkInfo("URLScheme", CoreInitialize.config().getsGrowingScheme()) }
+            list.tryAdd { SdkInfo("DataServerHost", NetworkConfig.getInstance().endPoint) }
 
             val sdkInfoStrArray = CoreInitialize.config().toString().split("\n")
             for (info in sdkInfoStrArray) {
                 val infoKv = info.split(":")
                 if (infoKv.size > 1) {
-                    getMappingInfo(infoKv[0], infoKv[1])?.let {
-                        list.add(it)
+                    getMappingInfo(infoKv[0], infoKv[1])?.let { info ->
+                        list.tryAdd { info }
                     }
                 }
             }
-            list.add(SdkInfo("登录账户", CoreInitialize.growingIOIPC().userId))
-            list.add(
+            list.tryAdd { SdkInfo("登录账户", CoreInitialize.growingIOIPC().userId) }
+            list.tryAdd {
                 SdkInfo(
                     "位置信息",
                     "${CoreInitialize.coreAppState().latitude},${CoreInitialize.coreAppState().longitude}"
                 )
-            )
+            }
 
 
         } else {
@@ -138,82 +138,34 @@ object SdkSaasInfoUtils {
         list.add(SdkInfo("设备信息", isHeader = true))
         list.add(SdkInfo("手机型号", Build.MANUFACTURER + " " + Build.MODEL))
         list.add(SdkInfo("系统版本", Build.VERSION.RELEASE + " (" + Build.VERSION.SDK_INT + ")"))
-        try {
-            list.add(SdkInfo("SD卡剩余空间", DeviceUtils.getSDCardSpace(context)))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-        try {
-            list.add(SdkInfo("系统剩余空间", DeviceUtils.getRomSpace(context)))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            list.add(
-                SdkInfo(
-                    "分辨率",
-                    "${DeviceUtils.getWidthPixels(context)}x${
-                        DeviceUtils.getRealHeightPixels(
-                            context
-                        )
-                    }"
-                )
+        list.tryAdd { SdkInfo("SD卡剩余空间", DeviceUtils.getSDCardSpace(context)) }
+        list.tryAdd { SdkInfo("系统剩余空间", DeviceUtils.getRomSpace(context)) }
+        list.tryAdd {
+            SdkInfo(
+                "分辨率",
+                "${DeviceUtils.getWidthPixels(context)}x${
+                    DeviceUtils.getRealHeightPixels(
+                        context
+                    )
+                }"
             )
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
         }
-
-        try {
-            if (context is Activity) {
-                list.add(SdkInfo("屏幕尺寸", DeviceUtils.getScreenInch(context).toString()))
+        if (context is Activity) {
+            list.tryAdd { SdkInfo("屏幕尺寸", DeviceUtils.getScreenInch(context).toString()) }
+        }
+        list.tryAdd { SdkInfo("ROOT", DeviceUtils.isRoot(context).toString()) }
+        list.tryAdd { SdkInfo("DENSITY", Resources.getSystem().displayMetrics.density.toString()) }
+        list.tryAdd { SdkInfo("IP", DeviceUtils.getIPAddress(true)) }
+        if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            list.tryAdd { SdkInfo("IMEI", CoreInitialize.deviceUUIDFactory().deviceId) }
+        }
+        if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            list.tryAdd { SdkInfo("AndroidId", CoreInitialize.deviceUUIDFactory().androidId) }
+        }
+        if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            CoreInitialize.deviceUUIDFactory().googleAdId?.let {
+                list.tryAdd { SdkInfo("GoogleId", it) }
             }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            list.add(SdkInfo("ROOT", DeviceUtils.isRoot(context).toString()))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            list.add(SdkInfo("DENSITY", Resources.getSystem().displayMetrics.density.toString()))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            list.add(SdkInfo("IP", DeviceUtils.getIPAddress(true)))
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
-                list.add(SdkInfo("IMEI", CoreInitialize.deviceUUIDFactory().deviceId))
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
-                list.add(SdkInfo("AndroidId", CoreInitialize.deviceUUIDFactory().androidId))
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
-                CoreInitialize.deviceUUIDFactory().googleAdId?.let {
-                    list.add(SdkInfo("GoogleId", it))
-                }
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace();
         }
 
         return list

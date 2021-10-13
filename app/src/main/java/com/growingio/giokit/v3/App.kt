@@ -20,7 +20,7 @@ class App : Application() {
 
         initGioSdk()
 
-        GioKit.Builder(this).build()
+        GioKit.with(this).build()
     }
 
     fun onTest() {
