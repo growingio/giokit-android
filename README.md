@@ -74,23 +74,26 @@ public class MyApplication extends Application {
 }
 ```
 
-### 设置手动埋点范围
-为了方便统一查看用户的手动埋点信息，我们通过 GioKit Plugin 插件来查找在应用中手动埋点调用的位置。
-
+### 插件配置
+为了满足用户的需求，我们在 Giokit 插件中添加了多项配置。
 ```groovy
 giokitExt {
     debugMode false
+    enableIncremental false
+    enableRelease false
     // 统计该域值下所有埋点信息，如 com.growingio 表示统计 com.growingio 包名下的埋点代码
     trackFinder {
         domain = ["com.growingio.giokit.demo"]
         // 若用户自己封装了SDK customEvent 方法，可通过在此设置来查找封装类调用的代码
-        //className "com.growingio.giokit.demo.AutotrackerUtils"
-        //methodName "trackCustomEvent"
+        // className "com.growingio.giokit.demo.AutotrackerUtils"
+        // methodName "trackCustomEvent"
     }
 }
 ```
-
-> 默认查找域名为项目的 `ApplicationId`
+1. debugMode 为true时，项目编译的时候会输出相应的 Debug 信息；
+2. enableIncremental 是否打开增量编译，默认为true。由于 Giokit 会查找代码中的所有埋点信息，所以在增量编译时有时候会出现无法找到埋点代码的情况，这时候可以将其设置false，来保证每次查找的准确性；
+3. enableRelease 是否支持release打包。giokit 是只推荐在 debug 环境下使用，若一定要在release环境下使用并是插件生效，则需要打开此开关；
+4. 为了方便统一查看用户的手动埋点信息，我们通过 trackFinder 配置来查找在应用中手动埋点调用的位置。默认查找域名为项目的`ApplicationId`
 
 ## 功能
 
