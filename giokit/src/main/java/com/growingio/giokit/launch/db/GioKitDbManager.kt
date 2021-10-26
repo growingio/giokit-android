@@ -49,7 +49,7 @@ class GioKitDbManager private constructor() {
     // saas sdk 数据库中没有对照的gsid
     // 所以直接删除对应所有类型所有事件
     fun removeEvents(type: String, lastId: String) {
-        lastId.toLongOrNull()?.let { id ->
+        lastId.toLongOrNull()?.let { _ ->
             GioKitDatabase.instance.getEventDao().updateLastExtra(type)
         }
     }

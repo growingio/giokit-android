@@ -23,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ListUpdateCallback;
 
+import com.growingio.uikit.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,7 +44,6 @@ class HoverViewStateExpanded extends BaseHoverViewState {
     private static final String TAG = "HoverMenuVSExpanded";
     private static final int ANCHOR_TAB_X_OFFSET_IN_PX = 100;
     private static final int ANCHOR_TAB_Y_OFFSET_IN_PX = 100;
-    private static final int TAB_SPACING_IN_PX = 200;
     private static final int TAB_APPEARANCE_DELAY_IN_MS = 100;
 
     private boolean mHasControl = false;
@@ -87,15 +88,13 @@ class HoverViewStateExpanded extends BaseHoverViewState {
             throw new RuntimeException("Cannot take control of a FloatingTab when we already control one.");
         }
 
+        int offset = hoverView.getContext().getResources().getDimensionPixelSize(R.dimen.hover_menu_tab_offset);
         mHasControl = true;
         mHoverView = hoverView;
         mHoverView.mState = this;
         mHoverView.makeTouchableInWindow();
         mHoverView.requestFocus(); // For handling hardware back button presses.
-        mDock = new Point(
-                mHoverView.mScreen.getWidth() - ANCHOR_TAB_X_OFFSET_IN_PX,
-                ANCHOR_TAB_Y_OFFSET_IN_PX
-        );
+        mDock = new Point(mHoverView.mScreen.getWidth() - offset, offset);
         if (null != mHoverView.mMenu) {
             Log.d(TAG, "Already has menu. Expanding.");
             setMenu(mHoverView.mMenu);
@@ -144,9 +143,10 @@ class HoverViewStateExpanded extends BaseHoverViewState {
                 }
 
                 Log.d(TAG, "Adding tabView: " + section.getTabView() + ". Its parent is: " + section.getTabView().getParent());
+                int spacing = mHoverView.getContext().getResources().getDimensionPixelSize(R.dimen.hover_menu_spacing);
                 mChainedTabs.add(chainedTab);
                 mSections.put(chainedTab, section);
-                mTabChains.add(new TabChain(chainedTab, TAB_SPACING_IN_PX));
+                mTabChains.add(new TabChain(chainedTab, spacing));
 
                 chainedTab.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -408,13 +408,14 @@ class HoverViewStateExpanded extends BaseHoverViewState {
                 tabView
         );
         newTab.disappearImmediate();
+        int spacing = mHoverView.getContext().getResources().getDimensionPixelSize(R.dimen.hover_menu_spacing);
         if (mChainedTabs.size() <= position) {
             // This section was appended to the end.
             mChainedTabs.add(newTab);
-            mTabChains.add(new TabChain(newTab, TAB_SPACING_IN_PX));
+            mTabChains.add(new TabChain(newTab, spacing));
         } else {
             mChainedTabs.add(position, newTab);
-            mTabChains.add(position, new TabChain(newTab, TAB_SPACING_IN_PX));
+            mTabChains.add(position, new TabChain(newTab, spacing));
         }
 
         newTab.setOnClickListener(new View.OnClickListener() {

@@ -12,6 +12,8 @@ open class GioKitExtension {
     //查找项目下的埋点代码位置
     var trackFinder: TrackFinder = TrackFinder()
     var debugMode: Boolean = false
+    var enableIncremental = true
+    var enableRelease = false
 
     fun trackFinder(action: Action<TrackFinder>) {
         action.execute(trackFinder)

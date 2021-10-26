@@ -33,10 +33,10 @@ import io.mattcarroll.hover.overlay.OverlayPermission;
 
 /**
  * {@code Service} that presents a {@link HoverView} within a {@code Window}.
- *
+ * <p>
  * The {@code HoverView} is displayed whenever any Intent is received by this {@code Service}. The
  * {@code HoverView} is removed and destroyed whenever this {@code Service} is destroyed.
- *
+ * <p>
  * A {@link Service} is required for displaying a {@code HoverView} in a {@code Window} because there
  * is no {@code Activity} to associate with the {@code HoverView}'s UI. This {@code Service} is the
  * application's link to the device's {@code Window} to display the {@code HoverView}.
@@ -87,6 +87,8 @@ public abstract class HoverMenuService extends Service {
             Log.d(TAG, "onStartCommand() - showing Hover menu.");
             mIsRunning = true;
             initHoverMenu(intent);
+        } else if (mHoverView != null) {
+            mHoverView.addToWindow();
         }
 
         return START_STICKY;

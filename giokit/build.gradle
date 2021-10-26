@@ -50,6 +50,7 @@ dependencies {
 
     kapt rootProject.ext.dependencies["room-compiler"]
 
+    compileOnly fileTree(include: ['*.jar'], dir: '../thirdLibs')
     compileOnly rootProject.ext.growingio["autotracker-cdp"]
     compileOnly rootProject.ext.growingio["tracker-cdp"]
     compileOnly rootProject.ext.growingio["autotrack-saas"]

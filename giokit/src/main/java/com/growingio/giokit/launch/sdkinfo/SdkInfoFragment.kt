@@ -31,11 +31,11 @@ class SdkInfoFragment : BaseFragment() {
 
         val allInfos = arrayListOf<SdkInfo>()
         if (GioPluginConfig.isSaasSdk) {
-            allInfos.addAll(SdkSaasInfoUtils.getSdkInfo(requireContext()))
+            allInfos.addAll(SdkSaasInfoUtils.getSdkInfo())
             allInfos.addAll(SdkSaasInfoUtils.getAppInfo(requireContext()))
             allInfos.addAll(SdkSaasInfoUtils.getMobileInfo(requireContext()))
         } else {
-            allInfos.addAll(SdkV3InfoUtils.getSdkInfo(requireContext()))
+            allInfos.addAll(SdkV3InfoUtils.getSdkInfo())
             allInfos.addAll(SdkV3InfoUtils.getAppInfo(requireContext()))
             allInfos.addAll(SdkV3InfoUtils.getMobileInfo(requireContext()))
         }

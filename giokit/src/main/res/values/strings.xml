@@ -10,5 +10,5 @@
     <string name="giokit_menu_info">SDK信息</string>
     <string name="giokit_menu_code">代码埋点</string>
     <string name="giokit_menu_data">埋点数据</string>
-    <string name="giokit_menu_track">XPATH分析</string>
+    <string name="giokit_menu_track">XPath追踪</string>
 </resources>

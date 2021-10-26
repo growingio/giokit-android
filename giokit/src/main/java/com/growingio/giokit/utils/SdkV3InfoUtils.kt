@@ -25,7 +25,7 @@ import com.growingio.giokit.launch.sdkinfo.SdkInfo
  */
 object SdkV3InfoUtils {
     //获取 sdk 信息
-    fun getSdkInfo(context: Context): List<SdkInfo> {
+    fun getSdkInfo(): List<SdkInfo> {
         val list = arrayListOf<SdkInfo>()
         list.add(SdkInfo("GrowingIO SDK信息", isHeader = true))
         val hasDepend = hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")
@@ -153,6 +153,7 @@ object SdkV3InfoUtils {
             list.add(SdkInfo("包名", pi.packageName))
             list.add(SdkInfo("应用版本名", pi.versionName))
             list.add(SdkInfo("应用版本号", pi.versionCode.toString()))
+
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N) {
                 list.add(SdkInfo("最低系统版本号", context.applicationInfo.minSdkVersion.toString()))
             }

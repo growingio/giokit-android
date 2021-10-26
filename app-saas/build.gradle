@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
 
-    id 'com.growingio.android'
     id 'com.growingio.giokit.saas'
 }
 
@@ -17,6 +16,7 @@ android {
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
 
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -50,7 +50,10 @@ dependencies {
     implementation rootProject.ext.dependencies["material"]
     implementation rootProject.ext.dependencies["constraintLayout"]
 
-    implementation rootProject.ext.growingio["autotrack-saas"]
+
+    implementation fileTree(include: ['*.jar'], dir: '../thirdLibs')
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation rootProject.ext.growingio["track-saas"]
     //implementation rootProject.ext.growingio["track-saas-cdp"]
     //implementation "com.growingio.giokit:giokit:1.0.0"
     implementation project(":giokit")

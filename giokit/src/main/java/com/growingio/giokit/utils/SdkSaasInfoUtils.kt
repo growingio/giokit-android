@@ -6,19 +6,8 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
-import com.growingio.android.sdk.autotrack.AutotrackConfig
-import com.growingio.android.sdk.autotrack.IgnorePolicy
-import com.growingio.android.sdk.autotrack.page.PageProvider
 import com.growingio.android.sdk.collection.CoreInitialize
-import com.growingio.android.sdk.collection.GConfig
-import com.growingio.android.sdk.collection.GrowingIO
 import com.growingio.android.sdk.collection.NetworkConfig
-import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
-import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
-import com.growingio.android.sdk.track.providers.ConfigurationProvider
-import com.growingio.android.sdk.track.providers.DeviceInfoProvider
-import com.growingio.android.sdk.track.providers.SessionProvider
-import com.growingio.android.sdk.track.providers.UserInfoProvider
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.launch.sdkinfo.SdkInfo
 import java.util.*
@@ -30,7 +19,7 @@ import java.util.*
  */
 object SdkSaasInfoUtils {
     //获取 sdk 信息
-    fun getSdkInfo(context: Context): List<SdkInfo> {
+    fun getSdkInfo(): List<SdkInfo> {
         val list = arrayListOf<SdkInfo>()
         list.add(SdkInfo("GrowingIO SDK信息", isHeader = true))
         val hasDepend = hasClass("com.growingio.android.sdk.collection.CoreInitialize")
@@ -45,8 +34,8 @@ object SdkSaasInfoUtils {
             for (info in sdkInfoStrArray) {
                 val infoKv = info.split(":")
                 if (infoKv.size > 1) {
-                    getMappingInfo(infoKv[0], infoKv[1])?.let { info ->
-                        list.tryAdd { info }
+                    getMappingInfo(infoKv[0], infoKv[1])?.let {
+                        list.tryAdd { it }
                     }
                 }
             }

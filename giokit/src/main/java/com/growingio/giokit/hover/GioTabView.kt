@@ -19,6 +19,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.util.TypedValue
@@ -54,13 +55,13 @@ class GioTabView(
 
     fun setTabBackgroundColor(@ColorInt backgroundColor: Int) {
         mBackgroundColor = backgroundColor
-        mCircleDrawable?.setColorFilter(mBackgroundColor, PorterDuff.Mode.SRC_ATOP)
+        mCircleDrawable?.colorFilter = PorterDuffColorFilter(mBackgroundColor, PorterDuff.Mode.SRC_ATOP)
     }
 
     fun setTabForegroundColor(@ColorInt foregroundColor: Int?) {
         mForegroundColor = foregroundColor
         if (null != mForegroundColor) {
-            mIconDrawable!!.setColorFilter(mForegroundColor!!, PorterDuff.Mode.SRC_ATOP)
+            mIconDrawable?.colorFilter = PorterDuffColorFilter(mForegroundColor!!, PorterDuff.Mode.SRC_ATOP)
         } else {
             mIconDrawable!!.colorFilter = null
         }
@@ -69,7 +70,7 @@ class GioTabView(
     fun setIcon(icon: Drawable?) {
         mIconDrawable = icon
         if (null != mForegroundColor && null != mIconDrawable) {
-            mIconDrawable!!.setColorFilter(mForegroundColor!!, PorterDuff.Mode.SRC_ATOP)
+            mIconDrawable?.colorFilter = PorterDuffColorFilter(mForegroundColor!!, PorterDuff.Mode.SRC_ATOP)
         }
         updateIconBounds()
         invalidate()

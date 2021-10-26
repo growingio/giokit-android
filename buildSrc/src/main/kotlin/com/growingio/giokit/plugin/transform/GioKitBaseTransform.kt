@@ -21,7 +21,7 @@ import org.gradle.api.Project
  *
  * @author cpacm 2021/8/18
  */
-open class GioKitBaseTransform(val project: Project,val gioConfig:GioConfig) : Transform() {
+open class GioKitBaseTransform(val project: Project, val gioConfig: GioConfig) : Transform() {
 
     private val android: BaseExtension = project.getAndroid()
 
@@ -60,9 +60,13 @@ open class GioKitBaseTransform(val project: Project,val gioConfig:GioConfig) : T
         else -> super.getReferencedScopes()
     }
 
-    override fun isIncremental() = true
+    override fun isIncremental() = gioConfig.gioKitExt.enableIncremental
 
     override fun transform(transformInvocation: TransformInvocation) {
+
+        //对 release task 不作处理,除非配置为release环境下可行
+        if (!gioConfig.gioKitExt.enableRelease && isReleaseTask(project)) return
+
         GioKitTransformInvocation(transformInvocation, this).apply {
             if (isIncremental) {
                 doIncrementalTransform()
@@ -72,6 +76,12 @@ open class GioKitBaseTransform(val project: Project,val gioConfig:GioConfig) : T
             }
             //赋值代码信息时需要再走一遍transform
             doLatestTransform()
+        }
+    }
+
+    private fun isReleaseTask(project: Project): Boolean {
+        return project.gradle.startParameter.taskNames.any {
+            it.contains("release") || it.contains("Release")
         }
     }
 

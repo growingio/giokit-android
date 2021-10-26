@@ -62,6 +62,11 @@ public class GioHoverMenuService extends HoverMenuService {
         GioKitImpl.gioKitHoverManager.setupHoverView(hoverView);
     }
 
+    @Override
+    protected void onHoverMenuExitingByUserRequest() {
+
+    }
+
     private HoverMenu createHoverMenu() {
         return new GioHoverCreateFactory().createGioMenuFromCode(getContextForHoverMenu());
     }

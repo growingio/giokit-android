@@ -98,8 +98,6 @@ class GioHoverMenu(val context: Context, val theme: GioHoverTheme) : HoverMenu()
         @ColorInt iconColor: Int?
     ): View {
         val resource = context.resources
-        val elevation =
-            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8f, resource.displayMetrics)
 
         val tabView = GioTabView(
             context,
@@ -108,7 +106,6 @@ class GioHoverMenu(val context: Context, val theme: GioHoverTheme) : HoverMenu()
         )
         tabView.setTabBackgroundColor(backgroundColor)
         tabView.setTabForegroundColor(iconColor)
-        tabView.elevation = elevation
         return tabView
     }
 

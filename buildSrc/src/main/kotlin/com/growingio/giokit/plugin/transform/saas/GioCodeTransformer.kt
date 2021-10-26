@@ -134,7 +134,7 @@ class GioCodeTransformer : ClassTransformer {
                 return true
             }
         }
-        return false
+        return true
     }
 
 

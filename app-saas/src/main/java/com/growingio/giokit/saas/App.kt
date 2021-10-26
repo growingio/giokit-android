@@ -27,9 +27,8 @@ class App : Application() {
     fun initGioSdk() {
         val configuration = Configuration()
             .setProjectId("0a1b4118dd954ec3bcc69da5138bdb96")
-            .setURLScheme("growing.a9b21b7c71946093")
+            .setURLScheme("growing.1f85fd632636891b")
             .setMutiprocess(true)
-            .trackAllFragments()
             .setTestMode(true)
             //.setDataSourceId("12345678")
             .setDebugMode(true)

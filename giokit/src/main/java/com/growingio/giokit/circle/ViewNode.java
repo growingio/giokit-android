@@ -58,6 +58,7 @@ public class ViewNode {
     public String mViewContent;
     public String mInheritableGrowingInfo;
     public boolean mParentIdSettled = false;
+    public boolean mIsWeb = false;
     public LinkedString mClickableParentXPath;
 
     // h5 传递过来的elem中包含了isTrackingEditText属性, 必须有个地方进行保存, 作为临时变量
@@ -383,6 +384,7 @@ public class ViewNode {
             //webNode.mWebElementInfo = info;
             webNode.mViewName = info.mHref == null ? host : info.mHref;
             webNode.mView = targetView;
+            webNode.mOriginalParentXpath = new LinkedString().append(path);
             if (elem.has("isTrackingEditText")) {
                 webNode.hybridIsTrackingEditText = elem.optBoolean("isTrackingEditText");
             } else {
@@ -391,14 +393,11 @@ public class ViewNode {
             if (elem.opt("idx") != null) {
                 webNode.mHasListParent = true;
                 webNode.mLastListPos = elem.getInt("idx");
-                webNode.mParentXPath = LinkedString.fromString(webNode.mOriginalParentXpath.toStringValue())
-                        .append("::")
-                        .append(elem.getString("x"));
-            } else {
-                webNode.mParentXPath = new LinkedString().append(elem.getString("x"));
             }
-            webNode.mViewPosition = 0;
+            webNode.mParentXPath = new LinkedString().append(elem.getString("x"));
+            webNode.mViewPosition = webNode.mLastListPos;
             webNode.mViewContent = elem.optString("v", "");
+            webNode.mIsWeb = true;
             int cx = (int) elem.getDouble("ex");
             int cy = (int) elem.getDouble("ey");
             int cw = (int) elem.getDouble("ew");

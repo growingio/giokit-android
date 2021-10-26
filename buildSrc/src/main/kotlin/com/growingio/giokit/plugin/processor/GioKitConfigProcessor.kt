@@ -51,7 +51,6 @@ class GioKitConfigProcessor(val project: Project, private val gioConfig: GioConf
             }
         }
         for (dependLib in dependLibs) {
-            dependLib.variant.println()
             //兼容2.0
             if (dependLib.variant.contains("com.growingio.android")
                 || dependLib.variant.contains(":growingio")

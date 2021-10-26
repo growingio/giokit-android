@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val webBtn = findViewById<Button>(R.id.web)
-        webBtn.setOnClickListener { startActivity(Intent(this, WebCircleHybridActivity::class.java)) }
+        webBtn.setOnClickListener { startActivity(Intent(this, X5CircleHybridActivity::class.java)) }
 
         GrowingIO.getInstance().setUserId("cpacm")
         GrowingIO.getInstance().setGeoLocation(100.0, 100.0)

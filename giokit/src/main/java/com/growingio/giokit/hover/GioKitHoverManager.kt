@@ -93,6 +93,7 @@ class GioKitHoverManager(val app: Application) :
             //将 hover 切换至悬浮窗
             hasOverlayPermission = true
             onActivityResumed(context)
+
             notifyForeground(context)
         }
     }
@@ -103,12 +104,10 @@ class GioKitHoverManager(val app: Application) :
     private fun notifyForeground(activity: Activity) {
         if (hasOverlayPermission) {
             GioHoverMenuService.showFloatingMenu(activity)
-        } else {
-            hoverView = null
         }
     }
 
-    fun setupHoverView(hoverView: HoverView){
+    fun setupHoverView(hoverView: HoverView) {
         this.hoverView = hoverView
         this.hoverView?.addOnExpandAndCollapseListener(HoverViewCollapseAndExpandListener())
     }
@@ -117,6 +116,12 @@ class GioKitHoverManager(val app: Application) :
      * 应用切换到后台
      */
     private fun notifyBackground() {
+        if (hasOverlayPermission) {
+            hoverView?.collapse()
+            hoverView?.removeFromWindow()
+        } else {
+            hoverView?.collapse()
+        }
 
     }
 

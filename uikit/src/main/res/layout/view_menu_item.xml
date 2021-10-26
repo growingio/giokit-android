@@ -4,7 +4,7 @@
     android:id="@+id/textview_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="24dp"
+    android:padding="@dimen/hover_menu_padding"
     android:textSize="20sp"
     android:textColor="@color/hover_content_menu_item_title_color"
     />

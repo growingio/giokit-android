@@ -17,8 +17,7 @@ import org.gradle.api.Project
 class GioKitPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.extensions.create("giokitExt", GioKitExtension::class.java)
-        //对 release task 不作处理
-        if (isReleaseTask(project)) return
+
         val v3Config = GioConfig("v3")
         v3Config.hasGioPlugin = project.plugins.hasPlugin("com.growingio.android.autotracker")
 
@@ -48,12 +47,6 @@ class GioKitPlugin : Plugin<Project> {
                     }
                 }
             }
-        }
-    }
-
-    private fun isReleaseTask(project: Project): Boolean {
-        return project.gradle.startParameter.taskNames.any {
-            it.contains("release") || it.contains("Release")
         }
     }
 }

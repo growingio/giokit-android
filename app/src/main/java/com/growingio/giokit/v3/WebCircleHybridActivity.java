@@ -10,9 +10,6 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.Nullable;
 
-import com.growingio.giokit.circle.ViewHelper;
-import com.growingio.giokit.hook.GioWebView;
-
 /**
  * Created by liangdengke on 2018/11/27.
  */
@@ -26,7 +23,6 @@ public class WebCircleHybridActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_circle);
         webView = findViewById(R.id.web_view);
-        //webView.addJavascriptInterface(new GioWebView.VdsBridge(), "_vds_bridge");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -37,7 +33,6 @@ public class WebCircleHybridActivity extends Activity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                ViewHelper.callJavaScript(view, "_vds_hybrid.findElementAtPoint");
             }
 
             @Override
@@ -46,15 +41,8 @@ public class WebCircleHybridActivity extends Activity {
             }
         });
 
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-            }
-
-
-        });
-        webView.loadUrl("https://www.baidu.com/");
+        webView.setWebChromeClient(new WebChromeClient());
+        webView.loadUrl("https://cn.bing.com/");
 
     }
 }

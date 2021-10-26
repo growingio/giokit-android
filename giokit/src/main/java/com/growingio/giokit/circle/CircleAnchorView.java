@@ -9,13 +9,19 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.AdapterView;
+
+import androidx.core.content.ContextCompat;
+import androidx.room.util.StringUtil;
 
 import com.growingio.giokit.R;
 import com.growingio.giokit.utils.DeviceUtils;
@@ -210,22 +216,37 @@ public class CircleAnchorView extends FloatViewContainer {
     }
 
     public void setCircleInfo(List<ViewNode> nodes) {
-        StringBuilder sb = new StringBuilder();
+        SpannableStringBuilder ssb = new SpannableStringBuilder();
+        int start = 0;
         if (nodes.size() > 0) {
             ViewNode node = nodes.get(0);
             try {
-                sb.append("当前：").append(node.mViewName).append("\n")
-                        .append("内容：").append(node.mViewContent == null ? "未定义" : node.mViewContent).append("\n");
+                ssb.append("当前：").append(node.mViewName).append("\n");
+                ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                start = ssb.length();
+                ssb.append("内容：").append(node.mViewContent == null ? "未定义" : node.mViewContent.length() > 200 ? node.mViewContent.substring(0, 200)+"..." : node.mViewContent).append("\n");
+                ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                start = ssb.length();
                 if (node.mHasListParent) {
-                    sb.append("列表：").append(node.mHasListParent ? "是" : "否").append("\n")
-                            .append("位置：").append(node.mViewPosition).append("\n");
+                    ssb.append("列表：").append(node.mHasListParent ? "是" : "否").append("\n");
+                    ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    start = ssb.length();
+                    ssb.append("位置：").append(String.valueOf(node.mViewPosition)).append("\n");
+                    ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    start = ssb.length();
                 }
-                sb.append("xpath：").append(node.mParentXPath.toString()).append("\n");
+                if (node.mIsWeb && node.mOriginalParentXpath.length() > 0) {
+                    ssb.append("path：").append(node.mOriginalParentXpath.toString()).append("\n");
+                    ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    start = ssb.length();
+                }
+                ssb.append("xpath：").append(node.mParentXPath.toString()).append("\n");
+                ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } catch (Exception e) {
 
             }
         }
-        post(() -> mExitView.setNodeInfo(sb.toString()));
+        post(() -> mExitView.setNodeInfo(ssb));
     }
 
     private void reverseArray(Object[] array) {
@@ -367,17 +388,17 @@ public class CircleAnchorView extends FloatViewContainer {
     }
 
     public void hoverOn(View webView, float x, float y) {
-        ViewHelper.callJavaScript(webView, "_vds_hybrid.hoverOn", x, y);
+        ViewHelper.callJavaScript(webView, "_gio_hybrid.hoverOn", x, y);
     }
 
     public void findElementAt(View webView) {
-        ViewHelper.callJavaScript(webView, "_vds_hybrid.findElementAtPoint");
+        ViewHelper.callJavaScript(webView, "_gio_hybrid.findElementAtPoint");
         mShowingMaskInWebView = webView;
     }
 
     public void hideMaskInWebView() {
         if (mShowingMaskInWebView != null) {
-            ViewHelper.callJavaScript(mShowingMaskInWebView, "_vds_hybrid.cancelHover");
+            ViewHelper.callJavaScript(mShowingMaskInWebView, "_gio_hybrid.cancelHover");
             mShowingMaskInWebView = null;
         }
     }

@@ -21,9 +21,8 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="40dp"
-            android:layout_marginBottom="16dp"
-            android:elevation="8dp">
+            android:layout_margin="16dp"
+            android:layout_marginBottom="24dp">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -97,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        android:padding="32dp">
+        android:padding="24dp">
 
         <TextView
             android:id="@+id/textview_goals_title"

@@ -3,5 +3,6 @@
     <color name="hover_primary">#fc5f3a</color>
     <color name="hover_accent">#ff9167</color>
     <color name="hover_dark">#c22a0d</color>
+    <color name="hover_mask">#F1D0C4</color>
 
 </resources>

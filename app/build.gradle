@@ -37,6 +37,8 @@ android {
 
 giokitExt {
     debugMode true
+    enableRelease false
+    enableIncremental false
     trackFinder {
         domain = ["com.growingio.giokit.v3"]
     }
@@ -44,7 +46,6 @@ giokitExt {
 
 growingAutotracker {
     logEnabled false
-    excludePackages = ["com.growingio.giokit.launch"]
 }
 
 dependencies {
@@ -55,7 +56,8 @@ dependencies {
     implementation rootProject.ext.dependencies["constraintLayout"]
 
     implementation rootProject.ext.growingio["autotracker-cdp"]
-    //implementation "com.growingio.giokit:giokit:1.0.0"
+    //debugImplementation "com.growingio.giokit:giokit:1.0.0-SNAPSHOT"
+    //releaseImplementation "com.growingio.giokit:giokit-no-op:1.0.0-SNAPSHOT"
     implementation project(":giokit")
 
     testImplementation rootProject.ext.dependencies["junit"]

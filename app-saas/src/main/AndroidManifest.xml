@@ -19,7 +19,7 @@
             </intent-filter>
 
             <intent-filter>
-                <data android:scheme="growing.a9b21b7c71946093" />
+                <data android:scheme="growing.1f85fd632636891b" />
 
                 <action android:name="android.intent.action.VIEW" />
 
@@ -29,6 +29,7 @@
         </activity>
 
         <activity android:name=".WebCircleHybridActivity"/>
+        <activity android:name=".X5CircleHybridActivity"/>
 
 
     </application>

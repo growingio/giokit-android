@@ -16,6 +16,7 @@
 package com.growingio.giokit.circle;
 
 import android.content.Context;
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -42,6 +43,10 @@ class CircleExitView extends FloatViewContainer {
 
     public void setNodeInfo(String nodeInfo){
         mNodeTv.setText(nodeInfo);
+    }
+
+    public void setNodeInfo(Spannable sp){
+        mNodeTv.setText(sp);
     }
 
 }
