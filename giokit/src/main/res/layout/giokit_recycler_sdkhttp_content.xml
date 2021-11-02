@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/giokit_item_background"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/httpDesc"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/httpCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/giokit_http_safe"
+            tools:text="204" />
+
+        <TextView
+            android:id="@+id/httpMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@color/giokit_text_grey"
+            android:textSize="@dimen/giokit_text_tag"
+            tools:text="Success" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/httpUrl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/giokit_text_grey"
+        android:textSize="@dimen/giokit_text_caption"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/httpDesc"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="http://117.50.105.255:8080/v3/projects/91eaf9b283361032/collect?stm=1635474898725" />
+
+
+    <TextView
+        android:id="@+id/httpDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/giokit_text_caption"
+        app:layout_constraintStart_toEndOf="@id/httpDesc"
+        app:layout_constraintTop_toBottomOf="@+id/httpUrl"
+        tools:text="2021-10-29 10:20:00" />
+
+    <TextView
+        android:id="@+id/httpCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/giokit_http_cost_background"
+        android:paddingStart="4dp"
+        android:paddingTop="1dp"
+        android:paddingEnd="4dp"
+        android:paddingBottom="1dp"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/giokit_text_tag"
+        app:layout_constraintBottom_toBottomOf="@+id/httpDate"
+        app:layout_constraintStart_toEndOf="@+id/httpDate"
+        app:layout_constraintTop_toTopOf="@+id/httpDate"
+        tools:text="耗时 0.5s" />
+
+    <TextView
+        android:id="@+id/httpMethod"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:textColor="@color/hover_accent"
+        android:textSize="@dimen/giokit_text_caption"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/httpDesc"
+        app:layout_constraintTop_toBottomOf="@+id/httpDate"
+        tools:text="POST" />
+
+    <TextView
+        android:id="@+id/httpSize"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/giokit_text_caption"
+        app:drawableStartCompat="@drawable/ic_giokit_http_upload"
+        app:layout_constraintStart_toEndOf="@+id/httpMethod"
+        app:layout_constraintTop_toBottomOf="@+id/httpDate"
+        tools:text="10KB" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

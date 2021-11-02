@@ -48,7 +48,7 @@ class GioCodeTransformer : ClassTransformer {
             }
         }
 
-        if (ignoreClassName(context, klass.className)) {
+        if (klass.className.ignoreClass(context)) {
             return klass
         }
 
@@ -122,43 +122,6 @@ class GioCodeTransformer : ClassTransformer {
         }
     }
 
-    fun ignoreClassName(context: GioTransformContext, className: String): Boolean {
-        for (domain in context.gioConfig.gioKitExt.trackFinder.domain) {
-            if (className.startsWith(domain, true)) {
-                return false
-            }
-        }
-
-        for (ignore in ignoreClassNames) {
-            if (className.startsWith(ignore, true)) {
-                return true
-            }
-        }
-        return true
-    }
-
-
-    val ignoreClassNames = arrayListOf(
-        "kotlin",
-        "android",
-        "com.growingio",
-        "androidx",
-        "com.google",
-        "okhttp3",
-        "okio",
-        "com.github.ybq.android",
-        "io.mattcarroll.hover",
-        "org.intellij"
-    )
-
-//    fun findAutoTrackHook(
-//        owner: String,
-//        name: String,
-//        globalClass: String,
-//        globalMethod: String
-//    ): GioTrackHook? {
-//
-//    }
 
     val trackHooks = arrayListOf(
         GioTrackHook("com.growingio.android.sdk.collection.GrowingIO", "track"),

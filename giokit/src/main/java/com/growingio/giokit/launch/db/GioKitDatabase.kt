@@ -10,10 +10,16 @@ import androidx.room.RoomDatabase
  *
  * @author cpacm 2021/8/30
  */
-@Database(entities = arrayOf(GioKitEventBean::class), version = 1,exportSchema = false)
+@Database(
+    entities = arrayOf(GioKitEventBean::class, GioKitHttpBean::class),
+    version = 1,
+    exportSchema = false
+)
 abstract class GioKitDatabase : RoomDatabase() {
 
     abstract fun getEventDao(): GioKitEventDao
+
+    abstract fun getHttpDao(): GioKitHttpDao
 
     companion object {
         const val DATABASE_NAME = "giokit_db"

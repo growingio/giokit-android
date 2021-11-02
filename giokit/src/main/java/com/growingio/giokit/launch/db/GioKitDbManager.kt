@@ -16,6 +16,44 @@ import java.io.IOException
 class GioKitDbManager private constructor() {
 
     private val EVENT_VALID_PERIOD_MILLS = 7L * 24 * 60 * 60000
+    private val HTTP_VALID_PERIOD_MILLS = 24 * 60 * 60000L
+
+    init {
+        //删除1天前的网络请求（网络请求数据只有24小时的有效期）
+        GioKitDatabase.instance.getHttpDao()
+            .outdatedHttp(System.currentTimeMillis() - HTTP_VALID_PERIOD_MILLS)
+    }
+
+    /**************** Http Database ****************/
+    fun getHttp(id: Int): GioKitHttpBean {
+        return GioKitDatabase.instance.getHttpDao().getHttp(id)
+    }
+
+    fun insertHttp(http: GioKitHttpBean) {
+        GioKitDatabase.instance.getHttpDao().insert(http)
+    }
+
+    fun getHttpList(start: Int, pageSize: Int): List<GioKitHttpBean> {
+        return GioKitDatabase.instance.getHttpDao().getHttpList(start, pageSize)
+    }
+
+    suspend fun countRunningRequest(): Int {
+        return GioKitDatabase.instance.getHttpDao().countHttpRequest(GioKitImpl.launchTime)
+    }
+
+    suspend fun sumUploadDataSize(): Long {
+        return GioKitDatabase.instance.getHttpDao().sumHttpUploadData(GioKitImpl.launchTime)
+    }
+
+    suspend fun countRunningErrorRequest(): Int {
+        return GioKitDatabase.instance.getHttpDao().countHttpErrorRequest(GioKitImpl.launchTime)
+    }
+
+
+    /**************** Event Database ****************/
+    fun getEvent(id: Int): GioKitEventBean {
+        return GioKitDatabase.instance.getEventDao().getEvent(id)
+    }
 
     fun insertEvent(event: GioKitEventBean) {
         GioKitDatabase.instance.getEventDao().insert(event)
@@ -84,7 +122,7 @@ class GioKitDbManager private constructor() {
     }
 
 
-    fun getDataList(start: Int, pageSize: Int): List<GioKitEventBean> {
+    fun getEventList(start: Int, pageSize: Int): List<GioKitEventBean> {
         return GioKitDatabase.instance.getEventDao().getEventList(start, pageSize)
     }
 

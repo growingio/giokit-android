@@ -47,6 +47,8 @@ dependencies {
     implementation rootProject.ext.dependencies["coroutines-android"]
 
     implementation rootProject.ext.dependencies["room-runtime"]
+    implementation rootProject.ext.dependencies["room-ktx"]
+    implementation rootProject.ext.dependencies["webkit"]
 
     kapt rootProject.ext.dependencies["room-compiler"]
 
@@ -57,7 +59,9 @@ dependencies {
     compileOnly rootProject.ext.growingio["track-saas-cdp"]
     compileOnly rootProject.ext.dependencies["appcompat-v7"]
     compileOnly rootProject.ext.dependencies["recyclerview-v7"]
+    compileOnly rootProject.ext.dependencies["volley"]
 
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':uikit')
 
     testImplementation rootProject.ext.dependencies["junit"]

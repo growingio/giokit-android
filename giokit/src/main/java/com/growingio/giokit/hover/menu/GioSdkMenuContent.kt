@@ -36,6 +36,9 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
         val sdkTrackLayout = findViewById(R.id.sdkTrackLayout) as View
         sdkTrackLayout.setOnClickListener(this)
 
+        val sdkHttpLayout = findViewById(R.id.sdkHttpLayout) as View
+        sdkHttpLayout.setOnClickListener(this)
+
     }
 
     override fun getView(): View {
@@ -91,6 +94,13 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                     }
                     context.startActivity(intent)
                 }
+            }
+            R.id.sdkHttpLayout ->{
+                GioKitImpl.gioKitHoverManager.hoverView?.collapse()
+                context.startActivity(Intent(context, UniversalActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKHTTP_PAGE)
+                })
             }
         }
     }

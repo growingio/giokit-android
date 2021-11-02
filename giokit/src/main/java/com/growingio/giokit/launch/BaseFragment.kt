@@ -60,7 +60,7 @@ abstract class BaseFragment : Fragment() {
     private fun initView() {
         val titleTv = findViewById<TextView>(R.id.title)
         titleTv.text = onGetTitle()
-        val back = findViewById<ImageView>(R.id.close)
+        val back = findViewById<View>(R.id.close)
         back.setOnClickListener { requireActivity().finish() }
     }
 

@@ -13,7 +13,8 @@ class GioKitV3Transform(androidProject: Project, gioConfig: GioConfig) :
                 GioInjectTransformer(),
                 GioCodeTransformer(),
                 GioDatabaseTransformer(),
-                GioWebViewTransformer()
+                GioWebViewTransformer(),
+                GioHttpTransformer(),
             )
         )
     )

@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@drawable/giokit_code_item_background"
+    android:background="@drawable/giokit_item_background"
     android:gravity="center"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
     android:padding="8dp">
 
     <TextView
@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="com.cpacm.bangumi.XXXUtilsXXXUtils" />
+        tools:text="com.cpacm.bangumi.XXXUtils" />
 
     <LinearLayout
         android:id="@+id/methodContainer"

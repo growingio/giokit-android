@@ -5,4 +5,11 @@
     <color name="hover_dark">#c22a0d</color>
     <color name="hover_mask">#F1D0C4</color>
 
+    <color name="giokit_http_safe">#4CAF50</color>
+    <color name="giokit_http_error">#c22a0d</color>
+
+    <color name="giokit_bg_grey">#EDEDED</color>
+    <color name="giokit_text_grey">#66000000</color>
+    <color name="giokit_text_alpha">#33000000</color>
+
 </resources>

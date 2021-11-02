@@ -10,9 +10,9 @@ import android.webkit.WebView
 import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.circle.ViewNode
 import com.growingio.giokit.circle.ViewNode.getWebNodesFromEvent
-import org.json.JSONException
 import org.json.JSONObject
 import java.lang.ref.WeakReference
+import androidx.webkit.WebViewCompat
 
 /**
  * <p>
@@ -24,14 +24,13 @@ object GioWebView {
     private const val MIN_PROGRESS_FOR_HOOK = 60
     private const val HOOK_CIRCLE_DELAY = 500L
 
-
     /*************************** Webview inject ****************************/
     @SuppressLint("SetJavaScriptEnabled")
     @JvmStatic
     fun addCircleJsToWebView(webView: WebView, progress: Int) {
         val oldView = GioKitImpl.webView.get()
         if (oldView == null || oldView != webView) {
-            webView.addJavascriptInterface(VdsBridge(), "_gio_bridge")
+            webView.addJavascriptInterface(GioWebView.VdsBridge(), "_gio_bridge")
             GioKitImpl.webView = WeakReference(webView)
         }
         if (progress >= MIN_PROGRESS_FOR_HOOK) {
@@ -39,11 +38,11 @@ object GioWebView {
             val message = Message.obtain(webView.handler) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     webView.evaluateJavascript(
-                        getAssets(webView.context, "gio_hybrid.min.js"),
+                        GioWebView.getAssets(webView.context, "gio_hybrid.min.js"),
                         null
                     )
                 } else {
-                    webView.loadUrl(getAssets(webView.context, "gio_hybrid.min.js"))
+                    webView.loadUrl(GioWebView.getAssets(webView.context, "gio_hybrid.min.js"))
                 }
             }
             message.what = 0
@@ -130,7 +129,7 @@ object GioWebView {
         open fun hoverNodes(message: String?) {
             Log.d("hoverNodes", message ?: "")
             try {
-                val `object` = JSONObject(message?:"{}")
+                val `object` = JSONObject(message ?: "{}")
                 val type = `object`.getString("t")
                 if (type == "snap") {
                     val nodes: List<ViewNode> = getWebNodesFromEvent(`object`)
@@ -141,5 +140,4 @@ object GioWebView {
             }
         }
     }
-
 }

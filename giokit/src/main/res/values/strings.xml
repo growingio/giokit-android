@@ -11,4 +11,18 @@
     <string name="giokit_menu_code">代码埋点</string>
     <string name="giokit_menu_data">埋点数据</string>
     <string name="giokit_menu_track">XPath追踪</string>
+    <string name="giokit_menu_http">网络请求</string>
+
+    <string name="giokit_http_running">已持续运行</string>
+    <string name="giokit_http_count">请求数量</string>
+    <string name="giokit_http_size">数据上传</string>
+    <string name="giokit_http_error">请求失败</string>
+    <string name="giokit_http_cost">耗时：%1$s</string>
+    <string name="giokit_http_request">请求</string>
+    <string name="giokit_http_response">响应</string>
+    <string name="giokit_http_covert">转换</string>
+    <string name="giokit_http_message">消息体</string>
+    <string name="giokit_http_request_header">请求头</string>
+    <string name="giokit_http_response_header">响应头</string>
+    <string name="giokit_http_request_body">请求数据</string>
 </resources>

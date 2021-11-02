@@ -22,8 +22,11 @@ internal object GioKitImpl {
     lateinit var curActivity: WeakReference<Activity>
     lateinit var webView: WeakReference<View>
 
+    var launchTime: Long = System.currentTimeMillis()
+
     fun install(app: Application) {
         APPLICATION = app
+        launchTime = System.currentTimeMillis()
         curActivity = WeakReference(null)
         webView = WeakReference(null)
 

@@ -28,8 +28,6 @@ class GioDatabaseTransformer : ClassTransformer {
             klass.methods.find { it.name == "removeEvents" }.let { methodNode ->
                 methodNode?.instructions?.insert(createDbRemovesInsnList())
             }
-
-
         }
         return klass
     }

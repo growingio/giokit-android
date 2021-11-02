@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/giokit_sheet_background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:padding="16dp"
+            android:src="@drawable/ic_giokit_close"
+            app:tint="@android:color/black"
+            app:tintMode="multiply" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/requestTab"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="56dp"
+            app:tabIndicatorColor="@color/hover_primary"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/hover_primary"
+            app:tabTextColor="@android:color/darker_gray" />
+
+    </RelativeLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

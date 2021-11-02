@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.growingio.giokit.R
-import com.growingio.giokit.launch.db.GioKitDatabase
+import com.growingio.giokit.launch.db.GioKitDbManager
 import java.lang.StringBuilder
 
 /**
@@ -49,7 +49,7 @@ class SdkDataInfoFragment : BottomSheetDialogFragment() {
         val infoTv = view.findViewById<TextView>(R.id.info)
         val titleTv = view.findViewById<TextView>(R.id.title)
 
-        val event = GioKitDatabase.instance.getEventDao().getEvent(eventId)
+        val event = GioKitDbManager.instance.getEvent(eventId)
         infoTv.text = beautyJson(event.data)
         titleTv.text = event.type
 

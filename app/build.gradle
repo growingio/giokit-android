@@ -56,6 +56,9 @@ dependencies {
     implementation rootProject.ext.dependencies["constraintLayout"]
 
     implementation rootProject.ext.growingio["autotracker-cdp"]
+    implementation rootProject.ext.growingio["encoder"]
+    implementation rootProject.ext.growingio["urlconnection"]
+    implementation rootProject.ext.growingio["volley"]
     //debugImplementation "com.growingio.giokit:giokit:1.0.0-SNAPSHOT"
     //releaseImplementation "com.growingio.giokit:giokit-no-op:1.0.0-SNAPSHOT"
     implementation project(":giokit")

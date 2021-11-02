@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.db.GioKitEventBean
-import java.text.SimpleDateFormat
-import java.util.*
+import com.growingio.giokit.utils.MeasureUtils.getCurrentTime
 
 /**
  * <p>
@@ -27,7 +26,7 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
         if (viewType == 1) {
             val view =
                 LayoutInflater.from(context)
-                    .inflate(R.layout.giokit_recycler_sdkdata_header, parent, false)
+                    .inflate(R.layout.giokit_recycler_sdkdata_date, parent, false)
             return DateViewHolder(view)
 
         } else {
@@ -108,19 +107,6 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
     }
 }
 
-/**
- * 得到时间  HH:mm
- */
-fun getCurrentTime(curtime: Long): String? {
-    var time: String? = null
-    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-    val date = sdf.format(curtime)
-    val split = date.split("\\s".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-    if (split.size > 1) {
-        time = split[1]
-    }
-    return time
-}
 
 class SdkEventDiffCallback : DiffUtil.ItemCallback<GioKitEventBean>() {
     override fun areItemsTheSame(oldItem: GioKitEventBean, newItem: GioKitEventBean): Boolean {
