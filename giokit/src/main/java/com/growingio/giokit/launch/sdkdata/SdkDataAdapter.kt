@@ -21,7 +21,6 @@ import com.growingio.giokit.utils.MeasureUtils.getCurrentTime
 class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
     PagingDataAdapter<GioKitEventBean, RecyclerView.ViewHolder>(SdkEventDiffCallback()) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == 1) {
             val view =

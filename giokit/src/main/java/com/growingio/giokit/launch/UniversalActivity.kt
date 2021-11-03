@@ -46,7 +46,6 @@ class UniversalActivity : AppCompatActivity() {
         showContent(mFragmentClass, bundle)
     }
 
-    @JvmOverloads
     fun showContent(target: Class<out BaseFragment>, bundle: Bundle? = null) {
         try {
 

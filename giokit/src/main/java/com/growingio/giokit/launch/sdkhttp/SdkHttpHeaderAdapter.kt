@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.R
@@ -15,22 +17,17 @@ import com.growingio.giokit.utils.MeasureUtils.byte2FitMemorySize
  *
  * @author cpacm 2021/10/28
  */
-class SdkHttpHeaderAdapter : RecyclerView.Adapter<SdkHttpHeaderAdapter.HttpHeaderViewHolder>() {
+class SdkHttpHeaderAdapter : LoadStateAdapter<SdkHttpHeaderAdapter.HttpHeaderViewHolder>() {
 
     private var data: HttpStatusBean? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HttpHeaderViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, loadState: LoadState): HttpHeaderViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.giokit_recycler_sdkhttp_header, parent, false)
         return HttpHeaderViewHolder(view)
     }
 
-    fun setData(data: HttpStatusBean) {
-        this.data = data
-        notifyDataSetChanged()
-    }
-
-    override fun onBindViewHolder(holder: HttpHeaderViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HttpHeaderViewHolder, loadState: LoadState) {
         if (data != null) {
             val time =
                 MeasureUtils.millis2FitTimeSpan(
@@ -48,10 +45,15 @@ class SdkHttpHeaderAdapter : RecyclerView.Adapter<SdkHttpHeaderAdapter.HttpHeade
         }
     }
 
-    override fun getItemCount(): Int {
-        return 1
+    override fun displayLoadStateAsItem(loadState: LoadState): Boolean {
+        return true
     }
 
+
+    fun setData(data: HttpStatusBean) {
+        this.data = data
+        notifyDataSetChanged()
+    }
 
     class HttpHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -68,6 +70,7 @@ class SdkHttpHeaderAdapter : RecyclerView.Adapter<SdkHttpHeaderAdapter.HttpHeade
         }
 
     }
+
 }
 
 data class HttpStatusBean(

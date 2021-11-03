@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.BaseFragment
+import com.growingio.giokit.launch.LoadingMoreAdapter
 import com.growingio.giokit.launch.db.GioKitDbManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -64,13 +65,13 @@ class SdkHttpFragment : BaseFragment() {
     override fun onViewCreated(view: View?) {
         val sdkList = findViewById<RecyclerView>(R.id.httpList)
         sdkList.layoutManager = LinearLayoutManager(requireContext())
-        val concatAdapter = ConcatAdapter(sdkHttpHeaderAdapter, sdkHttpAdapter)
-        sdkList.adapter = concatAdapter
+        sdkHttpAdapter.withLoadStateFooter(LoadingMoreAdapter())
+        sdkList.adapter = ConcatAdapter(sdkHttpHeaderAdapter, sdkHttpAdapter)
         sdkHttpAdapter.addLoadStateListener { }
 
         lifecycleScope.launch {
             val httpFlow = Pager(
-                config = PagingConfig(30, enablePlaceholders = false, initialLoadSize = 20),
+                config = PagingConfig(50, enablePlaceholders = false, initialLoadSize = 20),
                 pagingSourceFactory = { SdkHttpSource() }
             ).flow
             httpFlow.collectLatest { sdkHttpAdapter.submitData(it) }

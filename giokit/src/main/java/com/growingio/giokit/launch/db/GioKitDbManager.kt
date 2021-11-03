@@ -126,6 +126,10 @@ class GioKitDbManager private constructor() {
         return GioKitDatabase.instance.getEventDao().getEventList(start, pageSize)
     }
 
+    fun getEventListByType(event: String, start: Int, pageSize: Int): List<GioKitEventBean> {
+        return GioKitDatabase.instance.getEventDao().getEventListByType(event, start, pageSize)
+    }
+
 
     companion object {
         val instance: GioKitDbManager by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {

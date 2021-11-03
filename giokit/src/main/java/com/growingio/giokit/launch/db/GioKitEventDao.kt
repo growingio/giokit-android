@@ -19,6 +19,9 @@ interface GioKitEventDao {
     @Query("SELECT * FROM events ORDER BY time DESC,gsid DESC LIMIT :start,:limit")
     fun getEventList(start: Int, limit: Int): List<GioKitEventBean>
 
+    @Query("SELECT * FROM events WHERE type=:event ORDER BY time DESC,gsid DESC LIMIT :start,:limit")
+    fun getEventListByType(event: String, start: Int, limit: Int): List<GioKitEventBean>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg entities: GioKitEventBean)
 

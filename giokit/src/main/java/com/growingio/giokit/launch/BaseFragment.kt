@@ -2,6 +2,7 @@ package com.growingio.giokit.launch
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,9 +60,20 @@ abstract class BaseFragment : Fragment() {
 
     private fun initView() {
         val titleTv = findViewById<TextView>(R.id.title)
+        val title = onGetTitle()
+        if (title.length > 8) {
+            titleTv.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX,
+                resources.getDimension(R.dimen.giokit_text_subtitle)
+            )
+        }
         titleTv.text = onGetTitle()
         val back = findViewById<View>(R.id.close)
-        back.setOnClickListener { requireActivity().finish() }
+        back.setOnClickListener {
+            if (!onBackPressed()) {
+                requireActivity().finish()
+            }
+        }
     }
 
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@android:color/white"
+    android:paddingLeft="8dp"
+    android:paddingTop="8dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/giokit_data_search_border"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/search_type"
+            android:layout_width="40dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/giokit_search_type_normal_background"
+            android:gravity="center"
+            android:text="@string/giokit_data_search_default"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/giokit_text_caption" />
+
+        <ImageView
+            android:id="@+id/search_close"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_giokit_search_close"
+            android:visibility="invisible" />
+
+        <EditText
+            android:id="@+id/search_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_toStartOf="@id/search_close"
+            android:layout_toEndOf="@id/search_type"
+            android:background="@null"
+            android:ellipsize="end"
+            android:hint="@string/giokit_data_search_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="textNoSuggestions"
+            android:maxLines="1"
+            android:textColor="@color/giokit_text_grey"
+            android:textColorHint="@color/giokit_text_alpha"
+            android:textSize="@dimen/giokit_text_body" />
+
+    </RelativeLayout>
+
+</FrameLayout>
