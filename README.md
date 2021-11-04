@@ -92,7 +92,7 @@ giokitExt {
 ```
 1. debugMode 为true时，项目编译的时候会输出相应的 Debug 信息；
 2. enableIncremental 是否打开增量编译，默认为true。由于 Giokit 会查找代码中的所有埋点信息，所以在增量编译时有时候会出现无法找到埋点代码的情况，这时候可以将其设置false，来保证每次查找的准确性；
-3. enableRelease 是否支持release打包。giokit 是只推荐在 debug 环境下使用，若一定要在release环境下使用并是插件生效，则需要打开此开关；
+3. enableRelease 是否支持release打包。giokit 是只推荐在 debug 环境下使用，若一定要在release环境下使用，则需要打开此开关来使插件生效；
 4. 为了方便统一查看用户的手动埋点信息，我们通过 trackFinder 配置来查找在应用中手动埋点调用的位置。默认查找域名为项目的`ApplicationId`
 
 ## 功能
@@ -100,32 +100,34 @@ giokitExt {
 ### 自检页
 自检页可以帮助你获取最基本的SDK集成信息，如下图所示：
 
-![checkself](https://github.com/growingio/giokit-android/blob/master/ScreenShot/checkself.jpg?raw=true)
+![checkself](https://github.com/growingio/giokit-android/blob/master/ScreenShot/checkself.gif?raw=true)
 
 > 若标注红字则说明该项设置可能在正式环境下会有隐患。
 
 ### SDK信息
 该页收集了应用的所有基本信息，你可以在这里查看应用的详细信息。
 
-![sdk info](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdkinfo.jpg?raw=true)
+![sdk info](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdkinfo.gif?raw=true)
 
 ### 代码埋点
 这项功能会帮助你查找代码中所有的手动埋点位置，以 “类+方法” 的列表形式展现
 
-![sdk track](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdktrack.jpg?raw=true)
+![sdk track](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdkcode.jpg?raw=true)
 
 ### 埋点数据
 该界面会按照时间来展示埋点数据以及发送状况。
-
-![sdk data](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdkdata.jpg?raw=true)
-![sdk data detail](https://github.com/growingio/giokit-android/blob/master/ScreenShot/datadetail.jpg?raw=true)
+同时你可以通过输入事件类型来进行筛选。
+![sdk data](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdkdata.gif?raw=true)
 
 ### 埋点追踪
 使用该功能可以显示界面中控件的path路径，目前只兼容WebView。
 
-![sdk path](https://github.com/growingio/giokit-android/blob/master/ScreenShot/circler.jpg?raw=true)
+![sdk path](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdktrack.gif?raw=true)
 
+### 网络请求
+该界面会显示应用运行期间产生的所有网络请求，包括请求数量，请求大小和请求错误的个数。同时在详情页内可以查看使用了加密库之后的请求数据。
 
+![sdk path](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdkhttp.gif?raw=true)
 ## License
 ```
 Copyright (C) 2020 Beijing Yishu Technology Co., Ltd.
