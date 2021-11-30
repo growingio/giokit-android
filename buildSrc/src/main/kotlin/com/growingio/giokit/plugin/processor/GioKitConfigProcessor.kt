@@ -70,6 +70,7 @@ class GioKitConfigProcessor(val project: Project, private val gioConfig: GioConf
             // 获取 AndroidManifest 下配置的 url scheme 如"growing.d80871b41ef40518"
             // 执行clean之后，无法再在 build 文件中找到 build/intermediates/merged_manifest/debug/AndroidManifest.xml，故无法找到 urlscheme
             // 第二次build时将会找到。。
+            // 同样，如果只改变xml值未改变代码由于无法触发插件也不能实时更新
             variant.artifacts.get(ArtifactManager.MERGED_MANIFESTS).forEach { manifest ->
                 //用来标记未解析到 url scheme的情况，需要传一个非空的值给 giokit
                 gioConfig.xmlScheme = "empty"
