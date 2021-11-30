@@ -26,7 +26,7 @@ public class GioKitEventBean {
     private int id;
 
     @ColumnInfo(name = "gsid")
-    private long gsid;
+    private long gsid;// GEvent插入数据库的id
 
     @ColumnInfo(name = "type")
     private String type;

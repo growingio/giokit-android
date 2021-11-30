@@ -6,11 +6,13 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
+import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfig
 import com.growingio.android.sdk.autotrack.IgnorePolicy
 import com.growingio.android.sdk.autotrack.page.PageProvider
 import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
 import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
+import com.growingio.android.sdk.track.http.EventEncoder
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.android.sdk.track.providers.DeviceInfoProvider
 import com.growingio.android.sdk.track.providers.SessionProvider
@@ -32,7 +34,7 @@ object SdkV3InfoUtils {
         if (hasDepend) {
             val (_, sdkVersion, _) = GioPluginConfig.analyseDepend()
             list.tryAdd { SdkInfo("SDK版本", sdkVersion) }
-            list.tryAdd { SdkInfo("ProjectId", ConfigurationProvider.core().projectId) }
+            list.tryAdd { SdkInfo("项目ID", ConfigurationProvider.core().projectId) }
             list.tryAdd { SdkInfo("URLScheme", ConfigurationProvider.core().urlScheme) }
             val checkItem = CheckSelfUtils.getDataSourceID(0)
             list.tryAdd { SdkInfo("DataSource ID", checkItem.content) }
@@ -83,6 +85,7 @@ object SdkV3InfoUtils {
             list.tryAdd { SdkInfo("事件属性过滤", getIgnoreFiled()) }
             val scale = getImpressionScale()
             if (scale >= 0F) list.tryAdd { SdkInfo("曝光比例", scale.toString()) }
+            list.tryAdd { SdkInfo("数据加密", getEncryptEnabled()) }
 
             list.tryAdd { SdkInfo("登录账户", getLoginUser()) }
             list.tryAdd { SdkInfo("位置信息", getLocation()) }
@@ -92,6 +95,13 @@ object SdkV3InfoUtils {
         }
 
         return list
+    }
+
+    private fun getEncryptEnabled(): String {
+        if (TrackerContext.get().registry.getModelLoader(EventEncoder::class.java) != null) {
+            return "启用"
+        }
+        return "未启用"
     }
 
     private fun getExcludeEvent(): String {

@@ -1,5 +1,7 @@
 package com.growingio.giokit.hook
 
+import android.net.Uri
+import android.util.Log
 import com.growingio.android.sdk.track.events.base.BaseEvent
 import com.growingio.android.sdk.track.middleware.GEvent
 import com.growingio.giokit.launch.db.GioKitDbManager
@@ -28,7 +30,7 @@ object GioDatabase {
             var gsid = jsonObj.optInt("gesid")
             if (gsid == 0) {
                 val eArry = jsonObj.optJSONArray("e") ?: JSONArray()
-                if (eArry.length()> 0) {
+                if (eArry.length() > 0) {
                     gsid = eArry.getJSONObject(0).optInt("gesid")
                 }
             }
@@ -56,14 +58,25 @@ object GioDatabase {
 
     @JvmStatic
     fun removeSaasEvents(extra: String, lastId: String) {
-        GioKitDbManager.instance.removeEvents(extra, lastId)
+        GioKitDbManager.instance.removeSaasEvents(extra, lastId)
+    }
+
+    /************************* sdk 3.0 *************************/
+    /**
+     * 将7天前的事件置为过期
+     */
+    @JvmStatic
+    fun outdatedEvents() {
+        GioKitDbManager.instance.outdatedEvents()
     }
 
     @JvmStatic
-    fun insertV3Event(gEvent: GEvent) {
+    fun insertV3Event(uri: Uri, gEvent: GEvent) {
+        Log.d("GIO_DATABASE", uri.toString())
+        val dbId = uri.lastPathSegment?.toLong() ?: 0L
         if (gEvent is BaseEvent) {
             val gioEvent = GioKitEventBean()
-            gioEvent.gsid = gEvent.globalSequenceId
+            gioEvent.gsid = dbId
             gioEvent.status = GioKitEventBean.STATUS_READY
             gioEvent.time = gEvent.timestamp
             gioEvent.type = gEvent.eventType
@@ -84,18 +97,8 @@ object GioDatabase {
         GioKitDbManager.instance.deleteEvent(id)
     }
 
-    /**
-     * 将7天前的事件置为过期
-     */
     @JvmStatic
-    fun outdatedEvents() {
-        GioKitDbManager.instance.outdatedEvents()
+    fun removeEvents(lastId: Long, type: String) {
+        GioKitDbManager.instance.removeEvents(lastId, type)
     }
-
-    @JvmStatic
-    fun removeEvents(lastId: Long) {
-        GioKitDbManager.instance.removeEvents(lastId)
-    }
-
-
 }

@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId rootProject.ext.android.applicationId + ".v3"
-        minSdkVersion rootProject.ext.android.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
@@ -57,8 +57,7 @@ dependencies {
 
     implementation rootProject.ext.growingio["autotracker-cdp"]
     implementation rootProject.ext.growingio["encoder"]
-    implementation rootProject.ext.growingio["urlconnection"]
-    implementation rootProject.ext.growingio["volley"]
+    //implementation rootProject.ext.growingio["protobuf"]
     //debugImplementation "com.growingio.giokit:giokit:1.0.0-SNAPSHOT"
     //releaseImplementation "com.growingio.giokit:giokit-no-op:1.0.0-SNAPSHOT"
     implementation project(":giokit")

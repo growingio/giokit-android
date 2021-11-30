@@ -28,7 +28,7 @@ class SecondActivity : AppCompatActivity() {
         super.onNewIntent(intent)
     }
 
-    fun justislongmethod123llllloooonnnnngggggggoooonnnnngggggggnonog() {
+    fun justislongmethod() {
         GrowingAutotracker.get().trackCustomEvent("longmethod")
         GrowingAutotracker.get().trackCustomEvent("longmethod")
         GrowingAutotracker.get().trackCustomEvent("longmethod")

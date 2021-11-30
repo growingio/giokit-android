@@ -39,6 +39,7 @@ object SdkSaasInfoUtils {
                     }
                 }
             }
+            list.tryAdd { SdkInfo("数据加密", "打开") }
             list.tryAdd { SdkInfo("登录账户", CoreInitialize.growingIOIPC().userId) }
             list.tryAdd {
                 SdkInfo(

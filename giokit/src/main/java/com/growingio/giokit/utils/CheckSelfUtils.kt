@@ -274,26 +274,26 @@ object CheckSelfUtils {
         if (hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return CheckItem(
                 index,
-                "正在获取Project ID",
-                "Project ID",
+                "正在获取项目ID",
+                "项目ID",
                 ConfigurationProvider.core().projectId,
                 false
             )
         }
-        return CheckItem(index, "正在获取Project ID", "Project ID", "未集成SDK", true)
+        return CheckItem(index, "正在获取项目ID", "项目ID", "未集成SDK", true)
     }
 
     private fun getProjectIDSaas(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
             return CheckItem(
                 index,
-                "正在获取Project ID",
-                "Project ID",
+                "正在获取项目ID",
+                "项目ID",
                 CoreInitialize.coreAppState().getProjectId(),
                 false
             )
         }
-        return CheckItem(index, "正在获取Project ID", "Project ID", "未集成SDK", true)
+        return CheckItem(index, "正在获取项目ID", "项目ID", "未集成SDK", true)
     }
 
     @JvmStatic

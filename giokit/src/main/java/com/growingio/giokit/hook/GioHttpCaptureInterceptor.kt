@@ -93,8 +93,9 @@ class GioHttpCaptureInterceptor @JvmOverloads constructor() : Interceptor {
                 log(gioHttp.requestBody)
                 log("--> END ${request.method()} (${requestBody.contentLength()}-byte body)")
             } else {
-                gioHttp.requestBody = "encoded body omitted"
-                log("--> END ${request.method()} (binary ${requestBody.contentLength()}-byte body omitted)")
+                gioHttp.requestBody = buffer.readString(charset)
+                //gioHttp.requestBody = "encoded body omitted (e.g. protobuf)"
+                log("--> END ${request.method()} (binary ${requestBody.contentLength()}-byte body omitted. e.g. protobuf)")
             }
         }
 

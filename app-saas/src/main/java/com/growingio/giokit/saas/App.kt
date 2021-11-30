@@ -8,6 +8,7 @@ import com.growingio.android.sdk.collection.CoreInitialize
 import com.growingio.android.sdk.collection.GConfig
 import com.growingio.android.sdk.collection.GrowingIO
 import com.growingio.android.sdk.deeplink.DeeplinkCallback
+import com.growingio.android.sdk.utils.LogUtil
 import com.growingio.giokit.GioKit
 
 /**
@@ -19,7 +20,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        val startMill = System.currentTimeMillis()
+        //Debug.startMethodTracing()
         initGioSdk()
+        //Debug.stopMethodTracing()
+        LogUtil.d("startup", System.currentTimeMillis() - startMill)
         GioKit.Builder(this).build()
         FLAG_ACTIVITY_SINGLE_TOP
     }
@@ -52,7 +57,7 @@ class App : Application() {
         GrowingIO.getInstance().track("TestSession")
     }
 
-    fun test(){
+    fun test() {
         GrowingIO.getInstance().disableDataCollect()
         GConfig.getUrlScheme()
         CoreInitialize.config()

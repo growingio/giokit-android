@@ -31,8 +31,8 @@ interface GioKitEventDao {
     @Query("UPDATE events SET status=-1 WHERE time <=:sevenDayAgo AND status=0")
     fun outdatedEvent(sevenDayAgo: Long)
 
-    @Query("UPDATE events SET status=1 WHERE status=0 AND gsid<=:gsid")
-    fun updateLastGsid(gsid: Long)
+    @Query("UPDATE events SET status=1 WHERE status=0 AND gsid<=:gsid AND type=:type")
+    fun updateLastGsid(gsid: Long, type: String)
 
     @Query("UPDATE events SET status=1 WHERE extra=:extra")
     fun updateLastExtra(extra: String)

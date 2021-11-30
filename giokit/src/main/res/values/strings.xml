@@ -9,10 +9,10 @@
     <string name="giokit_menu_common">常用工具</string>
     <string name="giokit_menu_info">SDK信息</string>
     <string name="giokit_menu_code">代码埋点</string>
-    <string name="giokit_menu_data">埋点数据</string>
+    <string name="giokit_menu_data">事件库</string>
     <string name="giokit_menu_data_search">查找 \&quot;%1$s\&quot; 数据</string>
     <string name="giokit_menu_track">XPath追踪</string>
-    <string name="giokit_menu_http">网络请求</string>
+    <string name="giokit_menu_http">网络记录</string>
 
     <string name="giokit_data_loading">正在加载中</string>
     <string name="giokit_data_search_default">事件</string>

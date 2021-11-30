@@ -120,7 +120,7 @@ giokitExt {
 ![sdk data](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdkdata.gif?raw=true)
 
 ### 埋点追踪
-使用该功能可以显示界面中控件的path路径，目前只兼容WebView。
+使用该功能可以显示界面中控件的path路径。
 
 ![sdk path](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdktrack.gif?raw=true)
 
