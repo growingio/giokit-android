@@ -9,7 +9,7 @@ GioKit 是一个辅助客户快速接入我们SDK的一个功能，它能够让�
 
 GioKit 代码已托管在 [Github](https://github.com/growingio/giokit-android) 上，欢迎 star,fork 一波。
 
-> **Gradle插件版本**： 3.2.1及以上  
+> **Gradle插件版本**： 4.0.1及以上  
 > **Android系统版本**：Android 5.0及以上
 > **仅支持AndroidX**
 
@@ -54,8 +54,8 @@ apply plugin: 'com.growingio.giokit.saas'
 dependencies {
     ...
     //GioKit
-    debugImplementation "com.growingio.giokit:giokit:1.0.0-SNAPSHOT"
-    releaseImplementation "com.growingio.giokit:giokit-no-op:1.0.0-SNAPSHOT"
+    debugImplementation "com.growingio.giokit:giokit:1.2.0-SNAPSHOT"
+    releaseImplementation "com.growingio.giokit:giokit-no-op:1.2.0-SNAPSHOT"
 }
 
 ```

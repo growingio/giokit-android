@@ -6,12 +6,13 @@ ext {
             minSdkVersion             : 17,
             targetSdkVersion          : 30,
             //app版本号
-            versionCode               : 1,
-            versionName               : "1.1.0-SNAPSHOT",
+            versionCode               : 2,
+            versionName               : "1.2.0-SNAPSHOT",
 
             kotlin_version            : "1.5.20",
             kotlinx_coroutines_version: "1.5.1",
             gradle_plugin_version     : "4.2.2",
+            giokit_plugin_version     : "4.0.1",
             okhttp_v3                 : "3.14.7",
             okhttp_v4                 : "4.7.0",
             booster_version           : "3.5.0",
