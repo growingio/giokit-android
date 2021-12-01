@@ -62,9 +62,4 @@ dependencies {
     androidTestImplementation rootProject.ext.dependencies["androidx-junit"]
     androidTestImplementation rootProject.ext.dependencies["espresso-core"]
 
-    implementation 'com.umeng.umsdk:common:9.4.4'
-    implementation 'com.umeng.umsdk:asms:1.4.1'
-    implementation 'com.umeng.umsdk:apm:1.5.2'
-
-
 }
