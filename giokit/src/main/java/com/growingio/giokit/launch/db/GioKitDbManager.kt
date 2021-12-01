@@ -36,7 +36,7 @@ class GioKitDbManager private constructor() {
     }
 
     suspend fun sumUploadDataSize(): Long {
-        return GioKitDatabase.instance.getHttpDao().sumHttpUploadData(GioKitImpl.launchTime)
+        return GioKitDatabase.instance.getHttpDao().sumHttpUploadData(GioKitImpl.launchTime)?:0L
     }
 
     suspend fun countRunningErrorRequest(): Int {

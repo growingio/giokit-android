@@ -29,7 +29,7 @@ interface GioKitHttpDao {
     suspend fun countHttpRequest(startTime: Long): Int
 
     @Query("SELECT SUM(requestSize) FROM https WHERE httpTime>=:startTime")
-    suspend fun sumHttpUploadData(startTime: Long): Long
+    suspend fun sumHttpUploadData(startTime: Long): Long?
 
     @Query("SELECT COUNT(*) FROM https WHERE httpTime>=:startTime AND (responseCode<200 OR responseCode>=300)")
     suspend fun countHttpErrorRequest(startTime: Long): Int

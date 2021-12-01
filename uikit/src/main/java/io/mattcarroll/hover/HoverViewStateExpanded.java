@@ -59,7 +59,7 @@ class HoverViewStateExpanded extends BaseHoverViewState {
     private final Runnable mShowTabsRunnable = new Runnable() {
         @Override
         public void run() {
-            if (mHoverView.mScreen == null) return;
+            if (mHoverView == null || mHoverView.mScreen == null) return;
             mHoverView.mScreen.getShadeView().show();
             mHoverView.mScreen.getContentDisplay().selectedTabIs(mSelectedTab);
 
