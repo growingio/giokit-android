@@ -9,6 +9,14 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+jar {
+    manifest {
+        attributes(
+                "giokit-plugin-version": rootProject.ext.android.versionName
+        )
+    }
+}
+
 dependencies {
     compileOnly gradleApi()
     //implementation rootProject.ext.dependencies["kotlin-stdlib"]

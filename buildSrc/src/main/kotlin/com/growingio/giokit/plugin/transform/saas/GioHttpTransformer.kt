@@ -22,7 +22,6 @@ class GioHttpTransformer : ClassTransformer {
         // url connection
         if (className == "com.growingio.android.sdk.data.net.HttpService") {
             klass.methods?.find {
-                "HttpService:${it.name}-${it.access}".println()
                 it.name == "performRequest" && Opcodes.ACC_PRIVATE == it.access
             }.let {
                 "hook urlconnection succeed:${className}_${it?.name}_${it?.desc}".println()
@@ -31,13 +30,11 @@ class GioHttpTransformer : ClassTransformer {
                     ?.asIterable()
                     ?.filterIsInstance(FieldInsnNode::class.java)
                     ?.filter { method ->
-                        "instructions:${method.opcode},${method.owner},${method.name},${method.desc}".println()
                         method.opcode == Opcodes.GETSTATIC
                                 && method.owner == "com/growingio/android/sdk/collection/GConfig"
                                 && method.name == "DEBUG"
                                 && method.desc == "Z"
                     }?.forEach { fieldInsnNode ->
-                        "find:${fieldInsnNode.toString()}".println()
                         // 插入 `if (GConfig.DEBUG)` 位置前
                         it.instructions.insertBefore(
                             fieldInsnNode,

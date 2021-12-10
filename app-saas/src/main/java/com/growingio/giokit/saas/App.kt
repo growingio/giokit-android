@@ -37,6 +37,7 @@ class App : Application() {
             .setTestMode(true)
             //.setDataSourceId("12345678")
             .setDebugMode(true)
+            .setOAIDEnable(true)
             .setUploadExceptionEnable(true) // DeepLink 唤醒测试连接：https://gio.ren/dweyPBZ
             // 二维码扫码地址：https://www.growingio.com/projects/QJoOzEPY/sourcemonitor/tracker
             .setDeeplinkCallback(object : DeeplinkCallback {
@@ -51,7 +52,7 @@ class App : Application() {
                     }
                 }
             })
-            .setChannel("小木")
+            .setChannel("小木2")
 
         GrowingIO.startWithConfiguration(this, configuration)
         GrowingIO.getInstance().track("TestSession")

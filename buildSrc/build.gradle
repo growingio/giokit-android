@@ -38,6 +38,14 @@ compileKotlin {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8
 }
 
+jar {
+    manifest {
+        attributes(
+                "giokit-plugin-version": rootProject.ext.android.versionName
+        )
+    }
+}
+
 
 dependencies {
     compileOnly localGroovy()
@@ -48,3 +56,10 @@ dependencies {
     api "com.didiglobal.booster:booster-api:${rootProject.ext.android["booster_version"]}"
     //api "com.didiglobal.booster:booster-transform-asm:${rootProject.ext.android["booster_version"]}"
 }
+// 调试 plugin
+// 1. 配置 gradle.properties ,设置host端口
+// 2. 运行 $ ./gradlew --stop     # 先停掉 daemon 进程
+//         $ ./gradlew --daemon   # 启动 daemon 进程
+// 3. Attach daemon 进程  run -> Attach to Process 选择进程
+// 4. 放断点
+// 5. 运行构建，开始调试 ./gradlew assembleDebug

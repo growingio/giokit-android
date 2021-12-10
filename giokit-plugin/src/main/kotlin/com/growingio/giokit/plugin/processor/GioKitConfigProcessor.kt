@@ -10,10 +10,7 @@ import com.didiglobal.booster.task.spi.VariantProcessor
 import com.didiglobal.booster.transform.ArtifactManager
 import com.didiglobal.booster.transform.artifacts
 import com.growingio.giokit.plugin.extension.GioKitExtension
-import com.growingio.giokit.plugin.utils.DependLib
-import com.growingio.giokit.plugin.utils.GioConfig
-import com.growingio.giokit.plugin.utils.isRelease
-import com.growingio.giokit.plugin.utils.println
+import com.growingio.giokit.plugin.utils.*
 import org.gradle.api.Project
 import org.gradle.api.artifacts.result.ResolvedArtifactResult
 import javax.xml.parsers.SAXParserFactory
@@ -28,7 +25,7 @@ class GioKitConfigProcessor(val project: Project, private val gioConfig: GioConf
     private val dependLibs = mutableSetOf<DependLib>()
 
     override fun process(variant: BaseVariant) {
-        if (variant.isRelease()) return
+        if (!gioConfig.gioKitExt.enableRelease && variant.isRelease()) return
 
         //获取项目是否接入GrowingIO SDK
         dependLibs.clear()
@@ -57,11 +54,15 @@ class GioKitConfigProcessor(val project: Project, private val gioConfig: GioConf
                 || dependLib.variant.contains(":gio-sdk")
                 || dependLib.variant.contains(":vds-observable-autoburry")
                 || dependLib.variant.contains(":vds-observable-burry")
+                || dependLib.variant.contains("com.growingio.giokit")
+                || dependLib.variant.contains(":giokit")
             ) {
                 gioConfig.gioSdks.add(dependLib)
                 "add gio dependLib:${dependLib}".println()
             }
         }
+
+        checkGiokitVersion(gioConfig.gioSdks)
 
         if (variant is ApplicationVariant) {
             gioConfig.domain = variant.applicationId
@@ -96,5 +97,26 @@ class GioKitConfigProcessor(val project: Project, private val gioConfig: GioConf
         "processor->saasDomain:${gioConfig.domain}".println()
         "processor->hasGioPluginSaas:${gioConfig.hasGioPlugin}".println()
         "processor->gioDepend:${gioConfig.gioSdks}".println()
+    }
+
+    fun checkGiokitVersion(set: MutableSet<DependLib>) {
+        for (dependLib in set) {
+            val depend = dependLib.variant
+            if (depend.contains("giokit")) {
+                val version = depend.split(":").last()
+                "Giokit library dependency $version".println()
+                if (version.contains("Runtime")) {
+                    return
+                }
+                val pluginVersion = this.getGiokitPluginVersion()
+                "version compare: ${version}<=>${pluginVersion}".println()
+                if (version.equals(pluginVersion)) {
+                    return
+                } else {
+                    throw Exception("Giokit plugin $pluginVersion is not equal Giokit library dependency $version!!")
+                }
+            }
+        }
+        throw Exception("Can't find Giokit library dependency!")
     }
 }

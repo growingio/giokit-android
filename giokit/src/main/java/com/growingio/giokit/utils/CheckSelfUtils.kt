@@ -461,12 +461,16 @@ object CheckSelfUtils {
     private fun getOaidEnabledSaas(index: Int): CheckItem {
         if (hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
             try {
-                val oaid = CoreInitialize.deviceUUIDFactory().oaid
+                val oaid = getClassField(
+                    CoreInitialize.deviceUUIDFactory(),
+                    CoreInitialize.deviceUUIDFactory().javaClass.name,
+                    "oaidEnable"
+                )
                 return CheckItem(
                     index,
                     "正在查询oaid状态",
                     "oaid采集",
-                    if (oaid.isEmpty()) "未获取" else "已获取",
+                    if (oaid == null || !(oaid as Boolean)) "开" else "关",
                     false
                 )
             } catch (e: Exception) {
@@ -513,6 +517,23 @@ object CheckSelfUtils {
         } catch (e: ClassNotFoundException) {
             null
         } catch (e: NoSuchMethodException) {
+            null
+        } catch (e: SecurityException) {
+            null
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    private fun getClassField(obj: Any, className: String, field: String): Any? {
+        return try {
+            val clazz = Class.forName(className)
+            val f = clazz.getDeclaredField(field)
+            f.isAccessible = true
+            return f.get(obj)
+        } catch (e: ClassNotFoundException) {
+            null
+        } catch (e: NoSuchFieldException) {
             null
         } catch (e: SecurityException) {
             null

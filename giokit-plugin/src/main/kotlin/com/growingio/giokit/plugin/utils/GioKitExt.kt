@@ -3,6 +3,11 @@ package com.growingio.giokit.plugin.utils
 import com.android.build.gradle.api.BaseVariant
 import com.didiglobal.booster.transform.TransformContext
 import org.objectweb.asm.tree.ClassNode
+import java.io.File
+import java.io.FileInputStream
+import java.net.URLDecoder
+import java.nio.charset.Charset
+import java.util.jar.JarInputStream
 
 /**
  * <p>
@@ -68,6 +73,23 @@ fun String.loadClass(context: TransformContext): Class<*>? {
     return null
 }
 
+// find jar manifest ==> define in gradle >> jar{"giokit-plugin-version":version}
+fun Any.getGiokitPluginVersion(): String {
+    try {
+        val jarPath = URLDecoder.decode(
+            File(this.javaClass.protectionDomain.codeSource.location.path).canonicalPath,
+            Charset.defaultCharset()
+        )
+        val inputStream = JarInputStream(FileInputStream(jarPath))
+        val pluginVersion = inputStream.manifest.mainAttributes.getValue("giokit-plugin-version")
+        if (pluginVersion.isNullOrEmpty()) {
+            throw Exception("Can't find Giokit plugin!!")
+        }
+        return pluginVersion
+    } catch (e: Exception) {
+        throw Exception("Can't find Giokit plugin!!")
+    }
+}
 
 val ignoreClassNames = arrayListOf(
     "kotlin",

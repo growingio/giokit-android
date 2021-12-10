@@ -26,11 +26,11 @@ class GioKitSaasPlugin : Plugin<Project> {
         //主工程项目
         if (project.plugins.hasPlugin("com.android.application") || project.plugins.hasPlugin("com.android.dynamic-feature")) {
             val appExtension = project.extensions.getByName("android") as AppExtension
-
             appExtension.registerTransform(GioKitSaasTransform(project, sassConfig))
 
             project.afterEvaluate {
                 appExtension.applicationVariants.forEach { variant ->
+                    sassConfig.hasGioPlugin = it.plugins.hasPlugin("com.growingio.android")
                     if (it.plugins.hasPlugin("com.growingio.giokit.saas")) {
                         GioKitConfigProcessor(it, sassConfig).process(variant)
                     }
@@ -43,6 +43,7 @@ class GioKitSaasPlugin : Plugin<Project> {
             libraryExtension.registerTransform(GioKitSaasTransform(project, sassConfig))
             project.afterEvaluate {
                 libraryExtension.libraryVariants.forEach { variant ->
+                    sassConfig.hasGioPlugin = it.plugins.hasPlugin("com.growingio.android")
                     if (it.plugins.hasPlugin("com.growingio.giokit.saas")) {
                         GioKitConfigProcessor(it, sassConfig).process(variant)
                     }
