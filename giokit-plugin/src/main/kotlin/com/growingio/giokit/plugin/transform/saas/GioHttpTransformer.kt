@@ -1,6 +1,6 @@
 package com.growingio.giokit.plugin.transform.saas
 
-import com.didiglobal.booster.kotlinx.asIterable
+import com.growingio.giokit.plugin.base.asIterable
 import com.growingio.giokit.plugin.transform.ClassTransformer
 import com.growingio.giokit.plugin.utils.GioTransformContext
 import com.growingio.giokit.plugin.utils.className

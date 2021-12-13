@@ -30,7 +30,7 @@ class GioKitPlugin : Plugin<Project> {
             project.afterEvaluate {
                 appExtension.applicationVariants.forEach { variant ->
                     //兼容单项目多 application 情况
-                    v3Config.hasGioPlugin = project.plugins.hasPlugin("com.growingio.android.autotracker")
+                    //v3Config.hasGioPlugin = project.plugins.hasPlugin("com.growingio.android.autotracker")
                     if (it.plugins.hasPlugin("com.growingio.giokit")) {
                         GioKitConfigProcessor(it, v3Config).process(variant)
                     }
@@ -43,7 +43,7 @@ class GioKitPlugin : Plugin<Project> {
             libraryExtension.registerTransform(GioKitV3Transform(project, v3Config))
             project.afterEvaluate {
                 libraryExtension.libraryVariants.forEach { variant ->
-                    v3Config.hasGioPlugin = project.plugins.hasPlugin("com.growingio.android.autotracker")
+                    //v3Config.hasGioPlugin = project.plugins.hasPlugin("com.growingio.android.autotracker")
                     if (it.plugins.hasPlugin("com.growingio.giokit")) {
                         GioKitConfigProcessor(it, v3Config).process(variant)
                     }

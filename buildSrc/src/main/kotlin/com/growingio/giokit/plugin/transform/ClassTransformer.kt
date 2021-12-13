@@ -1,6 +1,5 @@
 package com.growingio.giokit.plugin.transform
 
-import com.didiglobal.booster.transform.TransformContext
 import com.growingio.giokit.plugin.utils.GioTransformContext
 import com.growingio.giokit.plugin.utils.GioTransformListener
 import org.objectweb.asm.tree.ClassNode

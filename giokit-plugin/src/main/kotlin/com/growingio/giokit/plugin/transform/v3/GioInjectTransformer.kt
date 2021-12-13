@@ -1,6 +1,5 @@
 package com.growingio.giokit.plugin.transform.v3
 
-import com.didiglobal.booster.transform.TransformContext
 import com.growingio.giokit.plugin.transform.ClassTransformer
 import com.growingio.giokit.plugin.utils.GioTransformContext
 import com.growingio.giokit.plugin.utils.className
@@ -160,7 +159,7 @@ class GioInjectTransformer : ClassTransformer {
         }
     }
 
-    private fun isAssignable(context: TransformContext, className: String): Boolean {
+    private fun isAssignable(context: GioTransformContext, className: String): Boolean {
         try {
             val targetClass =
                 context.klassPool.classLoader.loadClass("android.app.Application")

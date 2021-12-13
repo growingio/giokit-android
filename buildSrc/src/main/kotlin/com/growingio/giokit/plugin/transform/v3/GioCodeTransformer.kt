@@ -1,6 +1,6 @@
 package com.growingio.giokit.plugin.transform.v3
 
-import com.didiglobal.booster.kotlinx.asIterable
+import com.growingio.giokit.plugin.base.asIterable
 import com.growingio.giokit.plugin.transform.ClassTransformer
 import com.growingio.giokit.plugin.utils.*
 import org.objectweb.asm.Opcodes

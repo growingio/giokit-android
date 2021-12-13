@@ -52,9 +52,9 @@ dependencies {
     compileOnly gradleApi()
 
     implementation "com.android.tools.build:gradle:${rootProject.ext.android["giokit_plugin_version"]}"
-    /* 👇👇👇👇 引用这两个模块 👇👇👇👇 */
-    api "com.didiglobal.booster:booster-api:${rootProject.ext.android["booster_version"]}"
-    //api "com.didiglobal.booster:booster-transform-asm:${rootProject.ext.android["booster_version"]}"
+    /* 👇👇👇👇 不再使用didi的booster模块 👇👇👇👇 */
+    // api "com.didiglobal.booster:booster-api:${rootProject.ext.android["booster_version"]}"
+    // api "com.didiglobal.booster:booster-transform-asm:${rootProject.ext.android["booster_version"]}"
 }
 // 调试 plugin
 // 1. 配置 gradle.properties ,设置host端口
