@@ -1,7 +1,6 @@
 package com.growingio.giokit.plugin.transform.v3
 
 import com.growingio.giokit.plugin.transform.ClassTransformer
-import com.growingio.giokit.plugin.transform.saas.GioWebViewTransformer
 import com.growingio.giokit.plugin.utils.*
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.*
@@ -14,13 +13,13 @@ class GioWebViewTransformer : ClassTransformer {
             return klass
         }
         // find origin webview
-        if (injectWebView(context, klass, GioWebViewTransformer.WEBVIEW_INJECTOR)) return klass
+        if (injectWebView(context, klass, WEBVIEW_INJECTOR)) return klass
 
         // find x5 webview
-        if (injectWebView(context, klass, GioWebViewTransformer.X5_INJECTOR)) return klass
+        if (injectWebView(context, klass, X5_INJECTOR)) return klass
 
         // find uc webview
-        if (injectWebView(context, klass, GioWebViewTransformer.UC_INJECTOR)) return klass
+        if (injectWebView(context, klass, UC_INJECTOR)) return klass
 
         return klass
     }
