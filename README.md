@@ -124,6 +124,11 @@ giokitExt {
 
 ![sdk path](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdktrack.gif?raw=true)
 
+> 请注意，如果是需要计算webview上的xpath,则 `webview` 必须设置一个 `WebChromeClient` 以提供 Giokit 的js注入点。如下所示
+```java
+  webView.setWebChromeClient(new WebChromeClient() {});
+```
+
 ### 网络请求
 该界面会显示应用运行期间产生的所有网络请求，包括请求数量，请求大小和请求错误的个数。同时在详情页内可以查看使用了加密库之后的请求数据。
 

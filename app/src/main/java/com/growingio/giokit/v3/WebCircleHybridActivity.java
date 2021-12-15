@@ -41,8 +41,10 @@ public class WebCircleHybridActivity extends Activity {
             }
         });
 
-        WebChromeClient client = new WebChromeClient();
+        WebChromeClient client = new WebChromeClient() {
+        };
         webView.setWebChromeClient(client);
         webView.loadUrl("https://cn.bing.com/");
+        //webView.loadUrl("https://www.baidu.com/");
     }
 }
