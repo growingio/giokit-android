@@ -1,7 +1,6 @@
 package com.growingio.giokit.plugin.utils
 
 import com.android.build.gradle.api.BaseVariant
-import com.didiglobal.booster.transform.TransformContext
 import org.objectweb.asm.tree.ClassNode
 import java.io.File
 import java.io.FileInputStream
@@ -14,6 +13,7 @@ import java.util.jar.JarInputStream
  *
  * @author cpacm 2021/8/17
  */
+
 fun BaseVariant.isRelease(): Boolean {
     if (this.name.contains("release") || this.name.contains("Release")) {
         return true
@@ -64,7 +64,7 @@ fun String.isAssignableFrom(context: GioTransformContext, parentClass: Class<*>)
     return false
 }
 
-fun String.loadClass(context: TransformContext): Class<*>? {
+fun String.loadClass(context: GioTransformContext): Class<*>? {
     try {
         return context.klassPool.classLoader.loadClass(this)
     } catch (e: ClassNotFoundException) {

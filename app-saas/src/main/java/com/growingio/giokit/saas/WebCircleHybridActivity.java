@@ -38,13 +38,8 @@ public class WebCircleHybridActivity extends Activity {
             }
         });
 
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-            }
-        });
+        webView.setWebChromeClient(new WebChromeClient() {});
 
-        webView.loadUrl("https://www.baidu.com/");
+        webView.loadUrl("https://www.growingio.com/");
     }
 }

@@ -1,15 +1,12 @@
 package com.growingio.giokit.plugin.transform
 
-import com.android.build.api.transform.*
-import com.android.build.api.transform.Status.*
-import com.didiglobal.booster.gradle.*
-import com.didiglobal.booster.kotlinx.NCPU
-import com.didiglobal.booster.transform.AbstractKlassPool
-import com.didiglobal.booster.transform.ArtifactManager
-import com.didiglobal.booster.transform.TransformContext
-import com.didiglobal.booster.transform.artifacts
-import com.didiglobal.booster.transform.util.transform
-import com.growingio.giokit.plugin.utils.GioConfig
+import com.android.build.api.transform.DirectoryInput
+import com.android.build.api.transform.Format
+import com.android.build.api.transform.JarInput
+import com.android.build.api.transform.TransformInvocation
+import com.android.build.api.transform.QualifiedContent
+import com.android.build.api.transform.Status
+import com.growingio.giokit.plugin.base.*
 import com.growingio.giokit.plugin.utils.GioTransformContext
 import com.growingio.giokit.plugin.utils.println
 import java.io.File
@@ -23,7 +20,7 @@ import java.util.concurrent.*
 internal class GioKitTransformInvocation(
     private val delegate: TransformInvocation,
     internal val transform: GioKitBaseTransform,
-) : TransformInvocation by delegate, GioTransformContext, ArtifactManager {
+) : TransformInvocation by delegate, GioTransformContext {
 
     private val project = transform.project
 
@@ -41,36 +38,24 @@ internal class GioKitTransformInvocation(
 
     override val reportsDir: File = File(buildDir, "reports").also { it.mkdirs() }
 
-    override val bootClasspath = delegate.bootClasspath
+    override val bootClasspath = delegate.getBootClasspath(project)
 
     override val compileClasspath = delegate.compileClasspath
 
-    override val runtimeClasspath = delegate.runtimeClasspath
-
-    override val artifacts = this
-
-    override val dependencies: Collection<String> by lazy {
-        ResolvedArtifactResults(variant).map {
-            it.id.displayName
-        }
-    }
+    override val runtimeClasspath = delegate.getRuntimeClasspath(project)
 
     override val klassPool: AbstractKlassPool =
         object : AbstractKlassPool(compileClasspath, transform.bootKlassPool) {}
 
-    override val applicationId = delegate.applicationId
+    override val applicationId = getVariant(project).applicationId
 
-    override val originalApplicationId = delegate.originalApplicationId
+    override val isDebuggable = getVariant(project).buildType.isDebuggable
 
-    override val isDebuggable = variant.buildType.isDebuggable
-
-    override val isDataBindingEnabled = delegate.isDataBindingEnabled
+    override val isDataBindingEnabled = isDataBindingEnabled(project)
 
     override fun hasProperty(name: String) = project.hasProperty(name)
 
     override fun <T> getProperty(name: String, default: T): T = project.getProperty(name, default)
-
-    override fun get(type: String) = variant.artifacts.get(type)
 
     private fun onPreTransform() {
         transform.transformers.forEach {
@@ -143,7 +128,9 @@ internal class GioKitTransformInvocation(
                         )
                     }
                 }
-            }.forEach { it.get() }
+            }.forEach {
+                it.get()
+            }
         } finally {
             executor.shutdown()
             executor.awaitTermination(1, TimeUnit.HOURS)
@@ -158,7 +145,7 @@ internal class GioKitTransformInvocation(
         val executor = Executors.newFixedThreadPool(NCPU)
         try {
             this.inputs.map { input ->
-                input.jarInputs.filter { it.status != NOTCHANGED }.map { jarInput ->
+                input.jarInputs.filter { it.status != Status.NOTCHANGED }.map { jarInput ->
                     executor.submit {
                         doIncrementalTransform(jarInput)
                     }
@@ -182,8 +169,8 @@ internal class GioKitTransformInvocation(
     @Suppress("NON_EXHAUSTIVE_WHEN")
     private fun doIncrementalTransform(jarInput: JarInput) {
         when (jarInput.status) {
-            REMOVED -> jarInput.file.delete()
-            CHANGED, ADDED -> {
+            Status.REMOVED -> jarInput.file.delete()
+            Status.CHANGED, Status.ADDED -> {
                 project.logger.info("Transforming ${jarInput.file}")
                 outputProvider?.let { provider ->
                     jarInput.transform(
@@ -203,7 +190,7 @@ internal class GioKitTransformInvocation(
     private fun doIncrementalTransform(dirInput: DirectoryInput, base: URI) {
         dirInput.changedFiles.forEach { (file, status) ->
             when (status) {
-                REMOVED -> {
+                Status.REMOVED -> {
                     project.logger.info("Deleting $file")
                     outputProvider?.let { provider ->
                         provider.getContentLocation(
@@ -219,7 +206,7 @@ internal class GioKitTransformInvocation(
                     }
                     file.delete()
                 }
-                ADDED, CHANGED -> {
+                Status.ADDED, Status.CHANGED -> {
                     project.logger.info("Transforming $file")
                     outputProvider?.let { provider ->
                         val root = provider.getContentLocation(
@@ -239,7 +226,7 @@ internal class GioKitTransformInvocation(
         }
     }
 
-    private fun QualifiedContent.transform(output: File) {
+    fun QualifiedContent.transform(output: File) {
         outputs += output
         try {
             this.file.transform(output) { bytecode ->

@@ -30,7 +30,6 @@ class GioKitSaasPlugin : Plugin<Project> {
 
             project.afterEvaluate {
                 appExtension.applicationVariants.forEach { variant ->
-                    sassConfig.hasGioPlugin = it.plugins.hasPlugin("com.growingio.android")
                     if (it.plugins.hasPlugin("com.growingio.giokit.saas")) {
                         GioKitConfigProcessor(it, sassConfig).process(variant)
                     }
@@ -43,7 +42,6 @@ class GioKitSaasPlugin : Plugin<Project> {
             libraryExtension.registerTransform(GioKitSaasTransform(project, sassConfig))
             project.afterEvaluate {
                 libraryExtension.libraryVariants.forEach { variant ->
-                    sassConfig.hasGioPlugin = it.plugins.hasPlugin("com.growingio.android")
                     if (it.plugins.hasPlugin("com.growingio.giokit.saas")) {
                         GioKitConfigProcessor(it, sassConfig).process(variant)
                     }

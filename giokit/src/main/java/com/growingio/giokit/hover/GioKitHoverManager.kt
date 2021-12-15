@@ -122,7 +122,7 @@ class GioKitHoverManager(val app: Application) :
         } else {
             hoverView?.collapse()
         }
-
+        removeCircle()
     }
 
     private fun detach(activity: Activity) {

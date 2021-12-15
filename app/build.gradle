@@ -58,9 +58,9 @@ dependencies {
     implementation rootProject.ext.growingio["autotracker-cdp"]
     implementation rootProject.ext.growingio["encoder"]
     //implementation rootProject.ext.growingio["protobuf"]
-    debugImplementation "com.growingio.giokit:giokit:1.2.0-SNAPSHOT"
-    releaseImplementation "com.growingio.giokit:giokit-no-op:1.2.0-SNAPSHOT"
-    //implementation project(":giokit")
+    //debugImplementation "com.growingio.giokit:giokit:1.2.0-SNAPSHOT"
+    //releaseImplementation "com.growingio.giokit:giokit-no-op:1.2.0-SNAPSHOT"
+    implementation project(":giokit")
 
     testImplementation rootProject.ext.dependencies["junit"]
     androidTestImplementation rootProject.ext.dependencies["androidx-junit"]

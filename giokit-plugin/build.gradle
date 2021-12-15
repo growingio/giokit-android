@@ -20,9 +20,9 @@ jar {
 dependencies {
     compileOnly gradleApi()
     //implementation rootProject.ext.dependencies["kotlin-stdlib"]
-    implementation "com.android.tools.build:gradle:${rootProject.ext.android["giokit_plugin_version"]}"
+    compileOnly "com.android.tools.build:gradle:${rootProject.ext.android["giokit_plugin_version"]}"
     /* 👇👇👇👇 引用这两个模块 👇👇👇👇 */
-    api "com.didiglobal.booster:booster-api:${rootProject.ext.android["booster_version"]}"
+    // api "com.didiglobal.booster:booster-api:${rootProject.ext.android["booster_version"]}"
 }
 
 apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"

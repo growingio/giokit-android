@@ -5,15 +5,9 @@ import com.android.build.api.transform.Transform
 import com.android.build.api.transform.TransformInvocation
 import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.internal.pipeline.TransformManager
-import com.didiglobal.booster.gradle.SCOPE_FULL_PROJECT
-import com.didiglobal.booster.gradle.SCOPE_FULL_WITH_FEATURES
-import com.didiglobal.booster.gradle.SCOPE_PROJECT
-import com.didiglobal.booster.gradle.getAndroid
-import com.didiglobal.booster.transform.AbstractKlassPool
-import com.didiglobal.booster.transform.Klass
 import com.google.common.collect.ImmutableSet
+import com.growingio.giokit.plugin.base.*
 import com.growingio.giokit.plugin.utils.GioConfig
-import com.growingio.giokit.plugin.utils.println
 import org.gradle.api.Project
 
 /**
