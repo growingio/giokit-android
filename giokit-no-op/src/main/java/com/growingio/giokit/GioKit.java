@@ -17,7 +17,7 @@ public class GioKit {
         return new Builder(application);
     }
 
-    static class Builder {
+    public static class Builder {
         Builder(Application app) {
         }
 
