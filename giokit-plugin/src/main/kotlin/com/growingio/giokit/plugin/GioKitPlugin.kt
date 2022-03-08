@@ -21,6 +21,8 @@ class GioKitPlugin : Plugin<Project> {
         val v3Config = GioConfig("v3")
         v3Config.hasGioPlugin = project.plugins.hasPlugin("com.growingio.android.autotracker")
 
+        if (!v3Config.gioKitExt.enableRelease && isReleaseTask(project)) return
+
         //主工程项目
         if (project.plugins.hasPlugin("com.android.application") || project.plugins.hasPlugin("com.android.dynamic-feature")) {
             val appExtension = project.extensions.getByName("android") as AppExtension
@@ -49,6 +51,12 @@ class GioKitPlugin : Plugin<Project> {
                     }
                 }
             }
+        }
+    }
+
+    private fun isReleaseTask(project: Project): Boolean {
+        return project.gradle.startParameter.taskNames.any {
+            it.contains("release") || it.contains("Release")
         }
     }
 }

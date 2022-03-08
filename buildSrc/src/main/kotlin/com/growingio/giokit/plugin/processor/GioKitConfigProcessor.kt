@@ -20,7 +20,6 @@ class GioKitConfigProcessor(private val project: Project, private val gioConfig:
     private val dependLibs = mutableSetOf<DependLib>()
 
     override fun process(variant: BaseVariant) {
-        if (!gioConfig.gioKitExt.enableRelease && variant.isRelease()) return
 
         //获取项目是否接入GrowingIO SDK
         dependLibs.clear()

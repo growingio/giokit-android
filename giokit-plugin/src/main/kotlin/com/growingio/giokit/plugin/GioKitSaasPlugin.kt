@@ -17,11 +17,12 @@ import org.gradle.api.Project
 class GioKitSaasPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         project.extensions.create("giokitExt", GioKitExtension::class.java)
-        //对 release task 不作处理
-        //if (isReleaseTask(project)) return
 
         val sassConfig = GioConfig("saas")
         sassConfig.hasGioPlugin = project.plugins.hasPlugin("com.growingio.android")
+
+        //对 release task 不作处理
+        if (!sassConfig.gioKitExt.enableRelease && isReleaseTask(project)) return
 
         //主工程项目
         if (project.plugins.hasPlugin("com.android.application") || project.plugins.hasPlugin("com.android.dynamic-feature")) {
@@ -47,6 +48,12 @@ class GioKitSaasPlugin : Plugin<Project> {
                     }
                 }
             }
+        }
+    }
+
+    private fun isReleaseTask(project: Project): Boolean {
+        return project.gradle.startParameter.taskNames.any {
+            it.contains("release") || it.contains("Release")
         }
     }
 }
