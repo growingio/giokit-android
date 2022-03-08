@@ -7,7 +7,7 @@ ext {
             targetSdkVersion          : 30,
             //app版本号
             versionCode               : 3,
-            versionName               : "1.0.1",
+            versionName               : "1.1.0",
 
             kotlin_version            : "1.5.20",
             kotlinx_coroutines_version: "1.5.1",
