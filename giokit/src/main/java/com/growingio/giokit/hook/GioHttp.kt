@@ -31,10 +31,10 @@ object GioHttp {
     fun parseGioKitUrlConnection(
         urlConnection: HttpURLConnection,
         headers: Map<String, String>,
-        data: ByteArray
+        data: ByteArray?
     ) {
         val statusCode = urlConnection.responseCode
-        if (statusCode / 100 == 3) return
+        if (data == null || statusCode / 100 == 3) return
         val gioHttp = GioKitHttpBean()
         val httpUrl = urlConnection.url
         gioHttp.httpTime = (parseURLQuery(httpUrl.toString(), "stm")).toLong()

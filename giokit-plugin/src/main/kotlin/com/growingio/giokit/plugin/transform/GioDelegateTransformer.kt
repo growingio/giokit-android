@@ -52,7 +52,7 @@ class GioDelegateTransformer(
     ): ByteArray {
         return ClassWriter(ClassWriter.COMPUTE_MAXS).also { writer ->
             this.transformers.fold(ClassNode().also { klass ->
-                ClassReader(bytecode).accept(klass, 0)
+                ClassReader(bytecode).accept(klass, ClassReader.EXPAND_FRAMES)
             }) { klass, transformer ->
                 this.threadMxBean.sumCpuTime(transformer) {
                     if (transformer.isTransformLatest(klass)) {
@@ -67,7 +67,7 @@ class GioDelegateTransformer(
     fun transformLatest(context: GioTransformContext, bytecode: ByteArray): ByteArray {
         return ClassWriter(ClassWriter.COMPUTE_MAXS).also { writer ->
             this.transformers.fold(ClassNode().also { klass ->
-                ClassReader(bytecode).accept(klass, 0)
+                ClassReader(bytecode).accept(klass, ClassReader.EXPAND_FRAMES)
             }) { klass, transformer ->
                 this.threadMxBean.sumCpuTime(transformer) {
                     if (transformer.isTransformLatest(klass)) {
