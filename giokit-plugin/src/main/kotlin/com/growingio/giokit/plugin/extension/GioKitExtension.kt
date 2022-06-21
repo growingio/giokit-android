@@ -12,7 +12,6 @@ open class GioKitExtension {
     //查找项目下的埋点代码位置
     var trackFinder: TrackFinder = TrackFinder()
     var debugMode: Boolean = false
-    var enableIncremental = true
     var enableRelease = false
 
     fun trackFinder(action: Action<TrackFinder>) {
@@ -20,8 +19,9 @@ open class GioKitExtension {
     }
 }
 
-// 若用户没有设置，则不进行查找
 open class TrackFinder {
+    var enable: Boolean = true // 若用户没有设置，则不进行查找
+
     // 统计该域值下所有埋点信息，如 com.cpacm 表示统计 com.cpacm 包名下的埋点代码
     var domain: MutableList<String> = mutableListOf<String>()
 

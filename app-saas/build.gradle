@@ -8,12 +8,11 @@ plugins {
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.suppotrSdkVersion
 
     defaultConfig {
         applicationId rootProject.ext.android.applicationId + ".saas"
         minSdkVersion 21
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        targetSdkVersion 32
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
 
@@ -54,7 +53,7 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: '../thirdLibs')
     implementation 'androidx.multidex:multidex:2.0.1'
-    implementation rootProject.ext.growingio["track-saas"]
+    implementation rootProject.ext.growingio["autotrack-saas"]
     //implementation rootProject.ext.growingio["track-saas-cdp"]
     //implementation "com.growingio.giokit:giokit:1.0.0"
     implementation project(":giokit")

@@ -3,10 +3,11 @@ package com.growingio.giokit.plugin.processor
 import com.android.build.gradle.AppExtension
 import com.android.build.gradle.api.ApplicationVariant
 import com.android.build.gradle.api.BaseVariant
-import com.growingio.giokit.plugin.base.getAndroid
+import com.growingio.android.plugin.utils.w
 import com.growingio.giokit.plugin.extension.GioKitExtension
 import com.growingio.giokit.plugin.utils.*
 import org.gradle.api.Project
+import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
 import javax.xml.parsers.SAXParserFactory
 
 /**
@@ -14,11 +15,16 @@ import javax.xml.parsers.SAXParserFactory
  *     通过插件获取项目的配置
  * @author cpacm 2021/8/17
  */
-class GioKitConfigProcessor(private val project: Project, private val gioConfig: GioConfig) : VariantProcessor {
+class GioKitConfigProcessor(private val project: Project, private val gioConfig: GioConfig) {
+
+    init {
+        gioConfig.buildDir = project.buildDir
+    }
 
     private val dependLibs = mutableSetOf<DependLib>()
 
-    override fun process(variant: BaseVariant) {
+    // 暂时没有替换方法，需等到AGP8发布之后
+    fun process(variant: BaseVariant) {
         //获取项目是否接入GrowingIO SDK
         dependLibs.clear()
         getGrowingioDepends()
@@ -38,7 +44,6 @@ class GioKitConfigProcessor(private val project: Project, private val gioConfig:
         }
 
         checkGiokitVersion(gioConfig.gioSdks)
-
         if (variant is ApplicationVariant) {
             gioConfig.domain = variant.applicationId
             "App PackageName is====>${gioConfig.domain}".println()
@@ -50,7 +55,7 @@ class GioKitConfigProcessor(private val project: Project, private val gioConfig:
                 // 执行clean之后，无法再在 build 文件中找到 build/intermediates/merged_manifest/debug/AndroidManifest.xml，故无法找到 urlscheme
                 // 第二次build时将会找到。。
                 // 同样，如果只改变xml值未改变代码由于无法触发插件也不能实时更新
-                manifest?.let{
+                manifest.let {
                     gioConfig.xmlScheme = "empty"
                     val parser = SAXParserFactory.newInstance().newSAXParser()
                     val handler = GioKitXmlHandler {
@@ -73,38 +78,34 @@ class GioKitConfigProcessor(private val project: Project, private val gioConfig:
         "processor->gioDepend:${gioConfig.gioSdks}".println()
     }
 
-    fun checkGiokitVersion(set: MutableSet<DependLib>) {
+    private fun checkGiokitVersion(set: MutableSet<DependLib>) {
         for (dependLib in set) {
             val depend = dependLib.variant
             if (depend.contains("giokit")) {
-                val version = dependLib.version
-                if (version.contains("project")) {
-                    return
-                }
-                val pluginVersion = this.getGiokitPluginVersion()
-                "version compare: ${version}<=>${pluginVersion}".println()
-                if (version.equals(pluginVersion)) {
-                    return
-                } else {
-                    throw Exception("Giokit plugin $pluginVersion is not equal Giokit library dependency $version!!")
-                }
+                return
             }
         }
-        throw Exception("Can't find Giokit library dependency!")
+        w("Can't find Giokit library dependency!")
     }
 
-    fun getGrowingioDepends() {
-        for (configuration in project.configurations) {
-            if ("releaseRuntimeClasspath" == configuration.getName()) {
-                for (dependency in configuration.getIncoming().getResolutionResult().getRoot().getDependencies()) {
-                    "releaseRuntimeClass: ${dependency.requested.displayName}".println()
-                    val variants = dependency.requested.displayName.split(":")
-                    if (variants.size == 3) {
-                        dependLibs.add(DependLib(dependency.requested.displayName, variants[2]))
-                    } else if (variants.size == 2) {
-                        dependLibs.add(DependLib(dependency.requested.displayName, "project"))
-                    }
+    private fun getGrowingioDepends() {
+        if (project.state.failure != null) {
+            return
+        }
+
+        project.configurations.flatMap { configuration ->
+            configuration.dependencies.map { dependency ->
+                if (dependency is DefaultExternalModuleDependency) {
+                    dependLibs.add(
+                        DependLib(
+                            dependency.group + ":" + dependency.name,
+                            dependency.version ?: "undefined"
+                        )
+                    )
+                } else {
+                    dependLibs.add(DependLib(":" + dependency.name, "project"))
                 }
+                dependency.group to dependency.name
             }
         }
     }

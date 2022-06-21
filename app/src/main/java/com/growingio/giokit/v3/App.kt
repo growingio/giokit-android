@@ -38,7 +38,7 @@ class App : Application() {
             .setExcludeEvent(EventExcludeFilter.FORM_SUBMIT)
             .setExcludeEvent(EventExcludeFilter.VIEW_CHANGE)
             .setIgnoreField(FieldIgnoreFilter.NETWORK_STATE)
-            .setPreloadComponent(EncoderLibraryGioModule())
+            .addPreloadComponent(EncoderLibraryGioModule())
             .setChannel("test")
 
         GrowingAutotracker.startWithConfiguration(this, config)

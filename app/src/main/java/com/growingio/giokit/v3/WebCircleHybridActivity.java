@@ -42,6 +42,7 @@ public class WebCircleHybridActivity extends Activity {
         });
 
         WebChromeClient client = new WebChromeClient() {
+
         };
         webView.setWebChromeClient(client);
         webView.loadUrl("https://cn.bing.com/");

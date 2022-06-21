@@ -22,13 +22,6 @@ public class LambdaTest {
         button.setOnClickListener(v -> {
             GrowingAutotracker.get().trackCustomEvent("lambda");
         });
-
-        ArrayList<String> list = new ArrayList<>();
-        list.add("");
-
-        List arrayList = new ArrayList();
-        arrayList.add("cpacm#cpacm");
-        GioTrackInfo.inject(arrayList);
     }
 
     public void doubleText() {

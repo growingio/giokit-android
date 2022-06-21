@@ -24,7 +24,7 @@ object GioPluginConfig {
         hasGioPlugin = config.getOrElse("gioPlugin"){true} as Boolean
         isSaasSdk = config.getOrElse("isSaasSdk"){ false } as Boolean
         val dependStr = config.getOrElse("gioDepend"){""} as String
-        dependLibs = dependStr.split("::")
+        dependLibs = dependStr.split("##")
         Log.d("GioPluginConfig","$xmlScheme-$hasGioPlugin-$isSaasSdk-$dependLibs")
     }
 

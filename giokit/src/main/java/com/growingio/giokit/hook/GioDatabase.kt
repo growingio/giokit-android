@@ -71,12 +71,10 @@ object GioDatabase {
     }
 
     @JvmStatic
-    fun insertV3Event(uri: Uri, gEvent: GEvent) {
-        Log.d("GIO_DATABASE", uri.toString())
-        val dbId = uri.lastPathSegment?.toLong() ?: 0L
+    fun insertV3Event(gEvent: GEvent) {
         if (gEvent is BaseEvent) {
             val gioEvent = GioKitEventBean()
-            gioEvent.gsid = dbId
+            gioEvent.gsid = gEvent.globalSequenceId
             gioEvent.status = GioKitEventBean.STATUS_READY
             gioEvent.time = gEvent.timestamp
             gioEvent.type = gEvent.eventType
