@@ -58,7 +58,6 @@ object HookInjectorClass {
     const val CONFIG_INJECT = "config_inject"
 
     init {
-
         HTTP_V3_CLASSES = mutableListOf(
             HookData(
                 HTTP_V3_OKHTTP,
@@ -219,5 +218,15 @@ object HookInjectorClass {
 
     }
 
-
+    fun getIncludePackage(): Set<String> {
+        val includeSet = hashSetOf<String>()
+        HTTP_V3_CLASSES.forEach { includeSet.add(it.targetClassName) }
+        HTTP_SAAS_CLASSES.forEach { includeSet.add(it.targetClassName) }
+        DATABASE_V3_CLASSES.forEach { includeSet.add(it.targetClassName) }
+        DATABASE_SAAS_CLASSES.forEach { includeSet.add(it.targetClassName) }
+        WEBVIEW_CLASSES.forEach { includeSet.add(it.targetClassName) }
+        WEBVIEW_EXTRA_CLASSES.forEach { includeSet.add(it.targetClassName) }
+        CONFIG_CLASSES.forEach { includeSet.add(it.targetClassName) }
+        return includeSet
+    }
 }

@@ -1,4 +1,4 @@
-package com.growingio.giokit.saas
+package com.growingio.saas
 
 import android.app.Application
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -26,7 +26,6 @@ class App : Application() {
         //Debug.stopMethodTracing()
         LogUtil.d("startup", System.currentTimeMillis() - startMill)
         GioKit.Builder(this).build()
-        FLAG_ACTIVITY_SINGLE_TOP
     }
 
     fun initGioSdk() {
@@ -55,6 +54,10 @@ class App : Application() {
             .setChannel("小木2")
 
         GrowingIO.startWithConfiguration(this, configuration)
+        GrowingIO.getInstance().track("TestSession")
+    }
+
+    fun track() {
         GrowingIO.getInstance().track("TestSession")
     }
 

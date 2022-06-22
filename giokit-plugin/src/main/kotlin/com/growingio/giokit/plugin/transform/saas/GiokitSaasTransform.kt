@@ -38,7 +38,7 @@ internal class GiokitSaasTransform(
     private val gioConfig: GioConfig
 ) : GrowingBaseTransform(project, android) {
 
-    override fun getName() = "GiokitTransform"
+    override fun getName() = "GiokitSaasTransform"
 
     override fun transform(context: AutoTrackerContext, bytecode: ByteArray): ByteArray {
         try {
@@ -46,7 +46,9 @@ internal class GiokitSaasTransform(
             if (!shouldClassModified(
                     normalize(classReader.className)
                 )
-            ) { return bytecode }
+            ) {
+                return bytecode
+            }
 
 
             val gioKitWriter = object : ClassWriter(classReader, COMPUTE_MAXS) {
@@ -57,7 +59,7 @@ internal class GiokitSaasTransform(
             val apiVersion = gioKitWriter.getApi()
 
             val classContextCompat = object : GioTransformContext {
-                override val className = classReader.className
+                override val className = normalize(classReader.className)
                 override fun isAssignable(subClazz: String, superClazz: String): Boolean {
                     return context.klassPool.get(superClazz).isAssignableFrom(subClazz)
                 }

@@ -13,12 +13,12 @@ class GioKitDbManager private constructor() {
     private val HTTP_VALID_PERIOD_MILLS = 24 * 60 * 60000L
 
     init {
-        if (!GioKitDatabase.dbInited) {
-            GioKitDatabase.initDb(GioKitImpl.APPLICATION)
-        }
         //删除1天前的网络请求（网络请求数据只有24小时的有效期）
-        GioKitDatabase.instance.getHttpDao()
-            .outdatedHttp(System.currentTimeMillis() - HTTP_VALID_PERIOD_MILLS)
+        try {
+            GioKitDatabase.instance.getHttpDao()
+                .outdatedHttp(System.currentTimeMillis() - HTTP_VALID_PERIOD_MILLS)
+        } catch (ignored: Exception) {
+        }
     }
 
     /**************** Http Database ****************/

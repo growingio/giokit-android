@@ -42,13 +42,15 @@ class GioKitSaasPlugin : Plugin<Project> {
                 GioKitConfigProcessor(project, sassConfig).process(variant)
             }
 
-            if (SimpleAGPVersion.ANDROID_GRADLE_PLUGIN_VERSION < SimpleAGPVersion(4, 2)) {
-                // Configures bytecode transform using older APIs pre AGP 4.2
-                configureBytecodeTransform(project, sassConfig)
-            } else {
-                // Configures bytecode transform using AGP 4.2 ASM pipeline.
-                configureBytecodeTransformASM(project, sassConfig)
-            }
+            configureBytecodeTransform(project, sassConfig)
+
+//            if (SimpleAGPVersion.ANDROID_GRADLE_PLUGIN_VERSION < SimpleAGPVersion(4, 2)) {
+//                // Configures bytecode transform using older APIs pre AGP 4.2
+//                configureBytecodeTransform(project, sassConfig)
+//            } else {
+//                // Configures bytecode transform using AGP 4.2 ASM pipeline.
+//                configureBytecodeTransformASM(project, sassConfig)
+//            }
         }
     }
 

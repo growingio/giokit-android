@@ -52,7 +52,7 @@ class GioConfigVisitor(api: Int, ncv: ClassVisitor, context: GioTransformContext
     }
 
     private fun addPluginConfigInsnList(adviceAdapter: AdviceAdapter) {
-        "insert application succeed:${context.className}".println()
+        "insert plugin config succeed:${context.className}".println()
         adviceAdapter.apply {
             //new HashMap
             visitTypeInsn(Opcodes.NEW, "java/util/HashMap")

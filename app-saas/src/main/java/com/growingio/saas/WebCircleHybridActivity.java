@@ -1,26 +1,25 @@
-package com.growingio.giokit.saas;
+package com.growingio.saas;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.webkit.ClientCertRequest;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import androidx.annotation.Nullable;
 
-import com.tencent.smtt.export.external.interfaces.ClientCertRequest;
-import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
-import com.tencent.smtt.sdk.WebChromeClient;
-import com.tencent.smtt.sdk.WebView;
-import com.tencent.smtt.sdk.WebViewClient;
-
-public class X5CircleHybridActivity extends Activity {
-    private final String TAG = "X5CircleHybridActivity";
+public class WebCircleHybridActivity extends Activity {
+    private final String TAG = "WebCircleHybridActivity";
 
     WebView webView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_x5);
-        webView = findViewById(R.id.x5_web_view);
+        setContentView(R.layout.activity_web_circle);
+        webView = findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -39,13 +38,8 @@ public class X5CircleHybridActivity extends Activity {
             }
         });
 
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                super.onProgressChanged(view, newProgress);
-            }
-        });
+        webView.setWebChromeClient(new WebChromeClient() {});
 
-        webView.loadUrl("https://www.baidu.com/");
+        webView.loadUrl("https://cn.bing.com/");
     }
 }

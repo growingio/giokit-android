@@ -1,4 +1,4 @@
-package com.growingio.giokit.saas;
+package com.growingio.saas;
 
 import android.util.Log;
 import android.webkit.WebChromeClient;

@@ -10,7 +10,7 @@ android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
 
     defaultConfig {
-        applicationId rootProject.ext.android.applicationId + ".saas"
+        applicationId "com.growingio.saas"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode rootProject.ext.android.versionCode
@@ -38,7 +38,7 @@ android {
 giokitExt {
     debugMode true
     trackFinder {
-        domain = ["com.growingio.giokit.saas"]
+        domain = ["com.growingio.saas"]
     }
 }
 

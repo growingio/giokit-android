@@ -17,6 +17,7 @@
 package com.growingio.giokit.plugin.utils
 
 import com.growingio.android.plugin.utils.isAndroidGenerated
+import com.growingio.giokit.plugin.transform.HookInjectorClass.getIncludePackage
 
 
 /**
@@ -30,6 +31,13 @@ internal fun shouldClassModified(
     if (isAndroidGenerated(className)) {
         return false
     }
+
+    INCLUDE_PACKAGES.forEach {
+        if (className.startsWith(it)) {
+            return true
+        }
+    }
+
     EXCLUDED_PACKAGES.forEach {
         if (className.startsWith(it)) {
             return false
@@ -38,9 +46,12 @@ internal fun shouldClassModified(
     return true
 }
 
-val EXCLUDED_PACKAGES = arrayListOf(
-    "com.growingio.android.sdk",
-    //"com.growingio.giokit",
+
+val INCLUDE_PACKAGES = getIncludePackage()
+
+val EXCLUDED_PACKAGES = hashSetOf(
+    "com.growingio.android",
+    "com.growingio.giokit",
     //"com.alibaba.mobileim.extra.xblink.webview",
     //"com.alibaba.sdk.android.feedback.xblink",
     //"com.tencent.smtt",
@@ -86,4 +97,4 @@ val EXCLUDED_PACKAGES = arrayListOf(
     "com.amap.api",
     "com.google.iot",
 
-)
+    )

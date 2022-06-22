@@ -22,6 +22,7 @@ internal object GioKitImpl {
     lateinit var curActivity: WeakReference<Activity>
     lateinit var webView: WeakReference<View>
 
+    var inited = false
     var launchTime: Long = System.currentTimeMillis()
 
     fun install(app: Application) {
@@ -35,6 +36,8 @@ internal object GioKitImpl {
         GioKitDatabase.initDb(app)
 
         gioKitHoverManager = GioKitHoverManager(app)
+
+        inited = true
     }
 
     private fun initGioKitConfig() {

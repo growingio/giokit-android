@@ -6,10 +6,6 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import com.growingio.android.sdk.autotrack.GrowingAutotracker;
-import com.growingio.giokit.hook.GioTrackInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
