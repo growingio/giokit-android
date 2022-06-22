@@ -26,14 +26,12 @@ abstract class GioKitDatabase : RoomDatabase() {
     companion object {
         const val DATABASE_NAME = "giokit_db"
         lateinit var instance: GioKitDatabase
-        var dbInited = false
 
         fun initDb(context: Context) {
             instance = Room.databaseBuilder(context, GioKitDatabase::class.java, DATABASE_NAME)
                 .allowMainThreadQueries()
                 .addMigrations(Migration1_2)
                 .build()
-            dbInited = true
         }
 
         private val Migration1_2 = object : Migration(1, 2) {
