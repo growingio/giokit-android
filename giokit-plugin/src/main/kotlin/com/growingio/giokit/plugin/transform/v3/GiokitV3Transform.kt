@@ -57,7 +57,7 @@ internal class GiokitV3Transform(
             val apiVersion = gioKitWriter.getApi()
 
             val classContextCompat = object : GioTransformContext {
-                override val className = classReader.className
+                override val className = normalize(classReader.className)
                 override fun isAssignable(subClazz: String, superClazz: String): Boolean {
                     return context.klassPool.get(superClazz).isAssignableFrom(subClazz)
                 }
