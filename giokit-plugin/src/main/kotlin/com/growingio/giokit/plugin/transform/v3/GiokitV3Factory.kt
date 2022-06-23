@@ -49,10 +49,6 @@ internal abstract class GiokitV3Factory :
                 } ?: false
             }
 
-            override fun classIncluded(clazz: String): Boolean {
-                return true
-            }
-
             override val gioConfig: GioConfig get() = parameters.get().gioConfig.get()
             override val generatedDir: File get() = parameters.get().additionalClassesDir.get()
         }

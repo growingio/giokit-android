@@ -10,8 +10,6 @@ interface GioTransformContext {
 
     fun isAssignable(subClazz: String, superClazz: String): Boolean
 
-    fun classIncluded(clazz: String): Boolean
-
     val gioConfig: GioConfig
 
     val generatedDir: File

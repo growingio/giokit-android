@@ -64,10 +64,6 @@ internal class GiokitSaasTransform(
                     return context.klassPool.get(superClazz).isAssignableFrom(subClazz)
                 }
 
-                override fun classIncluded(clazz: String): Boolean {
-                    return true
-                }
-
                 override val gioConfig: GioConfig get() = this@GiokitSaasTransform.gioConfig
 
                 override val generatedDir: File
