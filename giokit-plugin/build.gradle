@@ -20,7 +20,7 @@ gradlePlugin{
             id = "com.growingio.giokit"
             implementationClass = "com.growingio.giokit.plugin.GioKitPlugin"
         }
-        create("giokit-saas"){
+        create("giokitSaas"){
             id = "com.growingio.giokit.saas"
             implementationClass = "com.growingio.giokit.plugin.GioKitSaasPlugin"
         }
