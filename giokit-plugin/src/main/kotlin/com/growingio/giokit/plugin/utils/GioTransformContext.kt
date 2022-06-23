@@ -1,118 +1,61 @@
 package com.growingio.giokit.plugin.utils
 
-import com.growingio.giokit.plugin.base.KlassPool
 import com.growingio.giokit.plugin.extension.GioKitExtension
 import java.io.File
+import java.io.Serializable
 import java.lang.StringBuilder
 
 interface GioTransformContext {
-    val name: String
+    val className: String
 
-    /**
-     * The project directory
-     */
-    val projectDir: File
-
-    /**
-     * The build directory
-     */
-    val buildDir: File
-
-    /**
-     * The temporary directory
-     */
-    val temporaryDir: File
-
-    /**
-     * The reports directory
-     */
-    val reportsDir: File
-
-    /**
-     * The boot classpath
-     */
-    val bootClasspath: Collection<File>
-
-    /**
-     * The compile classpath
-     */
-    val compileClasspath: Collection<File>
-
-    /**
-     * The runtime classpath
-     */
-    val runtimeClasspath: Collection<File>
-
-    /**
-     * The class pool
-     */
-    val klassPool: KlassPool
-
-    /**
-     * The application identifier
-     */
-    val applicationId: String
-
-    /**
-     * The buildType is debuggable
-     */
-    val isDebuggable: Boolean
-
-    /**
-     * is dataBinding enabled or not
-     */
-    val isDataBindingEnabled: Boolean
-
-    /**
-     * Check if has the specified property. Generally, the property is equivalent to project property
-     *
-     * @param name the name of property
-     */
-    fun hasProperty(name: String): Boolean
-
-    /**
-     * Returns the value of the specified property. Generally, the property is equivalent to project property
-     *
-     * @param name the name of property
-     * @param default the default value
-     */
-    fun <T> getProperty(name: String, default: T): T = default
+    fun isAssignable(subClazz: String, superClazz: String): Boolean
 
     val gioConfig: GioConfig
-}
 
-interface GioTransformListener {
-    fun onPreTransform(context: GioTransformContext) {}
-    fun onPostTransform(context: GioTransformContext) {}
+    val generatedDir: File
 }
-
 
 /**
  * 相关配置和变量保存区
  */
-data class GioConfig(val type: String) {
+data class GioConfig(val type: String) : Serializable {
     var domain: String = ""
     var xmlScheme: String = ""
     var gioSdks = mutableSetOf<DependLib>()
     var hasGioPlugin = false
     var gioTracks = mutableSetOf<GioTrackHook>()
-    var gioKitExt = GioKitExtension()
+    var buildDir: File? = null
+    var trackFinder = TrackFinder()
+
+    fun getVisitorCodeFile(): File {
+        return File(buildDir!!.absolutePath+ "/tmp/","giokit_track_scan.txt")
+    }
 
     fun setPluginExtension(ext: GioKitExtension) {
-        this.gioKitExt = ext
-        GIOKIT_LOG_ENABLE = ext.debugMode
+        this.trackFinder.enable = ext.trackFinder.enable
+        this.trackFinder.domain = ext.trackFinder.domain
+        this.trackFinder.className = ext.trackFinder.className
+        this.trackFinder.methodName = ext.trackFinder.methodName
+        DEBUG_ENABLE = ext.debugMode
     }
 
     fun getGioDepend(sdks: Set<DependLib>): String {
         val sb = StringBuilder()
         sdks.forEach { dependLib ->
-            sb.append(dependLib.variant)
+            sb.append(dependLib.variant).append(":").append(dependLib.version)
             if (sdks.last() != dependLib) {
-                sb.append("::")
+                sb.append("##")
             }
         }
         return sb.toString()
     }
+}
+
+class TrackFinder : Serializable {
+    var enable: Boolean = false
+    var domain: MutableList<String> = mutableListOf<String>()
+    var className: String = ""
+    var methodName: String = ""
 }
 
 data class GioTrackHook(
@@ -120,7 +63,8 @@ data class GioTrackHook(
     val methodName: String,
     var selfClassName: String = "",
     var selfMethodName: String = ""
-)
+) : Serializable {
+}
 
-data class DependLib(val variant: String, val version: String)
+data class DependLib(val variant: String, val version: String) : Serializable
 

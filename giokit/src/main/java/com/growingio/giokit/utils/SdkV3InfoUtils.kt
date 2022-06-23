@@ -12,7 +12,7 @@ import com.growingio.android.sdk.autotrack.IgnorePolicy
 import com.growingio.android.sdk.autotrack.page.PageProvider
 import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
 import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
-import com.growingio.android.sdk.track.http.EventEncoder
+import com.growingio.android.sdk.track.middleware.http.EventEncoder
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.android.sdk.track.providers.DeviceInfoProvider
 import com.growingio.android.sdk.track.providers.SessionProvider

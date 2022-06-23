@@ -6,35 +6,14 @@ pluginManagement {
         google()
         mavenCentral()
     }
-
-    // 设置插件解析策略
-    resolutionStrategy {
-        eachPlugin {
-            // 解析GrowingIO 插件
-            if (requested.id.id == "com.growingio.android") {
-                useModule("com.growingio.android:vds-gradle-plugin:autotrack-2.9.13")
-            }
-
-        }
-    }
 }
 dependencyResolutionManagement {
     //repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        jcenter()
         mavenLocal()
         maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
         google()
         mavenCentral()
     }
 }
-
-rootProject.name = "GioKit"
-
-includeBuild 'giokit-plugin'
-
-include ':app'
-include ':app-saas'
-include ':uikit'
-include ':giokit'
-include ':giokit-no-op'
+rootProject.name = "giokit-plugin"

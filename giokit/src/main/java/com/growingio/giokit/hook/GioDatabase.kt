@@ -4,6 +4,7 @@ import android.net.Uri
 import android.util.Log
 import com.growingio.android.sdk.track.events.base.BaseEvent
 import com.growingio.android.sdk.track.middleware.GEvent
+import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.launch.db.GioKitDbManager
 import com.growingio.giokit.launch.db.GioKitEventBean
 import org.json.JSONArray
@@ -67,16 +68,16 @@ object GioDatabase {
      */
     @JvmStatic
     fun outdatedEvents() {
-        GioKitDbManager.instance.outdatedEvents()
+        if (GioKitImpl.inited) {
+            GioKitDbManager.instance.outdatedEvents()
+        }
     }
 
     @JvmStatic
-    fun insertV3Event(uri: Uri, gEvent: GEvent) {
-        Log.d("GIO_DATABASE", uri.toString())
-        val dbId = uri.lastPathSegment?.toLong() ?: 0L
+    fun insertV3Event(gEvent: GEvent) {
         if (gEvent is BaseEvent) {
             val gioEvent = GioKitEventBean()
-            gioEvent.gsid = dbId
+            gioEvent.gsid = gEvent.globalSequenceId
             gioEvent.status = GioKitEventBean.STATUS_READY
             gioEvent.time = gEvent.timestamp
             gioEvent.type = gEvent.eventType

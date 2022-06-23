@@ -2,61 +2,30 @@
 buildscript {
     apply from: "config.gradle"
     ext {
-        rootProject.ext.android.kotlin_version = '1.5.20'
-    }
-    repositories {
-        google()
-        mavenCentral()
-        mavenLocal()
-        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-    }
-    dependencies {
-        classpath "com.android.tools.build:gradle:${rootProject.ext.android.gradle_plugin_version}"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.ext.android.kotlin_version}"
-
-        classpath growingio["autotracker-plugin"]
-        classpath growingio["autotrack-saas-plugin"]
-        //classpath "com.growingio.giokit:giokit-plugin:1.0.0-SNAPSHOT"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        kotlin_version = "1.6.21"
+        agp_version = System.getenv('AGP_VERSION') ?: "7.2.1"
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        mavenLocal()
-        jcenter()
-        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-    }
+plugins {
+    id 'com.android.application' version "$agp_version" apply false
+    id 'com.android.library' version "$agp_version" apply false
+    id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
+    id 'org.jetbrains.kotlin.jvm' version "$kotlin_version" apply false
+
+    id 'com.growingio.android.autotracker' version "3.4.0" apply false
+
+//    classpath growingio["autotracker-plugin"]
+
+//    id 'com.android.application' version '7.2.1' apply false
+//    id 'com.android.library' version '7.2.1' apply false
+//    id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
+//    id 'org.jetbrains.kotlin.jvm' version '1.6.21' apply false
+//    id 'com.google.devtools.ksp' version '1.6.21-1.0.5' apply false
 }
+
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir
-}
-
-/**
- * 删除指定目录下的文件
- */
-task deleteSource(type: Delete) {
-    doLast {
-        println("===delete Plugin Source start===")
-        delete "${project.rootDir}/giokit-plugin/src/main/"
-        println("===delete Plugin Source end===")
-    }
-}
-
-/**
- * 将buildSrc中的代码同步到giokit-plugin中
- */
-task copyPluginSource(type: Copy, dependsOn: deleteSource) {
-    doLast {
-        println("===copy Plugin Source start===")
-        from "${project.rootDir}/buildSrc/src/main/"
-        into "${project.rootDir}/giokit-plugin/src/main/"
-        include('**/*')
-        println("===copy Plugin Source end===")
-    }
 }

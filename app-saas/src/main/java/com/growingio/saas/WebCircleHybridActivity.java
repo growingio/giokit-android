@@ -1,4 +1,4 @@
-package com.growingio.giokit.v3;
+package com.growingio.saas;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,9 +10,6 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.Nullable;
 
-/**
- * Created by liangdengke on 2018/11/27.
- */
 public class WebCircleHybridActivity extends Activity {
     private final String TAG = "WebCircleHybridActivity";
 
@@ -41,11 +38,8 @@ public class WebCircleHybridActivity extends Activity {
             }
         });
 
-        WebChromeClient client = new WebChromeClient() {
+        webView.setWebChromeClient(new WebChromeClient() {});
 
-        };
-        webView.setWebChromeClient(client);
         webView.loadUrl("https://cn.bing.com/");
-        //webView.loadUrl("https://www.baidu.com/");
     }
 }

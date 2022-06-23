@@ -14,8 +14,11 @@ class GioKitDbManager private constructor() {
 
     init {
         //删除1天前的网络请求（网络请求数据只有24小时的有效期）
-        GioKitDatabase.instance.getHttpDao()
-            .outdatedHttp(System.currentTimeMillis() - HTTP_VALID_PERIOD_MILLS)
+        try {
+            GioKitDatabase.instance.getHttpDao()
+                .outdatedHttp(System.currentTimeMillis() - HTTP_VALID_PERIOD_MILLS)
+        } catch (ignored: Exception) {
+        }
     }
 
     /**************** Http Database ****************/
@@ -36,7 +39,7 @@ class GioKitDbManager private constructor() {
     }
 
     suspend fun sumUploadDataSize(): Long {
-        return GioKitDatabase.instance.getHttpDao().sumHttpUploadData(GioKitImpl.launchTime)?:0L
+        return GioKitDatabase.instance.getHttpDao().sumHttpUploadData(GioKitImpl.launchTime) ?: 0L
     }
 
     suspend fun countRunningErrorRequest(): Int {

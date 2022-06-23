@@ -1,12 +1,9 @@
 package com.growingio.giokit.plugin.utils
 
+import com.android.build.gradle.BaseExtension
 import com.android.build.gradle.api.BaseVariant
+import org.gradle.api.Project
 import org.objectweb.asm.tree.ClassNode
-import java.io.File
-import java.io.FileInputStream
-import java.net.URLDecoder
-import java.nio.charset.Charset
-import java.util.jar.JarInputStream
 
 /**
  * <p>
@@ -21,16 +18,14 @@ fun BaseVariant.isRelease(): Boolean {
     return false
 }
 
+inline fun <reified T : BaseExtension> Project.getAndroid(): T = extensions.getByName("android") as T
+
+var DEBUG_ENABLE = false
+
 fun String.println() {
-    if (isLogEnable()) {
-        println("[giokit plugin]===>$this")
+    if (DEBUG_ENABLE) {
+        println("[Giokit.Info] $this")
     }
-}
-
-var GIOKIT_LOG_ENABLE = false
-
-fun isLogEnable(): Boolean {
-    return GIOKIT_LOG_ENABLE
 }
 
 val ClassNode.className: String
@@ -40,7 +35,7 @@ val String.formatDot: String
     get() = this.replace('/', '.')
 
 fun String.ignoreClass(context: GioTransformContext): Boolean {
-    for (domain in context.gioConfig.gioKitExt.trackFinder.domain) {
+    for (domain in context.gioConfig.trackFinder.domain) {
         if (this.startsWith(domain, true)) {
             return false
         }
@@ -54,42 +49,23 @@ fun String.ignoreClass(context: GioTransformContext): Boolean {
     return false
 }
 
-fun String.isAssignableFrom(context: GioTransformContext, parentClass: Class<*>): Boolean {
-    try {
-        val findClass = context.klassPool.classLoader.loadClass(this)
-        return parentClass.isAssignableFrom(findClass)
-    } catch (e: ClassNotFoundException) {
-    } catch (e: NoClassDefFoundError) {
-    }
-    return false
-}
-
-fun String.loadClass(context: GioTransformContext): Class<*>? {
-    try {
-        return context.klassPool.classLoader.loadClass(this)
-    } catch (e: ClassNotFoundException) {
-    } catch (e: NoClassDefFoundError) {
-    }
-    return null
-}
-
 // find jar manifest ==> define in gradle >> jar{"giokit-plugin-version":version}
-fun Any.getGiokitPluginVersion(): String {
-    try {
-        val jarPath = URLDecoder.decode(
-            File(this.javaClass.protectionDomain.codeSource.location.path).canonicalPath,
-            Charset.defaultCharset()
-        )
-        val inputStream = JarInputStream(FileInputStream(jarPath))
-        val pluginVersion = inputStream.manifest.mainAttributes.getValue("giokit-plugin-version")
-        if (pluginVersion.isNullOrEmpty()) {
-            throw Exception("Can't find Giokit plugin!!")
-        }
-        return pluginVersion
-    } catch (e: Exception) {
-        throw Exception("Can't find Giokit plugin!!")
-    }
-}
+//fun Any.getGiokitPluginVersion(): String {
+//    try {
+//        val jarPath = URLDecoder.decode(
+//            File(this.javaClass.protectionDomain.codeSource.location.path).canonicalPath,
+//            Charset.defaultCharset()
+//        )
+//        val inputStream = JarInputStream(FileInputStream(jarPath))
+//        val pluginVersion = inputStream.manifest.mainAttributes.getValue("giokit-plugin-version")
+//        if (pluginVersion.isNullOrEmpty()) {
+//            throw Exception("Can't find Giokit plugin!!")
+//        }
+//        return pluginVersion
+//    } catch (e: Exception) {
+//        throw Exception("Can't find Giokit plugin!!")
+//    }
+//}
 
 val ignoreClassNames = arrayListOf(
     "kotlin",

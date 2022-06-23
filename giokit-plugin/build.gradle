@@ -1,28 +1,43 @@
-plugins {
-    id 'java-gradle-plugin'
-    id 'java-library'
-    id 'kotlin'
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-jar {
-    manifest {
-        attributes(
-                "giokit-plugin-version": rootProject.ext.android.versionName
-        )
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        kotlin_version = "1.6.21"
+        agp_version = System.getenv('AGP_VERSION') ?: "7.2.1"
     }
 }
 
-dependencies {
-    compileOnly gradleApi()
-    //implementation rootProject.ext.dependencies["kotlin-stdlib"]
-    compileOnly "com.android.tools.build:gradle:${rootProject.ext.android["giokit_plugin_version"]}"
-    /* 👇👇👇👇 引用这两个模块 👇👇👇👇 */
-    // api "com.didiglobal.booster:booster-api:${rootProject.ext.android["booster_version"]}"
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version "$kotlin_version"
+    id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
+    id 'java-gradle-plugin'
 }
 
-apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"
+apply from: "../config.gradle"
+
+gradlePlugin{
+    plugins{
+        create("giokit"){
+            id = "com.growingio.giokit"
+            implementationClass = "com.growingio.giokit.plugin.GioKitPlugin"
+        }
+        create("giokitSaas"){
+            id = "com.growingio.giokit.saas"
+            implementationClass = "com.growingio.giokit.plugin.GioKitSaasPlugin"
+        }
+    }
+}
+
+dependencies{
+    implementation "com.growingio.android:growingio-plugin-library:3.4.0"
+    implementation gradleApi()
+    compileOnly "com.android.tools.build:gradle:$agp_version"
+    compileOnly "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+    implementation 'org.ow2.asm:asm:9.2'
+    implementation 'org.ow2.asm:asm-util:9.2'
+    implementation 'org.ow2.asm:asm-commons:9.2'
+
+    implementation 'com.squareup:javapoet:1.13.0'
+}
+
+apply from: "publishMaven.gradle"

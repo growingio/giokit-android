@@ -6,10 +6,6 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import com.growingio.android.sdk.autotrack.GrowingAutotracker;
-import com.growingio.giokit.hook.GioTrackInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -22,13 +18,6 @@ public class LambdaTest {
         button.setOnClickListener(v -> {
             GrowingAutotracker.get().trackCustomEvent("lambda");
         });
-
-        ArrayList<String> list = new ArrayList<>();
-        list.add("");
-
-        List arrayList = new ArrayList();
-        arrayList.add("cpacm#cpacm");
-        GioTrackInfo.inject(arrayList);
     }
 
     public void doubleText() {
