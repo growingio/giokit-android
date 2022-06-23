@@ -42,15 +42,20 @@ class GioKitSaasPlugin : Plugin<Project> {
                 GioKitConfigProcessor(project, sassConfig).process(variant)
             }
 
-            configureBytecodeTransform(project, sassConfig)
+            //configureBytecodeTransform(project, sassConfig)
 
-//            if (SimpleAGPVersion.ANDROID_GRADLE_PLUGIN_VERSION < SimpleAGPVersion(4, 2)) {
-//                // Configures bytecode transform using older APIs pre AGP 4.2
-//                configureBytecodeTransform(project, sassConfig)
-//            } else {
-//                // Configures bytecode transform using AGP 4.2 ASM pipeline.
-//                configureBytecodeTransformASM(project, sassConfig)
-//            }
+            if (SimpleAGPVersion.ANDROID_GRADLE_PLUGIN_VERSION < SimpleAGPVersion(4, 2)) {
+                // Configures bytecode transform using older APIs pre AGP 4.2
+                configureBytecodeTransform(project, sassConfig)
+            } else if (SimpleAGPVersion.ANDROID_GRADLE_PLUGIN_VERSION >= SimpleAGPVersion(7, 1)
+                && SimpleAGPVersion.ANDROID_GRADLE_PLUGIN_VERSION < SimpleAGPVersion(7, 3)
+            ) {
+                // AndroidGradlePlugin version 7.2 breaks transform API when used along with ASM API
+                // look at https://issuetracker.google.com/issues/232438924
+                configureBytecodeTransform(project, sassConfig)
+            } else {
+                configureBytecodeTransformASM(project, sassConfig)
+            }
         }
     }
 
