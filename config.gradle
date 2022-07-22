@@ -20,6 +20,7 @@ ext {
 
     growingio = [
             "autotracker"          : "com.growingio.android:autotracker:${android.growingio}",
+            "autotracker-core"      : "com.growingio.android:autotracker-core:${android.growingio}",
             "autotracker-cdp"      : "com.growingio.android:autotracker-cdp:${android.growingio}",
             "tracker-cdp"          : "com.growingio.android:tracker-cdp:${android.growingio}",
             "autotracker-plugin"   : "com.growingio.android:autotracker-gradle-plugin:${android.growingio}",

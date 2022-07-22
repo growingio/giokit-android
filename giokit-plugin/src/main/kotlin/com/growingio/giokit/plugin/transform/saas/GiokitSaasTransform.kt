@@ -43,11 +43,16 @@ internal class GiokitSaasTransform(
     override fun transform(context: AutoTrackerContext, bytecode: ByteArray): ByteArray {
         try {
             val classReader = ClassReader(bytecode)
-            if (!shouldClassModified(
-                    normalize(classReader.className)
-                )
-            ) {
-                return bytecode
+            if (!shouldClassModified(normalize(classReader.className))) {
+                var shouldModifier = false
+                if (gioConfig.trackFinder.enable) {
+                    gioConfig.trackFinder.domain.forEach {
+                        if (normalize(classReader.className).startsWith(it)){
+                            shouldModifier = true
+                        }
+                    }
+                }
+                if(!shouldModifier) return bytecode
             }
 
 

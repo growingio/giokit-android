@@ -40,4 +40,7 @@ interface GioKitEventDao {
     @Delete
     fun delete(entity: GioKitEventBean)
 
+    @Query("DELETE FROM events")
+    fun clear()
+
 }
