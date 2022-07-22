@@ -44,7 +44,7 @@ giokitExt {
 }
 
 growingAutotracker {
-    logEnabled false
+    logEnabled true
 }
 
 dependencies {
