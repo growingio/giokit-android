@@ -41,6 +41,7 @@ dependencies {
     implementation rootProject.ext.dependencies["constraintLayout"]
     implementation rootProject.ext.dependencies["paging3"]
     implementation rootProject.ext.dependencies["swiperefreshlayout"]
+    implementation rootProject.ext.dependencies["preference"]
 
     implementation rootProject.ext.dependencies["coroutines-core"]
     implementation rootProject.ext.dependencies["coroutines-android"]

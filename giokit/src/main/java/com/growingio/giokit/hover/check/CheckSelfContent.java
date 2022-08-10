@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.growingio.giokit.R;
-import com.growingio.giokit.utils.CheckSelfUtils;
+import com.growingio.giokit.utils.CheckSdkStatusManager;
 
 import io.mattcarroll.hover.Content;
 
@@ -34,6 +34,8 @@ import io.mattcarroll.hover.Content;
  * {@link Content} that displays an checkview.
  */
 public class CheckSelfContent extends FrameLayout implements Content {
+
+    private static final float POST_TIME_DELAY = 800L;
 
     private View checkButton;
     private View descLayout;
@@ -71,18 +73,18 @@ public class CheckSelfContent extends FrameLayout implements Content {
         checkList.setVisibility(View.VISIBLE);
         long postTime = SystemClock.uptimeMillis();
 
-        post(CheckSelfUtils.getSdkDepend(0), postTime += 100L);
-        post(CheckSelfUtils.hasSdkPlugin(1), postTime += 1000L);
-        post(CheckSelfUtils.getProjectStatus(2), postTime += 1000L);
-        post(CheckSelfUtils.getProjectID(3), postTime += 1000L);
-        post(CheckSelfUtils.getURLScheme(4), postTime += 1000L);
-        post(CheckSelfUtils.getDataSourceID(5), postTime += 1000L);
-        post(CheckSelfUtils.getDataServerHost(6), postTime += 1000L);
-        post(CheckSelfUtils.getDataCollectionEnable(7), postTime += 1000L);
-        post(CheckSelfUtils.getSdkDebug(8), postTime += 1000L);
-        post(CheckSelfUtils.getOaidEnabled(9), postTime += 1000L);
+        post(CheckSdkStatusManager.getInstance().getSdkDepend(0), postTime += 100L);
+        post(CheckSdkStatusManager.getInstance().hasSdkPlugin(1), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getProjectStatus(2), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getProjectID(3), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getURLScheme(4), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getDataSourceID(5), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getDataServerHost(6), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getDataCollectionEnable(7), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getSdkDebug(8), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getOaidEnabled(9), postTime += POST_TIME_DELAY);
         //最后是手动埋点个数
-        CheckItem trackItem = CheckSelfUtils.getTrackCount(10);
+        CheckItem trackItem = CheckSdkStatusManager.getInstance().getTrackCount(10);
         if (!trackItem.isError()) {
             post(trackItem, postTime += 1000L);
         }
@@ -133,5 +135,7 @@ public class CheckSelfContent extends FrameLayout implements Content {
     public void onHidden() {
         mHoverMotion.stop();
     }
+
+
 
 }

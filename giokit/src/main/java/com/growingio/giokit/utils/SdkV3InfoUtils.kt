@@ -36,7 +36,7 @@ object SdkV3InfoUtils {
             list.tryAdd { SdkInfo("SDK版本", sdkVersion) }
             list.tryAdd { SdkInfo("项目ID", ConfigurationProvider.core().projectId) }
             list.tryAdd { SdkInfo("URLScheme", ConfigurationProvider.core().urlScheme) }
-            val checkItem = CheckSelfUtils.getDataSourceID(0)
+            val checkItem = CheckSdkStatusManager.getInstance().getDataSourceID(0)
             list.tryAdd { SdkInfo("DataSource ID", checkItem.content) }
             list.tryAdd {
                 SdkInfo(
@@ -59,7 +59,7 @@ object SdkV3InfoUtils {
             list.tryAdd {
                 SdkInfo(
                     "oaid采集",
-                    CheckSelfUtils.getOaidEnabled(0).content
+                    CheckSdkStatusManager.getInstance().getOaidEnabled(0).content
                 )
             }
             list.tryAdd { SdkInfo("分发渠道", ConfigurationProvider.core().channel) }

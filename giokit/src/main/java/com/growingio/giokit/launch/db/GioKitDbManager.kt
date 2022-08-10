@@ -46,6 +46,10 @@ class GioKitDbManager private constructor() {
         return GioKitDatabase.instance.getHttpDao().countHttpErrorRequest(GioKitImpl.launchTime)
     }
 
+    fun cleanHttp(){
+        GioKitDatabase.instance.getHttpDao().clear()
+    }
+
 
     /**************** Event Database ****************/
     fun getEvent(id: Int): GioKitEventBean {

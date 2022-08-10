@@ -38,7 +38,6 @@ class SdkDataFragment : BaseFragment() {
     }
 
     private val swipeLayout: SwipeRefreshLayout by lazy { findViewById(R.id.swipeLayout) }
-    private val fab: FloatingActionButton by lazy { findViewById(R.id.fab) }
 
     override fun layoutId(): Int {
         return R.layout.fragment_giokit_sdkdata
@@ -90,19 +89,6 @@ class SdkDataFragment : BaseFragment() {
             eventFlow.collectLatest {
                 sdkDataAdapter.submitData(it)
             }
-        }
-
-        fab.setOnClickListener {
-            AlertDialog.Builder(requireContext()).setMessage(R.string.giokit_data_delete_message)
-                .setPositiveButton(R.string.giokit_dialog_ok) { _, _ ->
-                    GioKitDbManager.instance.cleanEvent()
-                    sdkDataAdapter.refresh()
-                }
-                .setNegativeButton(R.string.giokit_dialog_cancel) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setCancelable(true)
-                .show()
         }
     }
 

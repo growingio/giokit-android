@@ -10,6 +10,7 @@ import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.UniversalActivity
+import com.growingio.giokit.setting.GiokitSettingActivity
 import io.mattcarroll.hover.Content
 import io.mattcarroll.hover.overlay.OverlayPermission
 
@@ -38,6 +39,9 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
 
         val sdkHttpLayout = findViewById(R.id.sdkHttpLayout) as View
         sdkHttpLayout.setOnClickListener(this)
+
+        val sdkCommonSettingLayout = findViewById(R.id.sdkCommonSettingLayout) as View
+        sdkCommonSettingLayout.setOnClickListener(this)
 
     }
 
@@ -100,6 +104,16 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKHTTP_PAGE)
+                })
+            }
+
+            // 通用设置
+            R.id.sdkCommonSettingLayout ->{
+                GioKitImpl.gioKitHoverManager.hoverView?.collapse()
+                context.startActivity(Intent(context, GiokitSettingActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDK_COMMONSETTING_PAGE)
+                    putExtra(LaunchPage.LAUNCH_FRAGMENT_TITLE, R.string.giokit_menu_common_setting)
                 })
             }
         }
