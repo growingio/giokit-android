@@ -3,11 +3,15 @@ package com.growingio.giokit
 import android.app.Activity
 import android.app.Application
 import android.view.View
+import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hook.GioTrackInfo
 import com.growingio.giokit.hover.GioKitHoverManager
 import com.growingio.giokit.launch.db.DatabaseCreator
 import com.growingio.giokit.launch.db.GioKitDatabase
+import com.growingio.giokit.utils.CheckSdkStatusManager
+import com.growingio.giokit.utils.CheckSelfUtils
+import com.growingio.giokit.utils.GiokitEventFilterProxy
 import java.lang.ref.WeakReference
 
 /**
@@ -37,6 +41,8 @@ internal object GioKitImpl {
 
         gioKitHoverManager = GioKitHoverManager(app)
 
+        initWithGrowingIOSDK()
+
         inited = true
     }
 
@@ -44,6 +50,11 @@ internal object GioKitImpl {
         GioPluginConfig.initGioKitConfig()
 
         GioTrackInfo.initGioTrack()
+    }
+
+    private fun initWithGrowingIOSDK() {
+        // deal v3sdk with EventFilter
+        CheckSdkStatusManager.getInstance().eventFilterProxy()
     }
 
 }

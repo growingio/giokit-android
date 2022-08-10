@@ -10,6 +10,7 @@ import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.R
 import com.growingio.giokit.circle.CircleAnchorView
 import com.growingio.giokit.launch.UniversalActivity
+import com.growingio.giokit.setting.GiokitSettingActivity
 import com.growingio.giokit.utils.BarUtils
 import io.mattcarroll.hover.HoverView
 import io.mattcarroll.hover.overlay.OverlayPermission
@@ -63,7 +64,7 @@ class GioKitHoverManager(val app: Application) :
 
     override fun onActivityResumed(activity: Activity) {
         GioKitImpl.curActivity = WeakReference(activity)
-        if (activity is UniversalActivity) return
+        if (activity is UniversalActivity || activity is GiokitSettingActivity) return
         if (hasOverlayPermission) {
             detach(activity)
             return

@@ -1,12 +1,16 @@
-package com.growingio.giokit.launch
+package com.growingio.giokit.setting
 
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceFragmentCompat
 import com.growingio.giokit.R
+import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_INDEX
+import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_TITLE
 import com.growingio.giokit.utils.SdkV3InfoUtils
-import java.util.ArrayDeque
 
 /**
  * <p>
@@ -14,13 +18,11 @@ import java.util.ArrayDeque
  * @author cpacm 2021/8/26
  */
 //@GrowingIOPageIgnore
-class UniversalActivity : AppCompatActivity() {
-
-    private val mFragments = ArrayDeque<BaseFragment>()
+class GiokitSettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTitle(R.string.giokit_universal_title)
+        setContentView(R.layout.activity_giokit_base)
         SdkV3InfoUtils.ignoreActivity(this)
         val bundle = intent.extras
         if (bundle == null) {
@@ -33,7 +35,7 @@ class UniversalActivity : AppCompatActivity() {
             return
         }
 
-        val mFragmentClass = LaunchPage.getPageClass(index)
+        val mFragmentClass = LaunchPage.getSettingPageClass(index)
         if (mFragmentClass == null) {
             finish()
             Toast.makeText(
@@ -46,50 +48,29 @@ class UniversalActivity : AppCompatActivity() {
         showContent(mFragmentClass, bundle)
     }
 
-    fun showContent(target: Class<out BaseFragment>, bundle: Bundle? = null) {
-        try {
+    fun showContent(target: Class<out PreferenceFragmentCompat>, bundle: Bundle? = null) {
 
+        val closeIv = findViewById<View>(R.id.close)
+        closeIv.setOnClickListener {
+            onBackPressed()
+        }
+
+        val titleTv = findViewById<TextView>(R.id.title)
+        titleTv.setText(bundle?.getInt(LAUNCH_FRAGMENT_TITLE)?:R.string.giokit_title_default)
+
+        try {
             val fragment = target.newInstance()
             if (bundle != null) {
                 fragment.arguments = bundle
             }
             val fm = supportFragmentManager
             val fragmentTransaction = fm.beginTransaction()
-            fragmentTransaction.add(android.R.id.content, fragment)
-            mFragments.push(fragment)
-            fragmentTransaction.addToBackStack("")
+            fragmentTransaction.replace(R.id.contentContainer, fragment)
             fragmentTransaction.commit()
         } catch (e: InstantiationException) {
             e.printStackTrace()
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
-        }
-    }
-
-
-    override fun onBackPressed() {
-        if (!mFragments.isEmpty()) {
-            val fragment = mFragments.first
-            if (!fragment.onBackPressed()) {
-                mFragments.removeFirst()
-                super.onBackPressed()
-                if (mFragments.isEmpty()) {
-                    finish()
-                }
-            }
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    fun doBack(fragment: BaseFragment) {
-        if (mFragments.contains(fragment)) {
-            mFragments.remove(fragment)
-            val fm = supportFragmentManager
-            fm.popBackStack()
-            if (mFragments.isEmpty()) {
-                finish()
-            }
         }
     }
 }
