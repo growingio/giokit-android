@@ -72,26 +72,27 @@ public class CheckSelfContent extends FrameLayout implements Content {
         descLayout.setVisibility(View.GONE);
         checkList.setVisibility(View.VISIBLE);
         long postTime = SystemClock.uptimeMillis();
+        int index = 0;
+        post(CheckSdkStatusManager.getInstance().getSdkDepend(index++), postTime += 100L);
+        post(CheckSdkStatusManager.getInstance().hasSdkPlugin(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getProjectStatus(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getProjectID(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getURLScheme(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getDataSourceID(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getDataServerHost(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getDataCollectionEnable(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getSdkDebug(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getOaidEnabled(index++), postTime += POST_TIME_DELAY);
 
-        post(CheckSdkStatusManager.getInstance().getSdkDepend(0), postTime += 100L);
-        post(CheckSdkStatusManager.getInstance().hasSdkPlugin(1), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getProjectStatus(2), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getProjectID(3), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getURLScheme(4), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getDataSourceID(5), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getDataServerHost(6), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getDataCollectionEnable(7), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getSdkDebug(8), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getOaidEnabled(9), postTime += POST_TIME_DELAY);
         //最后是手动埋点个数
-        CheckItem trackItem = CheckSdkStatusManager.getInstance().getTrackCount(10);
+        CheckItem trackItem = CheckSdkStatusManager.getInstance().getTrackCount(index);
         if (!trackItem.isError()) {
-            post(trackItem, postTime += 1000L);
+            post(trackItem, postTime += POST_TIME_DELAY);
         }
 
         getHandler().postAtTime(() -> {
             mHoverMotion.stop();
-        }, "giosdk", postTime + 1000L);
+        }, "giosdk", postTime + 500L);
     }
 
     private void post(CheckItem checkItem, long time) {
@@ -135,7 +136,6 @@ public class CheckSelfContent extends FrameLayout implements Content {
     public void onHidden() {
         mHoverMotion.stop();
     }
-
 
 
 }

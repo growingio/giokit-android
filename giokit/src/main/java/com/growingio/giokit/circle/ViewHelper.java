@@ -105,7 +105,6 @@ public class ViewHelper {
         return viewNode;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     public static boolean isViewSelfVisible(View mView) {
         if (mView == null || mView.getWindowVisibility() == View.GONE) {
             return false;
@@ -132,7 +131,6 @@ public class ViewHelper {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     public static boolean viewVisibilityInParents(View view) {
         if (view == null)
             return false;

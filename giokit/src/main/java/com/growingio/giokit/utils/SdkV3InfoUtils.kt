@@ -10,6 +10,9 @@ import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfig
 import com.growingio.android.sdk.autotrack.IgnorePolicy
 import com.growingio.android.sdk.autotrack.page.PageProvider
+import com.growingio.android.sdk.models.AppCloseEvent
+import com.growingio.android.sdk.models.VisitEvent
+import com.growingio.android.sdk.track.events.TrackEventType
 import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
 import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
@@ -19,6 +22,8 @@ import com.growingio.android.sdk.track.providers.SessionProvider
 import com.growingio.android.sdk.track.providers.UserInfoProvider
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.launch.sdkinfo.SdkInfo
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * <p>
@@ -227,5 +232,53 @@ object SdkV3InfoUtils {
         if (hasClass("com.growingio.android.sdk.autotrack.page.PageProvider")) {
             PageProvider.get().addIgnoreActivity(activity, IgnorePolicy.IGNORE_ALL)
         }
+    }
+
+    fun getEventAlphaBet(eventType: String): String {
+        return when (eventType) {
+            EventExcludeFilter.EVENT_VISITOR_ATTRIBUTES -> "VA"
+            EventExcludeFilter.EVENT_LOGIN_USER_ATTRIBUTES -> "UA"
+            EventExcludeFilter.EVENT_CONVERSION_VARIABLES -> "CV"
+            EventExcludeFilter.EVENT_APP_CLOSED -> "A"
+            EventExcludeFilter.EVENT_PAGE_ATTRIBUTES -> "PA"
+            EventExcludeFilter.EVENT_VIEW_CLICK -> "CK"
+            EventExcludeFilter.EVENT_VIEW_CHANGE -> "CG"
+            EventExcludeFilter.EVENT_FORM_SUBMIT -> "FS"
+            EventExcludeFilter.EVENT_REENGAGE -> "RG"
+            EventExcludeFilter.EVENT_ACTIVATE -> "AV"
+            else -> eventType.first().uppercase()
+        }
+    }
+
+    fun getEventDesc(eventType: String, data: String): String {
+        try {
+            val jsonObj = JSONObject(data)
+            // custom name
+            val name = jsonObj.optString("eventName")
+            if (name.isNotEmpty()) return name
+
+            // page
+            val p = jsonObj.optString("path")
+            if (p.isNotEmpty()) return p
+
+            // visit
+            if (eventType == EventExcludeFilter.EVENT_VISIT) {
+                val userId = jsonObj.optString("userId")
+                if (userId.isNotEmpty()) return userId
+                val oaid = jsonObj.optString("oaid")
+                if (oaid.isNotEmpty()) return oaid
+                val adrid = jsonObj.optString("androidId")
+                if (adrid.isNotEmpty()) return adrid
+                return jsonObj.optString("domain")
+            }
+
+            if (eventType == EventExcludeFilter.EVENT_APP_CLOSED) {
+                return jsonObj.optString("timestamp")
+            }
+            return jsonObj.optString("appName")
+
+        } catch (e: JSONException) {
+        }
+        return data
     }
 }

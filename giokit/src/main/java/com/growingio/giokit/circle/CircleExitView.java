@@ -29,7 +29,6 @@ class CircleExitView extends FloatViewContainer {
 
     private static final String TAG = "CircleExitView";
 
-    private View mExitIcon;
     private TextView mNodeTv;
     public CircleExitView(@NonNull Context context) {
         super(context);
@@ -48,5 +47,4 @@ class CircleExitView extends FloatViewContainer {
     public void setNodeInfo(Spannable sp){
         mNodeTv.setText(sp);
     }
-
 }

@@ -1,9 +1,9 @@
 ext {
     android = [
-            compileSdkVersion         : 33,
+            compileSdkVersion         : 32,
             applicationId             : "com.growingio.giokit",
             minSdkVersion             : 17,
-            targetSdkVersion          : 33,
+            targetSdkVersion          : 32,
             //app版本号
             versionCode               : 4,
             versionName               : "1.2.0",
@@ -11,7 +11,7 @@ ext {
             kotlin_version            : "1.6.21",
             kotlinx_coroutines_version: "1.6.2",
             gradle_plugin_version     : "4.2.2",
-            giokit_plugin_version     : "7.2.1",
+            giokit_plugin_version     : "7.2.2",
             okhttp_v3                 : "3.14.7",
             okhttp_v4                 : "4.7.0",
             growingio                 : "3.4.2-SNAPSHOT",
@@ -20,7 +20,7 @@ ext {
 
     growingio = [
             "autotracker"          : "com.growingio.android:autotracker:${android.growingio}",
-            "autotracker-core"      : "com.growingio.android:autotracker-core:${android.growingio}",
+            "autotracker-core"     : "com.growingio.android:autotracker-core:${android.growingio}",
             "autotracker-cdp"      : "com.growingio.android:autotracker-cdp:${android.growingio}",
             "tracker-cdp"          : "com.growingio.android:tracker-cdp:${android.growingio}",
             "autotracker-plugin"   : "com.growingio.android:autotracker-gradle-plugin:${android.growingio}",
@@ -28,6 +28,7 @@ ext {
             "urlconnection"        : "com.growingio.android:urlconnection:${android.growingio}",
             "volley"               : "com.growingio.android:volley:${android.growingio}",
             "protobuf"             : "com.growingio.android:protobuf:${android.growingio}",
+            "hybrid"               : "com.growingio.android:hybrid:${android.growingio}",
 
             //sass-v2.0
             "autotrack-saas"       : "com.growingio.android:vds-android-agent:autotrack-${android.growingio_v2}",
