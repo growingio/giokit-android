@@ -3,11 +3,15 @@ package com.growingio.giokit.hover.menu
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
 import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.R
+import com.growingio.giokit.instant.InstantEventCache
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.UniversalActivity
 import com.growingio.giokit.setting.GiokitSettingActivity
@@ -40,6 +44,9 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
         val sdkHttpLayout = findViewById(R.id.sdkHttpLayout) as View
         sdkHttpLayout.setOnClickListener(this)
 
+        val sdkInstantLayout = findViewById(R.id.sdkInstantLayout) as View
+        sdkInstantLayout.setOnClickListener(this)
+
         val sdkCommonSettingLayout = findViewById(R.id.sdkCommonSettingLayout) as View
         sdkCommonSettingLayout.setOnClickListener(this)
 
@@ -54,7 +61,22 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
     }
 
     override fun onShown() {
+        if (InstantEventCache.isInstantEventMonitorEnable()) {
+            val instantTitle = findViewById<TextView>(R.id.instantTitle)
+            instantTitle.ellipsize = TextUtils.TruncateAt.MARQUEE
+            instantTitle.setText(R.string.giokit_menu_monitor_running)
+            instantTitle.requestFocus()
 
+            val instantLogo = findViewById<ImageView>(R.id.instantLogo)
+            instantLogo.setBackgroundResource(R.drawable.giokit_check_menu_button_close_bg)
+        } else {
+            val instantTitle = findViewById<TextView>(R.id.instantTitle)
+            instantTitle.ellipsize = null
+            instantTitle.setText(R.string.giokit_menu_monitor)
+
+            val instantLogo = findViewById<ImageView>(R.id.instantLogo)
+            instantLogo.setBackgroundResource(R.drawable.giokit_check_menu_button_bg)
+        }
     }
 
     override fun onHidden() {
@@ -99,7 +121,28 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                     context.startActivity(intent)
                 }
             }
-            R.id.sdkHttpLayout ->{
+            R.id.sdkInstantLayout -> {
+                if (InstantEventCache.isInstantEventMonitorEnable()) {
+                    InstantEventCache.disableInstantEventMonitor()
+                    GioKitImpl.gioKitHoverManager.removeInstantMonitor()
+                    GioKitImpl.gioKitHoverManager.hoverView?.collapse()
+                    return
+                }
+                if (OverlayPermission.hasRuntimePermissionToDrawOverlay(context)) {
+                    GioKitImpl.gioKitHoverManager.hoverView?.collapse()
+                    GioKitImpl.gioKitHoverManager.notifyOverlay(context)
+
+                    GioKitImpl.gioKitHoverManager.startInstantMonitor(context)
+
+                } else {
+                    val intent = OverlayPermission.createIntentToRequestOverlayPermission(context)
+                    if (context !is Activity) {
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    context.startActivity(intent)
+                }
+            }
+            R.id.sdkHttpLayout -> {
                 GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -108,7 +151,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
             }
 
             // 通用设置
-            R.id.sdkCommonSettingLayout ->{
+            R.id.sdkCommonSettingLayout -> {
                 GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, GiokitSettingActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK

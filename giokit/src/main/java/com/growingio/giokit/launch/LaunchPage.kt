@@ -17,6 +17,8 @@ object LaunchPage {
     const val SDKINFO_PAGE = 1
     const val SDKCODE_PAGE = 2
     const val SDKDATA_PAGE = 3
+    const val SDKDATA_PAGE_RANGE_START = "data_page_range_start"
+    const val SDKDATA_PAGE_RANGE_END = "data_page_range_end"
     const val SDKHTTP_PAGE = 4
 
     const val SDK_CRASH_PAGE = 10

@@ -15,7 +15,7 @@ import com.growingio.giokit.hover.check.CheckItem
 class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
 
     override fun getProjectStatus(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.GInternal")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.GInternal")) {
             val hasInited = !GInternal.getInstance().featuresVersionJson.isNullOrEmpty()
             val lazyInit = GioPluginConfig.isInitLazy
             return CheckItem(
@@ -39,7 +39,7 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
 
     override fun getURLScheme(index: Int): CheckItem {
         val xmlScheme = GioPluginConfig.xmlScheme
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
             val urlScheme = CoreInitialize.config().getsGrowingScheme()
             // 插件未找到 urlscheme 时不做校验
             if (xmlScheme.isNullOrEmpty() || urlScheme == xmlScheme) {
@@ -79,8 +79,8 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
     }
 
     override fun getDataSourceID(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
-            if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.ICfgCDPImpl")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.ICfgCDPImpl")) {
                 val coreAppState = CoreInitialize.coreAppState()
                 val coreClass = coreAppState.javaClass
                 try {
@@ -114,7 +114,7 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
     }
 
     override fun getProjectID(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
             return CheckItem(
                 index,
                 "正在获取项目ID",
@@ -127,7 +127,7 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
     }
 
     override fun getDataServerHost(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.NetworkConfig")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.NetworkConfig")) {
             return with(NetworkConfig.getInstance().apiEndPoint()) {
                 CheckItem(
                     index,
@@ -142,7 +142,7 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
     }
 
     override fun getDataCollectionEnable(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
             return with(CoreInitialize.config().isEnabled) {
                 CheckItem(
                     index,
@@ -157,7 +157,7 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
     }
 
     override fun getSdkDebug(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.GConfig")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.GConfig")) {
             return with(GConfig.DEBUG) {
                 CheckItem(
                     index,
@@ -172,9 +172,9 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
     }
 
     override fun getOaidEnabled(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
             try {
-                val oaid = CheckSelfUtils.getClassField(
+                val oaid = CheckSdkStatusManager.getClassField(
                     CoreInitialize.deviceUUIDFactory(),
                     CoreInitialize.deviceUUIDFactory().javaClass.name,
                     "oaidEnable"

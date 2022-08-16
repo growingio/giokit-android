@@ -45,6 +45,7 @@ giokitExt {
 
 growingAutotracker {
     logEnabled true
+    includePackages "com.growingio.giokit.v3"
 }
 
 dependencies {
@@ -58,6 +59,7 @@ dependencies {
     implementation rootProject.ext.growingio["encoder"]
     implementation rootProject.ext.growingio["urlconnection"]
     implementation rootProject.ext.growingio["volley"]
+    implementation rootProject.ext.growingio["hybrid"]
     //implementation rootProject.ext.growingio["protobuf"]
     //debugImplementation "com.growingio.giokit:giokit:1.2.0-SNAPSHOT"
     //releaseImplementation "com.growingio.giokit:giokit-no-op:1.2.0-SNAPSHOT"

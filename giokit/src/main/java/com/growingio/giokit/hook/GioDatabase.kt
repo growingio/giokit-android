@@ -1,7 +1,5 @@
 package com.growingio.giokit.hook
 
-import android.net.Uri
-import android.util.Log
 import com.growingio.android.sdk.track.events.base.BaseEvent
 import com.growingio.android.sdk.track.middleware.GEvent
 import com.growingio.giokit.GioKitImpl

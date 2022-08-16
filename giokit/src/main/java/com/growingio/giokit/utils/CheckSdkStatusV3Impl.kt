@@ -15,7 +15,7 @@ import com.growingio.giokit.hover.check.CheckItem
  */
 class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     override fun getProjectStatus(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.TrackerContext")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.TrackerContext")) {
             val hasInited = TrackerContext.get() != null
             val lazyInit = GioPluginConfig.isInitLazy
             return CheckItem(
@@ -39,7 +39,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
     override fun getURLScheme(index: Int): CheckItem {
         val xmlScheme = GioPluginConfig.xmlScheme
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             val urlScheme = ConfigurationProvider.core().urlScheme
             // 插件未找到 urlscheme 时不做校验
             if (xmlScheme.isNullOrEmpty() || urlScheme == xmlScheme) {
@@ -78,8 +78,8 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     }
 
     override fun getDataSourceID(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            if (CheckSelfUtils.hasClass("com.growingio.android.sdk.autotrack.CdpAutotrackConfig")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.autotrack.CdpAutotrackConfig")) {
                 val config = ConfigurationProvider.get()
                     .getConfiguration<CdpAutotrackConfig>(CdpAutotrackConfig::class.java)
                 return CheckItem(
@@ -89,7 +89,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
                     config?.dataSourceId ?: "未配置",
                     config?.dataSourceId == null
                 )
-            } else if (CheckSelfUtils.hasClass("com.growingio.android.sdk.track.CdpConfig")) {
+            } else if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.CdpConfig")) {
                 val config = ConfigurationProvider.get()
                     .getConfiguration<CdpConfig>(CdpConfig::class.java)
                 return CheckItem(
@@ -118,7 +118,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     }
 
     override fun getProjectID(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return CheckItem(
                 index,
                 "正在获取项目ID",
@@ -131,7 +131,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     }
 
     override fun getDataServerHost(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return with(ConfigurationProvider.core().dataCollectionServerHost) {
                 CheckItem(
                     index,
@@ -146,7 +146,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     }
 
     override fun getDataCollectionEnable(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return with(ConfigurationProvider.core().isDataCollectionEnabled) {
                 CheckItem(
                     index,
@@ -161,7 +161,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     }
 
     override fun getSdkDebug(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             return with(ConfigurationProvider.core().isDebugEnabled) {
                 CheckItem(
                     index,
@@ -176,8 +176,8 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     }
 
     override fun getOaidEnabled(index: Int): CheckItem {
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            val isV320 = CheckSelfUtils.hasMethodNoParam(
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
+            val isV320 = CheckSdkStatusManager.hasMethodNoParam(
                 ConfigurationProvider.core(),
                 "com.growingio.android.sdk.CoreConfiguration",
                 "isOaidEnabled"
@@ -194,7 +194,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
                 }
             }
         }
-        if (CheckSelfUtils.hasClass("com.growingio.android.sdk.TrackerContext") && CheckSelfUtils.hasClass("com.growingio.android.sdk.track.middleware.OaidHelper")) {
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.TrackerContext") && CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.OaidHelper")) {
             //v3.3.0 oaid转为模块
             return with(TrackerContext.get().registry.getModelLoader(OaidHelper::class.java)) {
                 CheckItem(

@@ -6,10 +6,16 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
+import android.text.TextUtils
 import com.growingio.android.sdk.collection.CoreInitialize
 import com.growingio.android.sdk.collection.NetworkConfig
+import com.growingio.android.sdk.models.*
+import com.growingio.giokit.hook.GioDatabase
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.launch.sdkinfo.SdkInfo
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
 
 /**
@@ -159,5 +165,56 @@ object SdkSaasInfoUtils {
         }
 
         return list
+    }
+
+    fun getEventAlphaBet(eventType: String): String {
+        return when (eventType) {
+            ActionEvent.CLICK_TYPE_NAME -> "CK"
+            ActionEvent.IMP_TYPE_NAME -> "I"
+            ActionEvent.CHANGE_TYPE_NAME -> "CG"
+            AppCloseEvent.TYPE_NAME -> "A"
+            ConversionEvent.TYPE_NAME -> "EV"
+            PageVariableEvent.TYPE_NAME -> "PV"
+            PeopleEvent.TYPE_NAME -> "PP"
+            VisitorVarEvent.TYPE_NAME -> "VV"
+            else -> eventType.first().uppercase()
+        }
+    }
+
+    fun getEventDesc(eventType: String, data: String): String {
+        try {
+            val jsonObj = JSONObject(data)
+            // custom name
+            val name = jsonObj.optString("n")
+            if (name.isNotEmpty()) return name
+
+            // page
+            val p = jsonObj.optString("p")
+            if (p.isNotEmpty()) return p
+
+            // visit
+            if (eventType == VisitEvent.TYPE_NAME) {
+                val cs1 = jsonObj.optString("cs1")
+                if (cs1.isNotEmpty()) return cs1
+                val adrid = jsonObj.optString("adrid")
+                if (adrid.isNotEmpty()) return adrid
+                return jsonObj.optString("d")
+            }
+            if (eventType == AppCloseEvent.TYPE_NAME) {
+                return jsonObj.optString("tm")
+            }
+
+            //action
+            val e = jsonObj.optJSONArray("e")
+            if (e != null && e.length() > 0) {
+                val last = e.getJSONObject(e.length() - 1)
+                val path = last.optString("x")
+                return path ?: ""
+            }
+            return jsonObj.optString("d")
+
+        } catch (e: JSONException) {
+        }
+        return data
     }
 }

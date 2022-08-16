@@ -19,10 +19,13 @@
     <string name="giokit_menu_track">XPath追踪</string>
     <string name="giokit_menu_http">网络记录</string>
     <string name="giokit_menu_monitor">实时事件</string>
+    <string name="giokit_menu_monitor_running">实时事件监控正在显示中…</string>
     <string name="giokit_menu_setting">设置</string>
     <string name="giokit_menu_common_setting">通用设置</string>
     <string name="giokit_menu_performance">性能</string>
     <string name="giokit_menu_crash">崩溃报告</string>
+
+    <string name="giokit_circle_tip">请拖动中间的圆点选择控件</string>
 
     <string name="giokit_data_loading">正在加载中</string>
     <string name="giokit_data_search_default">事件</string>

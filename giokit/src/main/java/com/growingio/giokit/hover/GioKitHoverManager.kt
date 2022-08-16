@@ -9,6 +9,8 @@ import android.widget.RelativeLayout
 import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.R
 import com.growingio.giokit.circle.CircleAnchorView
+import com.growingio.giokit.instant.InstantEventCache
+import com.growingio.giokit.instant.InstantEventView
 import com.growingio.giokit.launch.UniversalActivity
 import com.growingio.giokit.setting.GiokitSettingActivity
 import com.growingio.giokit.utils.BarUtils
@@ -28,6 +30,7 @@ class GioKitHoverManager(val app: Application) :
     private var startedActivityCounts: Int = 0
     var hoverView: HoverView? = null
     var anchorView: CircleAnchorView? = null
+    var instantEventView: InstantEventView? = null
 
     init {
         app.registerActivityLifecycleCallbacks(this)
@@ -39,9 +42,31 @@ class GioKitHoverManager(val app: Application) :
         anchorView?.show()
     }
 
-    fun removeCircle() {
+    fun removeFloatingView() {
+        removeCircle()
+        instantEventView?.hide()
+    }
+
+    fun restoreFloatingView() {
+        instantEventView?.show()
+    }
+
+    private fun removeCircle() {
         anchorView?.remove()
         anchorView = null
+    }
+
+    fun startInstantMonitor(context: Context) {
+        InstantEventCache.enableInstantEventMonitor()
+        if (instantEventView != null && instantEventView?.isShow() == true) return
+        instantEventView = InstantEventView(context)
+        instantEventView?.show()
+    }
+
+    fun removeInstantMonitor() {
+        InstantEventCache.disableInstantEventMonitor()
+        instantEventView?.remove()
+        instantEventView = null
     }
 
     private fun checkOverlayPermission(): Boolean {
@@ -105,6 +130,7 @@ class GioKitHoverManager(val app: Application) :
     private fun notifyForeground(activity: Activity) {
         if (hasOverlayPermission) {
             GioHoverMenuService.showFloatingMenu(activity)
+            restoreFloatingView()
         }
     }
 
@@ -123,7 +149,7 @@ class GioKitHoverManager(val app: Application) :
         } else {
             hoverView?.collapse()
         }
-        removeCircle()
+        removeFloatingView()
     }
 
     private fun detach(activity: Activity) {
@@ -164,19 +190,21 @@ class GioKitHoverManager(val app: Application) :
 
     inner class HoverViewCollapseAndExpandListener : HoverView.Listener {
         override fun onExpanding() {
-            removeCircle()
+            removeFloatingView()
         }
 
         override fun onExpanded() {}
 
         override fun onCollapsing() {}
 
-        override fun onCollapsed() {}
+        override fun onCollapsed() {
+            restoreFloatingView()
+        }
 
         override fun onClosing() {}
 
         override fun onClosed() {
-            removeCircle()
+            removeFloatingView()
         }
 
     }
