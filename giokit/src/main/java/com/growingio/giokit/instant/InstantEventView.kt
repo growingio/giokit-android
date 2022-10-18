@@ -5,17 +5,14 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.view.*
 import android.widget.TextView
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.R
 import com.growingio.giokit.circle.FloatViewContainer
 import com.growingio.giokit.circle.FloatWindowManager
 import com.growingio.giokit.instant.InstantEventCache.INSTANT_DISPLAY_MAX_COUNT
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.UniversalActivity
-import com.growingio.giokit.launch.db.GioKitEventBean
 import com.growingio.giokit.utils.CheckSdkStatusManager
 import java.lang.StringBuilder
 

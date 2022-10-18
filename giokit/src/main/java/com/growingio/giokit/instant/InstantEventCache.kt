@@ -6,7 +6,6 @@ import android.os.Message
 import android.os.SystemClock
 import com.growingio.giokit.launch.db.GioKitEventBean
 import java.lang.ref.WeakReference
-import kotlin.reflect.KProperty
 
 /**
  * <p>
@@ -14,12 +13,6 @@ import kotlin.reflect.KProperty
  * @author cpacm 2022/8/11
  */
 object InstantEventCache {
-    class D {
-        operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
-            return "thisRef"
-        }
-    }
-
     private val cacheEvent = arrayListOf<GioKitEventBean>()
     private const val INSTANT_BUNDLE_WAIT_TIME = 500L
     private const val INSTANT_DISPLAY_TIME = 15000L
@@ -37,7 +30,7 @@ object InstantEventCache {
                 cacheEvent.clear()
                 if (bundleEvent.size == 2) {
                     dispatchInstantData(arrayListOf(bundleEvent.first()))
-                    dispatchInstantData(arrayListOf(bundleEvent.last()), 200L)
+                    dispatchInstantData(arrayListOf(bundleEvent.last()), 100L)
                 } else {
                     dispatchInstantData(bundleEvent)
                 }
