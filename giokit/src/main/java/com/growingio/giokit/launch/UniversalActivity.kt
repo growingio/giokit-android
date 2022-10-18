@@ -1,10 +1,9 @@
 package com.growingio.giokit.launch
 
-import android.R
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-//import com.growingio.android.sdk.autoburry.page.GrowingIOPageIgnore
+import com.growingio.giokit.R
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_INDEX
 import com.growingio.giokit.utils.SdkV3InfoUtils
 import java.util.ArrayDeque
@@ -21,6 +20,7 @@ class UniversalActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTitle(R.string.giokit_universal_title)
         SdkV3InfoUtils.ignoreActivity(this)
         val bundle = intent.extras
         if (bundle == null) {
@@ -55,7 +55,7 @@ class UniversalActivity : AppCompatActivity() {
             }
             val fm = supportFragmentManager
             val fragmentTransaction = fm.beginTransaction()
-            fragmentTransaction.add(R.id.content, fragment)
+            fragmentTransaction.add(android.R.id.content, fragment)
             mFragments.push(fragment)
             fragmentTransaction.addToBackStack("")
             fragmentTransaction.commit()
@@ -65,6 +65,7 @@ class UniversalActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
+
 
     override fun onBackPressed() {
         if (!mFragments.isEmpty()) {

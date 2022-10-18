@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.BaseFragment
+import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.LoadingMoreAdapter
 import com.growingio.giokit.launch.UniversalActivity
 import kotlinx.coroutines.flow.collectLatest
@@ -66,6 +67,11 @@ class SdkDataFragment : BaseFragment() {
             }
         }
         sdkDataAdapter.withLoadStateFooter(LoadingMoreAdapter())
+        if (arguments != null) {
+            val instantRangeStart = requireArguments().getLong(LaunchPage.SDKDATA_PAGE_RANGE_START, 0L)
+            val instantRangeEnd = requireArguments().getLong(LaunchPage.SDKDATA_PAGE_RANGE_END, 0L)
+            sdkDataAdapter.setInstantRange(instantRangeStart, instantRangeEnd)
+        }
 
         sdkList.adapter = ConcatAdapter(sdkHeaderAdapter, sdkDataAdapter)
         swipeLayout.setOnRefreshListener {

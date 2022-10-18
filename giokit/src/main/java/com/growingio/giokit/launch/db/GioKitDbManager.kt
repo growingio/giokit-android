@@ -1,6 +1,7 @@
 package com.growingio.giokit.launch.db
 
 import com.growingio.giokit.GioKitImpl
+import com.growingio.giokit.instant.InstantEventCache
 
 /**
  * <p>
@@ -46,13 +47,18 @@ class GioKitDbManager private constructor() {
         return GioKitDatabase.instance.getHttpDao().countHttpErrorRequest(GioKitImpl.launchTime)
     }
 
+    fun cleanHttp() {
+        GioKitDatabase.instance.getHttpDao().clear()
+    }
+
 
     /**************** Event Database ****************/
     fun getEvent(id: Int): GioKitEventBean {
         return GioKitDatabase.instance.getEventDao().getEvent(id)
     }
 
-    fun insertEvent(event: GioKitEventBean) {
+    fun insertEvent(event: GioKitEventBean){
+        InstantEventCache.acceptEvent(event)
         GioKitDatabase.instance.getEventDao().insert(event)
     }
 
@@ -84,6 +90,10 @@ class GioKitDbManager private constructor() {
 
     fun getEventListByType(event: String, start: Int, pageSize: Int): List<GioKitEventBean> {
         return GioKitDatabase.instance.getEventDao().getEventListByType(event, start, pageSize)
+    }
+
+    fun cleanEvent() {
+        GioKitDatabase.instance.getEventDao().clear()
     }
 
 

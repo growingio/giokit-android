@@ -20,7 +20,7 @@
             android:padding="8dp"
             android:textSize="@dimen/giokit_text_body"
             android:textColor="@android:color/white"
-            android:text="请拖动中间的圆点选择控件"/>
+            android:text="@string/giokit_circle_tip"/>
 
     </FrameLayout>
 </merge>

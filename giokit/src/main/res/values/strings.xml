@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="giokit_dialog_ok">确定</string>
+    <string name="giokit_dialog_cancel">取消</string>
+    <string name="giokit_title_default">GioKit</string>
+    <string name="giokit_universal_title">GiokitUniversalActivity</string>
+
     <string name="giokit_checkself">CHECK-SELF</string>
     <string name="giokit_check_content">点击检查埋点 SDK 是否集成成功</string>
     <string name="giokit_check_author">By GrowingIO</string>
@@ -13,10 +18,19 @@
     <string name="giokit_menu_data_search">查找 \&quot;%1$s\&quot; 数据</string>
     <string name="giokit_menu_track">XPath追踪</string>
     <string name="giokit_menu_http">网络记录</string>
+    <string name="giokit_menu_monitor">实时事件</string>
+    <string name="giokit_menu_monitor_running">实时事件监控正在显示中…</string>
+    <string name="giokit_menu_setting">设置</string>
+    <string name="giokit_menu_common_setting">通用设置</string>
+    <string name="giokit_menu_performance">性能</string>
+    <string name="giokit_menu_crash">崩溃报告</string>
+
+    <string name="giokit_circle_tip">请拖动中间的圆点选择控件</string>
 
     <string name="giokit_data_loading">正在加载中</string>
     <string name="giokit_data_search_default">事件</string>
     <string name="giokit_data_search_hint">输入要搜索的事件类型</string>
+    <string name="giokit_data_delete_message">是否删除所有的事件数据记录？</string>
 
     <string name="giokit_http_running">已持续运行</string>
     <string name="giokit_http_count">请求数量</string>
@@ -30,4 +44,13 @@
     <string name="giokit_http_request_header">请求头</string>
     <string name="giokit_http_response_header">响应头</string>
     <string name="giokit_http_request_body">请求数据</string>
+    <string name="giokit_http_delete_message">是否删除所有的网络请求数据记录？</string>
+
+
+    <string name="giokit_pref_data">数据</string>
+    <string name="giokit_pref_event_clear">清空事件</string>
+    <string name="giokit_pref_event_clear_desc">清空事件库中的所有事件数据</string>
+    <string name="giokit_pref_http_clear">清空网络</string>
+    <string name="giokit_pref_http_clear_desc">清空网络记录下的所有请求数据</string>
+
 </resources>

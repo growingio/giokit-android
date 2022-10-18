@@ -64,6 +64,12 @@ internal abstract class GiokitV3Factory :
 
 
     override fun isInstrumentable(classData: ClassData): Boolean {
+        val gioConfig = parameters.get().gioConfig.get()
+        if (gioConfig.trackFinder.enable) {
+            gioConfig.trackFinder.domain.forEach {
+                if (classData.className.startsWith(it)) return true
+            }
+        }
         return shouldClassModified(
             classData.className
         )

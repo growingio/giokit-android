@@ -16,14 +16,19 @@ class MainActivity : AppCompatActivity() {
 
         val tv = findViewById<TextView>(R.id.track)
         tv.setOnClickListener {
-            startActivity(Intent(this,SecondActivity::class.java))
+            startActivity(Intent(this, SecondActivity::class.java))
         }
 
         val webBtn = findViewById<Button>(R.id.web)
         webBtn.setOnClickListener { startActivity(Intent(this, WebCircleHybridActivity::class.java)) }
 
-        GrowingAutotracker.get().setLoginUserId("cpacm")
-        GrowingAutotracker.get().setLocation(100.0, 100.0)
+        val customBtn = findViewById<Button>(R.id.custom)
+        customBtn.setOnClickListener {
+            GrowingAutotracker.get().trackCustomEvent("giokit")
+            //GrowingAutotracker.get().setLoginUserId("cpacm")
+            //GrowingAutotracker.get().setLocation(100.0, 100.0)
+        }
+
     }
 
     override fun onNewIntent(intent: Intent?) {

@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-@TargetApi(15)
 public class CircleAnchorView extends FloatViewContainer {
 
     final static String TAG = "GrowingIO.FloatView";

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    tools:targetApi="lollipop">
+
+    <FrameLayout
+        android:id="@+id/eventContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:padding="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/eventList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@android:color/black"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            tools:ignore="SmallSp"
+            tools:text="custom\ncpacm" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/idContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:background="@drawable/giokit_instant_event_start_bg"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@id/eventContainer"
+        app:layout_constraintEnd_toStartOf="@id/eventContainer"
+        app:layout_constraintTop_toTopOf="@id/eventContainer">
+
+        <TextView
+            android:id="@+id/ids"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingStart="12dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="2dp"
+            android:textColor="@android:color/white"
+            android:textSize="8sp"
+            android:textStyle="italic|bold"
+            tools:ignore="SmallSp"
+            tools:text="1212\n~\n12121" />
+
+
+    </FrameLayout>
+
+    <View
+        android:layout_width="8dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/idContainer"
+        app:layout_constraintEnd_toStartOf="@id/idContainer"
+        app:layout_constraintTop_toTopOf="@id/idContainer" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

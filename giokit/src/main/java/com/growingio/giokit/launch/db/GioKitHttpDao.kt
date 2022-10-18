@@ -33,4 +33,7 @@ interface GioKitHttpDao {
 
     @Query("SELECT COUNT(*) FROM https WHERE httpTime>=:startTime AND (responseCode<200 OR responseCode>=300)")
     suspend fun countHttpErrorRequest(startTime: Long): Int
+
+    @Query("DELETE FROM https")
+    fun clear()
 }

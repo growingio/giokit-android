@@ -2,8 +2,8 @@
 buildscript {
     apply from: "config.gradle"
     ext {
-        kotlin_version = "1.6.21"
-        agp_version = System.getenv('AGP_VERSION') ?: "7.2.1"
+        kotlin_version = "1.7.10"
+        agp_version = System.getenv('AGP_VERSION') ?: "7.3.0"
     }
 }
 
@@ -13,7 +13,8 @@ plugins {
     id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
     id 'org.jetbrains.kotlin.jvm' version "$kotlin_version" apply false
 
-    id 'com.growingio.android.autotracker' version "3.4.0" apply false
+    id 'com.growingio.android.autotracker' version "3.4.1" apply false
+    id "io.codearte.nexus-staging" version "0.30.0"
 
 //    classpath growingio["autotracker-plugin"]
 
@@ -24,7 +25,7 @@ plugins {
 //    id 'com.google.devtools.ksp' version '1.6.21-1.0.5' apply false
 }
 
-
+apply from: "${rootProject.projectDir}/gradle/stagingMaven.gradle"
 
 task clean(type: Delete) {
     delete rootProject.buildDir

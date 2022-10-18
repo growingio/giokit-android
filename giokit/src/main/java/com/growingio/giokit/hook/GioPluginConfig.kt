@@ -1,7 +1,7 @@
 package com.growingio.giokit.hook
 
 import android.util.Log
-import com.growingio.giokit.utils.CheckSelfUtils
+import com.growingio.giokit.utils.CheckSdkStatusManager
 
 /**
  * <p>
@@ -36,7 +36,7 @@ object GioPluginConfig {
 
     @JvmStatic
     fun checkSdkHasInit() {
-        if (CheckSelfUtils.checkSdkInit()) {
+        if (CheckSdkStatusManager.checkSdkInit()) {
             isInitLazy = false
         }
     }

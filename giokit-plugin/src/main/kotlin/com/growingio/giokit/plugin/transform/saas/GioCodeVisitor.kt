@@ -1,6 +1,7 @@
 package com.growingio.giokit.plugin.transform.saas
 
 import com.growingio.android.plugin.utils.info
+import com.growingio.android.plugin.utils.normalize
 import com.growingio.android.plugin.utils.unNormalize
 import com.growingio.giokit.plugin.utils.GioTrackHook
 import com.growingio.giokit.plugin.utils.GioTransformContext
@@ -24,6 +25,7 @@ import javax.lang.model.element.Modifier
 class GioCodeVisitor(api: Int, ncv: ClassVisitor, val context: GioTransformContext) :
     ClassVisitor(api, ncv) {
 
+    private var shouldFindCode = false
     private val findedMethod: HashSet<GioTrackHook> = hashSetOf()
     private val findDomain: HashSet<String> = hashSetOf()
     val trackHooks = hashSetOf(
@@ -47,6 +49,22 @@ class GioCodeVisitor(api: Int, ncv: ClassVisitor, val context: GioTransformConte
         }
     }
 
+    override fun visit(
+        version: Int,
+        access: Int,
+        name: String?,
+        signature: String?,
+        superName: String?,
+        interfaces: Array<out String>?
+    ) {
+        findDomain.forEach {
+            if (name != null && normalize(name).startsWith(it)) {
+                shouldFindCode = true
+            }
+        }
+        super.visit(version, access, name, signature, superName, interfaces)
+    }
+
     override fun visitMethod(
         access: Int,
         name: String?,
@@ -54,7 +72,7 @@ class GioCodeVisitor(api: Int, ncv: ClassVisitor, val context: GioTransformConte
         signature: String?,
         exceptions: Array<out String>?
     ): MethodVisitor {
-        if (findDomain.isEmpty()) {
+        if (!shouldFindCode) {
             return super.visitMethod(access, name, descriptor, signature, exceptions)
         }
 

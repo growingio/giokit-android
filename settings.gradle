@@ -14,7 +14,6 @@ pluginManagement {
             if (requested.id.id == "com.growingio.android") {
                 useModule("com.growingio.android:vds-gradle-plugin:autotrack-2.9.13")
             }
-
         }
     }
 }
