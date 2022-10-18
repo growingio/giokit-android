@@ -2,8 +2,8 @@
 buildscript {
     apply from: "config.gradle"
     ext {
-        kotlin_version = "1.6.21"
-        agp_version = System.getenv('AGP_VERSION') ?: "7.2.2"
+        kotlin_version = "1.7.10"
+        agp_version = System.getenv('AGP_VERSION') ?: "7.3.0"
     }
 }
 

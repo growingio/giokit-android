@@ -10,8 +10,7 @@ import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfig
 import com.growingio.android.sdk.autotrack.IgnorePolicy
 import com.growingio.android.sdk.autotrack.page.PageProvider
-import com.growingio.android.sdk.models.AppCloseEvent
-import com.growingio.android.sdk.models.VisitEvent
+import com.growingio.android.sdk.track.events.AutotrackEventType
 import com.growingio.android.sdk.track.events.TrackEventType
 import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
 import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
@@ -236,16 +235,16 @@ object SdkV3InfoUtils {
 
     fun getEventAlphaBet(eventType: String): String {
         return when (eventType) {
-            EventExcludeFilter.EVENT_VISITOR_ATTRIBUTES -> "VA"
-            EventExcludeFilter.EVENT_LOGIN_USER_ATTRIBUTES -> "UA"
-            EventExcludeFilter.EVENT_CONVERSION_VARIABLES -> "CV"
-            EventExcludeFilter.EVENT_APP_CLOSED -> "A"
-            EventExcludeFilter.EVENT_PAGE_ATTRIBUTES -> "PA"
-            EventExcludeFilter.EVENT_VIEW_CLICK -> "CK"
-            EventExcludeFilter.EVENT_VIEW_CHANGE -> "CG"
-            EventExcludeFilter.EVENT_FORM_SUBMIT -> "FS"
-            EventExcludeFilter.EVENT_REENGAGE -> "RG"
-            EventExcludeFilter.EVENT_ACTIVATE -> "AV"
+            TrackEventType.VISITOR_ATTRIBUTES -> "VA"
+            TrackEventType.LOGIN_USER_ATTRIBUTES -> "UA"
+            TrackEventType.CONVERSION_VARIABLES -> "CV"
+            TrackEventType.APP_CLOSED -> "A"
+            AutotrackEventType.PAGE_ATTRIBUTES -> "PA"
+            AutotrackEventType.VIEW_CLICK -> "CK"
+            AutotrackEventType.VIEW_CHANGE -> "CG"
+            TrackEventType.FORM_SUBMIT -> "FS"
+            TrackEventType.REENGAGE -> "RG"
+            TrackEventType.ACTIVATE -> "AV"
             else -> eventType.first().uppercase()
         }
     }
@@ -262,7 +261,7 @@ object SdkV3InfoUtils {
             if (p.isNotEmpty()) return p
 
             // visit
-            if (eventType == EventExcludeFilter.EVENT_VISIT) {
+            if (eventType == TrackEventType.VISIT) {
                 val userId = jsonObj.optString("userId")
                 if (userId.isNotEmpty()) return userId
                 val oaid = jsonObj.optString("oaid")
@@ -272,7 +271,7 @@ object SdkV3InfoUtils {
                 return jsonObj.optString("domain")
             }
 
-            if (eventType == EventExcludeFilter.EVENT_APP_CLOSED) {
+            if (eventType == TrackEventType.APP_CLOSED) {
                 return jsonObj.optString("timestamp")
             }
             return jsonObj.optString("appName")
