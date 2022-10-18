@@ -2,7 +2,6 @@ package com.growingio.giokit.launch.sdkdata
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.Pager
@@ -12,13 +11,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.BaseFragment
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.LoadingMoreAdapter
 import com.growingio.giokit.launch.UniversalActivity
-import com.growingio.giokit.launch.db.GioKitDbManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
