@@ -140,5 +140,5 @@ interface CheckSdkStatusInterface {
     fun getDataServerHost(index: Int): CheckItem
     fun getDataCollectionEnable(index: Int): CheckItem
     fun getSdkDebug(index: Int): CheckItem
-    fun getOaidEnabled(index: Int): CheckItem
+    fun getSdkModules(index:Int):CheckItem
 }

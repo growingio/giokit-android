@@ -3,6 +3,7 @@ package com.growingio.giokit
 import android.app.Activity
 import android.app.Application
 import android.view.View
+import com.growingio.giokit.apm.GMonitorManager
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hook.GioTrackInfo
 import com.growingio.giokit.hover.GioKitHoverManager
@@ -38,6 +39,8 @@ internal object GioKitImpl {
         gioKitHoverManager = GioKitHoverManager(app)
 
         initWithGrowingIOSDK()
+
+        GMonitorManager.initGMonitor(app)
 
         inited = true
     }

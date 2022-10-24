@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
             GrowingAutotracker.get().trackCustomEvent("giokit")
             //GrowingAutotracker.get().setLoginUserId("cpacm")
             //GrowingAutotracker.get().setLocation(100.0, 100.0)
+            throw RuntimeException("cpacm's exception")
         }
 
     }

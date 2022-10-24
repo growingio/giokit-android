@@ -50,6 +50,8 @@ dependencies {
     implementation rootProject.ext.dependencies["room-ktx"]
     implementation rootProject.ext.dependencies["webkit"]
 
+    implementation rootProject.ext.growingio["gmonitor"]
+
     kapt rootProject.ext.dependencies["room-compiler"]
 
     compileOnly fileTree(include: ['*.jar'], dir: '../thirdLibs')

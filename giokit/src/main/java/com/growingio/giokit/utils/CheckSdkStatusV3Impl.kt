@@ -4,7 +4,13 @@ import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.CdpAutotrackConfig
 import com.growingio.android.sdk.track.CdpConfig
 import com.growingio.android.sdk.track.middleware.OaidHelper
+import com.growingio.android.sdk.track.middleware.advert.Activate
+import com.growingio.android.sdk.track.middleware.format.EventFormatData
+import com.growingio.android.sdk.track.middleware.http.EventEncoder
+import com.growingio.android.sdk.track.middleware.hybrid.HybridBridge
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
+import com.growingio.android.sdk.track.webservices.Circler
+import com.growingio.android.sdk.track.webservices.Debugger
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hover.check.CheckItem
 
@@ -175,37 +181,74 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
         return CheckItem(index, "正在处于Debug调试模式", "调试模式", "未集成SDK", true)
     }
 
-    override fun getOaidEnabled(index: Int): CheckItem {
-        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            val isV320 = CheckSdkStatusManager.hasMethodNoParam(
-                ConfigurationProvider.core(),
-                "com.growingio.android.sdk.CoreConfiguration",
-                "isOaidEnabled"
-            )
-            if (isV320 != null) {
-                if (isV320 is Boolean) {
-                    return CheckItem(
-                        index,
-                        "正在查询oaid状态",
-                        "oaid采集",
-                        if (isV320) "开" else "关",
-                        false
-                    )
+    override fun getSdkModules(index: Int): CheckItem {
+        val modules = arrayListOf<String>()
+        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.TrackerContext")) {
+            // oaid模块
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.OaidHelper")) {
+                with(TrackerContext.get().registry.getModelLoader(OaidHelper::class.java)) {
+                    if (this != null) modules.add("oaid")
+                }
+
+            }
+
+
+            // protobuf 模块
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.format.EventFormatData")) {
+                with(TrackerContext.get().registry.getModelLoader(EventFormatData::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.protobuf.ProtobufDataLoader") {
+                        modules.add("protobuf")
+                    }
                 }
             }
-        }
-        if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.TrackerContext") && CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.OaidHelper")) {
-            //v3.3.0 oaid转为模块
-            return with(TrackerContext.get().registry.getModelLoader(OaidHelper::class.java)) {
-                CheckItem(
-                    index,
-                    "正在查询oaid状态",
-                    "oaid采集模块",
-                    if (this != null) "已注册" else "未注册",
-                    false
-                )
+
+            // hybrid
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.hybrid.HybridBridge")) {
+                with(TrackerContext.get().registry.getModelLoader(HybridBridge::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.android.hybrid.HybridBridgeLoader") {
+                        modules.add("hybrid")
+                    }
+                }
             }
+
+            // encoder
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.http.EventEncoder")) {
+                with(TrackerContext.get().registry.getModelLoader(EventEncoder::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.android.encoder.EncoderDataLoader") {
+                        modules.add("加密")
+                    }
+                }
+            }
+
+            // debugger
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.webservices.Debugger")) {
+                if (CheckSdkStatusManager.hasClass("com.growingio.android.debugger.DebuggerDataLoader")) {
+                    modules.add("debugger")
+                }
+            }
+
+            // circler
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.webservices.Circler")) {
+                if (CheckSdkStatusManager.hasClass("com.growingio.android.circler.CirclerDataLoader")) {
+                    modules.add("圈选")
+                }
+            }
+
+            // advert
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.advert.Activate")) {
+                with(TrackerContext.get().registry.getModelLoader(Activate::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.android.advert.AdvertActivateDataLoader") {
+                        modules.add("广告")
+                    }
+                }
+            }
+            val checkItem = CheckItem(
+                index, "正在查询集成模块", "已集成模块", modules.joinToString("，"), false
+            )
+
+            return checkItem
         }
-        return CheckItem(index, "正在查询oaid状态", "oaid采集", "未集成SDK", true)
+
+        return CheckItem(index, "正在查询集成模块", "集成模块", "未集成模块", false)
     }
 }

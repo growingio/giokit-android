@@ -62,8 +62,8 @@ object SdkV3InfoUtils {
             }
             list.tryAdd {
                 SdkInfo(
-                    "oaid采集",
-                    CheckSdkStatusManager.getInstance().getOaidEnabled(0).content
+                    "集成模块",
+                    CheckSdkStatusManager.getInstance().getSdkModules(0).content
                 )
             }
             list.tryAdd { SdkInfo("分发渠道", ConfigurationProvider.core().channel) }

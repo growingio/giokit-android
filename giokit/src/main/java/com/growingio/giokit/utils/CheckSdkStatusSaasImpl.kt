@@ -171,7 +171,7 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
         return CheckItem(index, "正在处于Debug调试模式", "调试模式", "未集成SDK", true)
     }
 
-    override fun getOaidEnabled(index: Int): CheckItem {
+    override fun getSdkModules(index: Int): CheckItem {
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.collection.CoreInitialize")) {
             try {
                 val oaid = CheckSdkStatusManager.getClassField(
@@ -181,14 +181,21 @@ class CheckSdkStatusSaasImpl : CheckSdkStatusInterface {
                 )
                 return CheckItem(
                     index,
-                    "正在查询oaid状态",
-                    "oaid采集",
-                    if (oaid == null || !(oaid as Boolean)) "开" else "关",
+                    "正在查询集成状态",
+                    "集成扩展",
+                    if (oaid == null || !(oaid as Boolean)) "OAID采集" else "无",
                     false
                 )
+
             } catch (e: Exception) {
             }
         }
-        return CheckItem(index, "正在查询oaid状态", "oaid采集", "未集成", false)
+        return CheckItem(
+            index,
+            "正在查询集成状态",
+            "集成扩展",
+            "无",
+            false
+        )
     }
 }

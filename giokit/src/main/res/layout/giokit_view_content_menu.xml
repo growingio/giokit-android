@@ -169,7 +169,7 @@
                     android:layout_height="48dp"
                     android:background="@drawable/giokit_check_menu_button_bg"
                     android:padding="8dp"
-                    android:src="@drawable/ic_giokit_menu_history" />
+                    android:src="@drawable/ic_giokit_menu_network" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -235,8 +235,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -270,13 +269,13 @@
                     android:layout_height="48dp"
                     android:background="@drawable/giokit_check_menu_button_bg"
                     android:padding="8dp"
-                    android:src="@drawable/ic_giokit_menu_http" />
+                    android:src="@drawable/ic_giokit_menu_crash" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@string/giokit_menu_crash"
+                    android:text="@string/giokit_menu_error"
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/giokit_text_body" />
 

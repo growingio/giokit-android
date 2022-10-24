@@ -1,7 +1,9 @@
 package com.growingio.giokit.launch.db
 
+import android.os.Looper
 import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.instant.InstantEventCache
+import com.growingio.giokit.utils.cleanOutDatedFile
 
 /**
  * <p>
@@ -14,12 +16,44 @@ class GioKitDbManager private constructor() {
     private val HTTP_VALID_PERIOD_MILLS = 24 * 60 * 60000L
 
     init {
-        //删除1天前的网络请求（网络请求数据只有24小时的有效期）
-        try {
-            GioKitDatabase.instance.getHttpDao()
-                .outdatedHttp(System.currentTimeMillis() - HTTP_VALID_PERIOD_MILLS)
-        } catch (ignored: Exception) {
+        Looper.myQueue().addIdleHandler {
+            try {
+                //删除1天前的网络请求（网络请求数据只有24小时的有效期）
+                GioKitDatabase.instance.getHttpDao().outdatedHttp(System.currentTimeMillis() - HTTP_VALID_PERIOD_MILLS)
+
+                //删除7天前的事件缓存
+                outdatedEvents()
+
+                // 删除7天前的错误日志文件
+                outdatedBreadcrumb()
+                GioKitImpl.APPLICATION.cleanOutDatedFile(System.currentTimeMillis() - EVENT_VALID_PERIOD_MILLS)
+
+            } catch (ignored: Exception) {
+            }
+            false
         }
+    }
+
+    /**************** Breadcrumb Database ****************/
+    fun getBreadcrumb(id: Long): GioKitBreadCrumb {
+        return GioKitDatabase.instance.getBreadcrumbDao().getBreadCrumb(id)
+    }
+
+    fun insertBreadcrumb(bc: GioKitBreadCrumb) {
+        GioKitDatabase.instance.getBreadcrumbDao().insert(bc)
+    }
+
+    fun cleanBreadcrumb() {
+        GioKitDatabase.instance.getBreadcrumbDao().clear()
+    }
+
+    fun outdatedBreadcrumb() {
+        GioKitDatabase.instance.getBreadcrumbDao()
+            .outdatedBreadCrumb(System.currentTimeMillis() - EVENT_VALID_PERIOD_MILLS)
+    }
+
+    fun getErrorBreadcrumbList(type: String, start: Int, pageSize: Int): List<GioKitBreadCrumb> {
+        return GioKitDatabase.instance.getBreadcrumbDao().getBreadCrumbList(type, start, pageSize)
     }
 
     /**************** Http Database ****************/
@@ -57,7 +91,7 @@ class GioKitDbManager private constructor() {
         return GioKitDatabase.instance.getEventDao().getEvent(id)
     }
 
-    fun insertEvent(event: GioKitEventBean){
+    fun insertEvent(event: GioKitEventBean) {
         InstantEventCache.acceptEvent(event)
         GioKitDatabase.instance.getEventDao().insert(event)
     }
