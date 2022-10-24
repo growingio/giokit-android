@@ -1,7 +1,9 @@
 package com.growingio.giokit.apm
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import androidx.preference.PreferenceManager
 import com.growingio.android.gmonitor.*
 import com.growingio.android.gmonitor.anr.AnrIntegration
 import com.growingio.android.gmonitor.crash.UncaughtExceptionHandlerIntegration
@@ -10,6 +12,10 @@ import com.growingio.android.gmonitor.fragment.FragmentSupportLifecycleIntegrati
 import com.growingio.android.gmonitor.fragment.FragmentXLifecycleIntegration
 import com.growingio.android.gmonitor.utils.AndroidLogger
 import com.growingio.giokit.GioKitImpl
+import com.growingio.giokit.setting.SdkCommonSettingFragment.Companion.APM_ACTIVITY_ENABLED
+import com.growingio.giokit.setting.SdkCommonSettingFragment.Companion.APM_ANR_ENABLED
+import com.growingio.giokit.setting.SdkCommonSettingFragment.Companion.APM_FRAGMENT_ENABLED
+import com.growingio.giokit.setting.SdkCommonSettingFragment.Companion.APM_JAVA_CRASH_ENABLED
 
 
 /**
@@ -67,6 +73,7 @@ class GMonitorManager private constructor(
     }
 
     fun setAnrIntegration(enable: Boolean) {
+        option.enableAnr = enable
         var anr: Integration? = option.integrations.find { it is AnrIntegration }
         if (enable && anr == null) {
             anr = AnrIntegration(context)
@@ -80,6 +87,7 @@ class GMonitorManager private constructor(
     }
 
     fun setActivityIntegration(enable: Boolean) {
+        option.enableActivityLifecycleTracing = enable
         var activity: Integration? = option.integrations.find { it is ActivityLifecycleIntegration }
         if (enable && activity == null && context is Application) {
             activity = ActivityLifecycleIntegration(context)
@@ -94,6 +102,8 @@ class GMonitorManager private constructor(
     }
 
     fun setFragmentIntegration(enable: Boolean, isFragmentX: Boolean = true) {
+        option.enableFragmentXLifecycleTracing = enable
+        option.enableFragmentSupportLifecycleTracing = enable
         var fragment: Integration? = option.integrations.find {
             if (isFragmentX) it is FragmentXLifecycleIntegration
             else it is FragmentSupportLifecycleIntegration
@@ -113,6 +123,7 @@ class GMonitorManager private constructor(
 
     companion object {
 
+        @SuppressLint("StaticFieldLeak")
         private var instance: GMonitorManager? = null
 
         @JvmStatic
@@ -127,13 +138,17 @@ class GMonitorManager private constructor(
         fun initGMonitor(application: Application): GMonitorManager {
             val option = GMonitorOption()
             option.debug = true
-            option.enableActivityLifecycleTracing = true
+
+            val sp = PreferenceManager.getDefaultSharedPreferences(application)
+
+            option.enableActivityLifecycleTracing = sp.getBoolean(APM_ACTIVITY_ENABLED, true)
             option.avoidRunningAppProcesses = false
-            option.enableUncaughtExceptionHandler = true
+            option.enableUncaughtExceptionHandler = sp.getBoolean(APM_JAVA_CRASH_ENABLED, true)
             option.printUncaughtStackTrace = false
-            option.enableFragmentXLifecycleTracing = true
-            option.enableFragmentSupportLifecycleTracing = true
+            option.enableFragmentXLifecycleTracing = sp.getBoolean(APM_FRAGMENT_ENABLED, true)
+            option.enableFragmentSupportLifecycleTracing = sp.getBoolean(APM_FRAGMENT_ENABLED, true)
             option.enableFragmentSystemLifecycleTracing = false
+            option.enableAnr = sp.getBoolean(APM_ANR_ENABLED, true)
             option.anrInDebug = true
             option.anrTimeoutIntervalMillis = 5000L
             option.logger = AndroidLogger()
