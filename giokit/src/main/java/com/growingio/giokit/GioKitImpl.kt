@@ -40,7 +40,7 @@ internal object GioKitImpl {
 
         initWithGrowingIOSDK()
 
-        GMonitorManager.initGMonitor(app)
+        GMonitorManager.getInstance(app)
 
         inited = true
     }

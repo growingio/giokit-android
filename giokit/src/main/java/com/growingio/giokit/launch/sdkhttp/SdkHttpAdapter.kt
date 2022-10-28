@@ -29,7 +29,7 @@ class SdkHttpAdapter(val httpClick: (Int) -> Unit) :
         if (viewType == 1) {
             val view =
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.giokit_recycler_sdkhttp_date, parent, false)
+                    .inflate(R.layout.giokit_recycler_sdkcommon_date, parent, false)
             return DateViewHolder(view)
 
         } else {

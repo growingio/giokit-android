@@ -16,10 +16,11 @@ data class GioKitBreadCrumb(
     @ColumnInfo(name = "category", defaultValue = "") var category: String,//分类
     @ColumnInfo(name = "message", defaultValue = "") var message: String, //信息
     @ColumnInfo(name = "content", defaultValue = "") var content: String,
+    @ColumnInfo(name = "duration") var duration: Long = 0L,
     @ColumnInfo(name = "extra", defaultValue = "") var extra: String,
     @ColumnInfo(name = "time") var time: Long = 0L,
 ) {
-    constructor() : this(0L, "breadcrumb", "", "", "", "", 0L)
+    constructor() : this(0L, "breadcrumb", "", "", "", 0L, "", 0L)
 }
 
 /**

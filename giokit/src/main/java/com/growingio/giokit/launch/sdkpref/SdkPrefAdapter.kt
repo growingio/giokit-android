@@ -1,5 +1,6 @@
-package com.growingio.giokit.launch.sdkcrash
+package com.growingio.giokit.launch.sdkpref
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,8 @@ import com.growingio.giokit.utils.MeasureUtils.getCurrentTime
  *
  * @author cpacm 2022/10/24
  */
-class SdkErrorAdapter(val errorClick: (Long) -> Unit) :
-    PagingDataAdapter<GioKitBreadCrumb, RecyclerView.ViewHolder>(SdkErrorDiffCallback()) {
+class SdkPrefAdapter :
+    PagingDataAdapter<GioKitBreadCrumb, RecyclerView.ViewHolder>(SdkPrefDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == 1) {
@@ -29,8 +30,8 @@ class SdkErrorAdapter(val errorClick: (Long) -> Unit) :
         } else {
             val view =
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.giokit_recycler_sdkerror_content, parent, false)
-            return ErrorViewHolder(view)
+                    .inflate(R.layout.giokit_recycler_sdkpref_content, parent, false)
+            return PrefViewHolder(view)
         }
     }
 
@@ -40,26 +41,28 @@ class SdkErrorAdapter(val errorClick: (Long) -> Unit) :
         else return 0
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val error = getItem(position)
-        if (holder is ErrorViewHolder) {
-            if (error == null) return
-            holder.errorDate.text = getCurrentTime(error.time)
-            holder.errorType.text  = error.category
-            holder.errorMessage.text = error.message
-            holder.errorAt.text = error.content
+        val pref = getItem(position)
+        if (holder is PrefViewHolder) {
+            if (pref == null) return
+            holder.prefTime.text = getCurrentTime(pref.time)
+            holder.prefContent.text = pref.content
+            holder.prefName.text = pref.message
+            holder.prefDuration.text = pref.duration.toString() + " ms"
+            holder.prefType.text = pref.category
 
-            holder.itemView.setOnClickListener { errorClick.invoke(error.id) }
         } else if (holder is DateViewHolder) {
-            holder.dateTv.text = error?.extra
+            holder.dateTv.text = pref?.extra
         }
     }
 
-    inner class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val errorDate = itemView.findViewById<TextView>(R.id.errorDate)
-        val errorType = itemView.findViewById<TextView>(R.id.errorType)
-        val errorMessage = itemView.findViewById<TextView>(R.id.errorMessage)
-        val errorAt = itemView.findViewById<TextView>(R.id.errorAt)
+    inner class PrefViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val prefContent = itemView.findViewById<TextView>(R.id.prefContent)
+        val prefName = itemView.findViewById<TextView>(R.id.prefName)
+        val prefDuration = itemView.findViewById<TextView>(R.id.prefDuration)
+        val prefTime = itemView.findViewById<TextView>(R.id.prefTime)
+        val prefType = itemView.findViewById<TextView>(R.id.prefType)
     }
 
     inner class DateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -68,7 +71,7 @@ class SdkErrorAdapter(val errorClick: (Long) -> Unit) :
 }
 
 
-class SdkErrorDiffCallback : DiffUtil.ItemCallback<GioKitBreadCrumb>() {
+class SdkPrefDiffCallback : DiffUtil.ItemCallback<GioKitBreadCrumb>() {
     override fun areItemsTheSame(oldItem: GioKitBreadCrumb, newItem: GioKitBreadCrumb): Boolean {
         return oldItem.id == newItem.id
     }

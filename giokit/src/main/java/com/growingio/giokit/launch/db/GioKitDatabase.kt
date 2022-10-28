@@ -48,7 +48,7 @@ abstract class GioKitDatabase : RoomDatabase() {
         private val Migration2_3 = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("DROP TABLE IF EXISTS `breadcrumb`")
-                database.execSQL("CREATE TABLE IF NOT EXISTS `breadcrumb` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `category` TEXT NOT NULL DEFAULT '', `message` TEXT NOT NULL DEFAULT '', `content` TEXT NOT NULL DEFAULT '', `extra` TEXT NOT NULL DEFAULT '', `time` INTEGER NOT NULL)")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `breadcrumb` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `category` TEXT NOT NULL DEFAULT '', `message` TEXT NOT NULL DEFAULT '', `content` TEXT NOT NULL DEFAULT '', `duration` INTEGER NOT NULL,`extra` TEXT NOT NULL DEFAULT '', `time` INTEGER NOT NULL)")
             }
 
         }

@@ -24,6 +24,7 @@
     <string name="giokit_menu_common_setting">通用设置</string>
     <string name="giokit_menu_performance">性能</string>
     <string name="giokit_menu_error">错误报告</string>
+    <string name="giokit_menu_pref">启动耗时</string>
 
     <string name="giokit_circle_tip">请拖动中间的圆点选择控件</string>
 
@@ -46,7 +47,6 @@
     <string name="giokit_http_request_body">请求数据</string>
     <string name="giokit_http_delete_message">是否删除所有的网络请求数据记录？</string>
 
-
     <string name="giokit_pref_data">数据</string>
     <string name="giokit_pref_event_clear">清空事件</string>
     <string name="giokit_pref_event_clear_desc">清空事件库中的所有事件数据</string>
@@ -60,6 +60,12 @@
     <string name="giokit_pref_apm_fragment">Fragment 启动时间</string>
     <string name="giokit_pref_apm_crash">Java Crash 日志</string>
     <string name="giokit_pref_apm_anr">Anr 日志</string>
-    <string name="giokit_apm_delete_message">是否清空性能监控下产生的所有历史数据？</string>
+    <string name="giokit_pref_delete_message">是否清空性能监控下产生的所有历史数据？</string>
+
+    <string name="giokit_pref_app_cold">应用启动</string>
+    <string name="giokit_pref_app_warm">应用恢复</string>
+    <string name="giokit_pref_tag_cold">冷启动</string>
+    <string name="giokit_pref_tag_warn">热启动</string>
+    <string name="giokit_pref_duration">耗时 %1$s 毫秒</string>
 
 </resources>

@@ -54,7 +54,7 @@ class SdkCommonSettingFragment : PreferenceFragmentCompat() {
         apmDataPref?.setOnPreferenceClickListener {
             AlertDialog.Builder(requireContext())
                 .setTitle(R.string.giokit_pref_monitor_clear)
-                .setMessage(R.string.giokit_apm_delete_message)
+                .setMessage(R.string.giokit_pref_delete_message)
                 .setPositiveButton(R.string.giokit_dialog_ok) { v, witch ->
                     GioKitDbManager.instance.cleanBreadcrumb()
                     v.dismiss()

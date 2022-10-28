@@ -7,7 +7,6 @@ import androidx.preference.PreferenceManager
 import com.growingio.android.gmonitor.*
 import com.growingio.android.gmonitor.anr.AnrIntegration
 import com.growingio.android.gmonitor.crash.UncaughtExceptionHandlerIntegration
-import com.growingio.android.gmonitor.fragment.FragmentLifecycleIntegration
 import com.growingio.android.gmonitor.fragment.FragmentSupportLifecycleIntegration
 import com.growingio.android.gmonitor.fragment.FragmentXLifecycleIntegration
 import com.growingio.android.gmonitor.utils.AndroidLogger
@@ -34,14 +33,16 @@ class GMonitorManager private constructor(
     init {
         currentTracker.set(tracker)
 
-        if (context is Application) {
-            option.integrations.add(ActivityLifecycleIntegration(context))
-            option.integrations.add(FragmentXLifecycleIntegration(context))
-            option.integrations.add(FragmentSupportLifecycleIntegration(context))
-            option.integrations.add(FragmentLifecycleIntegration(context))
+        with(option) {
+            if (context is Application) {
+                if (enableActivityLifecycleTracing) integrations.add(ActivityLifecycleIntegration(context))
+                if (enableFragmentXLifecycleTracing) integrations.add(FragmentXLifecycleIntegration(context))
+                if (enableFragmentSupportLifecycleTracing) integrations.add(FragmentSupportLifecycleIntegration(context))
+            }
+            if (enableUncaughtExceptionHandler) integrations.add(UncaughtExceptionHandlerIntegration())
+            if (enableAnr) integrations.add(AnrIntegration(context))
         }
-        option.integrations.add(UncaughtExceptionHandlerIntegration())
-        option.integrations.add(AnrIntegration(context))
+
 
         option.integrations.forEach {
             it.register(getCurrentTracker(), option)
@@ -58,6 +59,7 @@ class GMonitorManager private constructor(
     }
 
     fun setUncaughtExceptionIntegration(enable: Boolean) {
+        option.enableUncaughtExceptionHandler = enable
         var uncaughtException: Integration? = option.integrations.find {
             it is UncaughtExceptionHandlerIntegration
         }
@@ -124,12 +126,13 @@ class GMonitorManager private constructor(
     companion object {
 
         @SuppressLint("StaticFieldLeak")
+        @Volatile
         private var instance: GMonitorManager? = null
 
         @JvmStatic
-        fun getInstance(): GMonitorManager =
+        fun getInstance(application: Application? = null): GMonitorManager =
             instance ?: synchronized(this) {
-                instance ?: initGMonitor(GioKitImpl.APPLICATION).apply {
+                instance ?: initGMonitor(application ?: GioKitImpl.APPLICATION).apply {
                     instance = this
                 }
             }
