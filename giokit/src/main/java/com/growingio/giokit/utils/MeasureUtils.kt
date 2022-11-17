@@ -1,6 +1,8 @@
 package com.growingio.giokit.utils
 
 import android.annotation.SuppressLint
+import android.util.Log
+import com.growingio.android.gmonitor.utils.ILogger
 import com.growingio.giokit.GioKitImpl
 import java.text.SimpleDateFormat
 import java.util.*
@@ -172,6 +174,16 @@ object MeasureUtils {
         502 to "Bad Gateway",
         503 to "Service Unavailable",
     )
+
+    fun loadClass(clazz: String): Any? {
+        try {
+            return Class.forName(clazz)
+        } catch (_: ClassNotFoundException) {
+        } catch (_: UnsatisfiedLinkError) {
+        } catch (_: Throwable) {
+        }
+        return null
+    }
 }
 
 object MemoryConstants {

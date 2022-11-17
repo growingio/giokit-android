@@ -29,7 +29,7 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
         if (viewType == 1) {
             val view =
                 LayoutInflater.from(context)
-                    .inflate(R.layout.giokit_recycler_sdkdata_date, parent, false)
+                    .inflate(R.layout.giokit_recycler_sdkcommon_date, parent, false)
             return DateViewHolder(view)
 
         } else {
@@ -130,7 +130,7 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
     }
 
     inner class DateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val dateTv = itemView.findViewById<TextView>(R.id.header)
+        val dateTv = itemView.findViewById<TextView>(R.id.date)
     }
 }
 

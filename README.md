@@ -131,6 +131,13 @@ giokitExt {
 该界面会显示应用运行期间产生的所有网络请求，包括请求数量，请求大小和请求错误的个数。同时在详情页内可以查看使用了加密库之后的请求数据。
 
 ![sdk path](https://github.com/growingio/giokit-android/blob/master/ScreenShot/sdkhttp.gif?raw=true)
+
+### 错误报告
+该界面会捕获应用运行期间发生的Java错误，包括ANR错误。在详情页可以查看错误的堆栈信息。
+
+### 启动耗时
+启动耗时界面会统计应用每个界面打开的耗时时间，包括app冷热启动时间，Activity启动时间，Fragment启动时间。
+
 ## License
 ```
 Copyright (C) 2020 Beijing Yishu Technology Co., Ltd.

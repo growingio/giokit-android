@@ -14,7 +14,7 @@
         <activity
             android:name=".setting.GiokitSettingActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/GioTheme"
             android:windowSoftInputMode="adjustPan|stateHidden|stateUnchanged" />
 
         <service android:name=".hover.GioHoverMenuService" />

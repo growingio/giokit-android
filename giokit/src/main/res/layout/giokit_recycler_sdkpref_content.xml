@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/giokit_item_background"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/prefContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:textSize="@dimen/giokit_text_body"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toStartOf="@+id/prefStatus"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="com.growingio.giokit.launch.sdkinfo.SdkInfoFragment -> com.growingio.giokit.launch.UniversalActivity" />
+
+    <LinearLayout
+        android:id="@+id/prefLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/prefContent">
+
+        <TextView
+            android:id="@+id/prefName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/giokit_http_cost_background"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLength="30"
+            android:paddingStart="4dp"
+            android:paddingTop="1dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="1dp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/giokit_text_caption"
+            tools:text="MainActivityMainActivityMainActivityMainActivity" />
+
+        <TextView
+            android:id="@+id/prefDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/giokit_http_cost_background"
+            android:gravity="center"
+            android:paddingStart="4dp"
+            android:paddingTop="1dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="1dp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/giokit_text_caption"
+            tools:text="100ms" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/prefStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="4dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/prefTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="@dimen/giokit_text_caption"
+            tools:text="12:40" />
+
+        <TextView
+            android:id="@+id/prefType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/hover_primary"
+            android:textSize="@dimen/giokit_text_caption"
+            tools:text="ACTIVITY" />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

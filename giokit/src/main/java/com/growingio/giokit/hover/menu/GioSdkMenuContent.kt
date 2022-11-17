@@ -47,6 +47,12 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
         val sdkInstantLayout = findViewById(R.id.sdkInstantLayout) as View
         sdkInstantLayout.setOnClickListener(this)
 
+        val sdkCrashLayout = findViewById(R.id.sdkCrashLayout) as View
+        sdkCrashLayout.setOnClickListener(this)
+
+        val sdkPrefLayout = findViewById(R.id.sdkPrefLayout) as View
+        sdkPrefLayout.setOnClickListener(this)
+
         val sdkCommonSettingLayout = findViewById(R.id.sdkCommonSettingLayout) as View
         sdkCommonSettingLayout.setOnClickListener(this)
 
@@ -147,6 +153,21 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKHTTP_PAGE)
+                })
+            }
+
+            R.id.sdkCrashLayout -> {
+                GioKitImpl.gioKitHoverManager.hoverView?.collapse()
+                context.startActivity(Intent(context, UniversalActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKERROR_PAGE)
+                })
+            }
+            R.id.sdkPrefLayout -> {
+                GioKitImpl.gioKitHoverManager.hoverView?.collapse()
+                context.startActivity(Intent(context, UniversalActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKPREF_PAGE)
                 })
             }
 

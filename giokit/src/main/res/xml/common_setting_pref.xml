@@ -2,20 +2,58 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:key="giokit_apm"
+        android:title="@string/giokit_pref_apm">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_giokit_menu_duration_pref"
+            android:key="giokit_activity_time"
+            android:title="@string/giokit_pref_apm_activity" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_giokit_menu_duration_pref2"
+            android:key="giokit_fragment_time"
+            android:title="@string/giokit_pref_apm_fragment" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:icon="@drawable/ic_giokit_menu_crash_pref"
+            android:key="giokit_crash_log"
+            android:title="@string/giokit_pref_apm_crash" />
+
+        <SwitchPreference
+            android:icon="@drawable/ic_giokit_menu_anr_pref"
+            android:defaultValue="true"
+            android:key="giokit_anr_log"
+            android:title="@string/giokit_pref_apm_anr" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
         android:key="giokit_data"
         android:title="@string/giokit_pref_data">
 
         <Preference
+            android:icon="@drawable/ic_giokit_menu_database_pref"
             android:key="giokit_event_clear"
             android:summary="@string/giokit_pref_event_clear_desc"
-            android:icon="@drawable/ic_giokit_menu_database_pref"
             android:title="@string/giokit_pref_event_clear" />
 
         <Preference
+            android:icon="@drawable/ic_giokit_menu_network_pref"
             android:key="giokit_http_clear"
-            android:icon="@drawable/ic_giokit_menu_history_pref"
             android:summary="@string/giokit_pref_http_clear_desc"
             android:title="@string/giokit_pref_http_clear" />
+
+        <Preference
+            android:icon="@drawable/ic_giokit_menu_apm_pref"
+            android:key="giokit_apm_clear"
+            android:summary="@string/giokit_pref_monitor_clear_desc"
+            android:title="@string/giokit_pref_monitor_clear" />
+
 
     </PreferenceCategory>
 

@@ -82,7 +82,7 @@ public class CheckSelfContent extends FrameLayout implements Content {
         post(CheckSdkStatusManager.getInstance().getDataServerHost(index++), postTime += POST_TIME_DELAY);
         post(CheckSdkStatusManager.getInstance().getDataCollectionEnable(index++), postTime += POST_TIME_DELAY);
         post(CheckSdkStatusManager.getInstance().getSdkDebug(index++), postTime += POST_TIME_DELAY);
-        post(CheckSdkStatusManager.getInstance().getOaidEnabled(index++), postTime += POST_TIME_DELAY);
+        post(CheckSdkStatusManager.getInstance().getSdkModules(index++), postTime += POST_TIME_DELAY);
 
         //最后是手动埋点个数
         CheckItem trackItem = CheckSdkStatusManager.getInstance().getTrackCount(index);
