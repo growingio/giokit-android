@@ -19,9 +19,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="48dp"
             android:textColor="@android:color/black"
             android:textSize="@dimen/giokit_text_navi"
             android:textStyle="bold"
+            android:lines="1"
+            android:ellipsize="end"
             tools:text="设备信息" />
 
         <FrameLayout

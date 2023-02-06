@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
@@ -31,15 +30,11 @@ abstract class BaseFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_giokit_base, container, false)
         inflater.inflate(
-            layoutId(),
-            rootView!!.findViewById<View>(R.id.contentContainer) as FrameLayout,
-            true
+            layoutId(), rootView!!.findViewById<View>(R.id.contentContainer) as FrameLayout, true
         )
         return rootView
     }
@@ -50,8 +45,7 @@ abstract class BaseFragment : Fragment() {
             if (view.context is Activity) {
                 (view.context as Activity).window.decorView.requestLayout()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ignored: Exception) {
         }
 
         initView()
@@ -59,20 +53,25 @@ abstract class BaseFragment : Fragment() {
     }
 
     private fun initView() {
-        val titleTv = findViewById<TextView>(R.id.title)
         val title = onGetTitle()
-        if (title.length > 8) {
-            titleTv.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                resources.getDimension(R.dimen.giokit_text_subtitle)
-            )
+        setTitle(title)
+        val close = findViewById<View>(R.id.close)
+        close.setOnClickListener {
+            finish()
         }
-        titleTv.text = onGetTitle()
-        val back = findViewById<View>(R.id.close)
-        back.setOnClickListener {
-            if (!onBackPressed()) {
-                requireActivity().finish()
+    }
+
+    fun setTitle(title: String?) {
+        try {
+            if (title == null || title.isEmpty()) return
+            val titleTv = findViewById<TextView>(R.id.title)
+            if (title.length > 8) {
+                titleTv.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.giokit_text_subtitle)
+                )
             }
+            titleTv.text = title
+        } catch (ignored: IllegalStateException) {
         }
     }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
     <PreferenceCategory
         android:key="giokit_apm"
         android:title="@string/giokit_pref_apm">
@@ -24,8 +23,8 @@
             android:title="@string/giokit_pref_apm_crash" />
 
         <SwitchPreference
-            android:icon="@drawable/ic_giokit_menu_anr_pref"
             android:defaultValue="true"
+            android:icon="@drawable/ic_giokit_menu_anr_pref"
             android:key="giokit_anr_log"
             android:title="@string/giokit_pref_apm_anr" />
 

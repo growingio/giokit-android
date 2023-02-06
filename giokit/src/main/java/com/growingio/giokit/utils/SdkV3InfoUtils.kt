@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
+import android.view.View
 import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfig
 import com.growingio.android.sdk.autotrack.IgnorePolicy
@@ -15,6 +16,7 @@ import com.growingio.android.sdk.track.events.TrackEventType
 import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
 import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
+import com.growingio.android.sdk.track.middleware.hybrid.HybridBridge
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.android.sdk.track.providers.DeviceInfoProvider
 import com.growingio.android.sdk.track.providers.SessionProvider
@@ -30,6 +32,19 @@ import org.json.JSONObject
  * @author cpacm 2021/8/26
  */
 object SdkV3InfoUtils {
+
+    fun hookWebView(webView: View){
+        if (!TrackerContext.initializedSuccessfully()) {
+            return
+        }
+
+        val modelLoader = TrackerContext.get().registry.getModelLoader(
+            HybridBridge::class.java,
+            Boolean::class.java
+        )
+        modelLoader?.buildLoadData(HybridBridge(webView))?.fetcher?.executeData()
+    }
+
     //获取 sdk 信息
     fun getSdkInfo(): List<SdkInfo> {
         val list = arrayListOf<SdkInfo>()

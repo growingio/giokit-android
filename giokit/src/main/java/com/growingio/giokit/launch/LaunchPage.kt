@@ -3,6 +3,7 @@ package com.growingio.giokit.launch
 import com.growingio.giokit.launch.sdkcode.SdkCodeFragment
 import com.growingio.giokit.launch.sdkcrash.SdkErrorFragment
 import com.growingio.giokit.launch.sdkdata.SdkDataFragment
+import com.growingio.giokit.launch.sdkh5door.SdkH5DoorFragment
 import com.growingio.giokit.launch.sdkhttp.SdkHttpFragment
 import com.growingio.giokit.launch.sdkinfo.SdkInfoFragment
 import com.growingio.giokit.launch.sdkpref.SdkPrefFragment
@@ -22,6 +23,7 @@ object LaunchPage {
     const val SDKDATA_PAGE_RANGE_START = "data_page_range_start"
     const val SDKDATA_PAGE_RANGE_END = "data_page_range_end"
     const val SDKHTTP_PAGE = 4
+    const val SDKH5DOOR_PAGE = 5
 
     const val SDKERROR_PAGE = 10
     const val SDKPREF_PAGE = 11
@@ -33,6 +35,8 @@ object LaunchPage {
         SDKCODE_PAGE -> SdkCodeFragment::class.java
         SDKDATA_PAGE -> SdkDataFragment::class.java
         SDKHTTP_PAGE -> SdkHttpFragment::class.java
+        SDKH5DOOR_PAGE -> SdkH5DoorFragment::class.java
+
         SDKERROR_PAGE -> SdkErrorFragment::class.java
         SDKPREF_PAGE -> SdkPrefFragment::class.java
         else -> null

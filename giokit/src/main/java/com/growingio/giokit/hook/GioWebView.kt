@@ -7,12 +7,12 @@ import android.os.Message
 import android.util.Log
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import androidx.preference.PreferenceManager
 import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.circle.ViewNode
 import com.growingio.giokit.circle.ViewNode.getWebNodesFromEvent
 import org.json.JSONObject
 import java.lang.ref.WeakReference
-import androidx.webkit.WebViewCompat
 
 /**
  * <p>
@@ -20,17 +20,35 @@ import androidx.webkit.WebViewCompat
  * @author cpacm 2021/9/8
  */
 object GioWebView {
-    private const val WEBVIEW_JS_TAG = 100 shl 24
-    private const val MIN_PROGRESS_FOR_HOOK = 60
-    private const val HOOK_CIRCLE_DELAY = 500L
+    const val WEBVIEW_JS_TAG = 100 shl 24
+    const val MIN_PROGRESS_FOR_HOOK = 60
+    const val HOOK_CIRCLE_DELAY = 500L
+
+    private const val WEBJS_GIOKIT_PATH = "https://assets.giocdn.com/sdk/webjs/giokit.min.js"
+    const val WEBJS_HOOK_JAVASCRIPT =
+        "javascript:import('$WEBJS_GIOKIT_PATH').then(() => { if(!window.gioKit){window.gioKit=new GioKit();}})"
+
 
     /*************************** Webview inject ****************************/
+    @JvmStatic
+    fun addWebJsGiokit(forceAdd: Boolean = false, hookWebView: (javascript: String) -> Unit) {
+        val sp = PreferenceManager.getDefaultSharedPreferences(GioKitImpl.APPLICATION)
+        val enabled = sp.getBoolean("GIOKIT_WEBVIEW_JS_ENABLED", false)
+        if (!enabled && !forceAdd) return
+        try {
+            //hookWebView(getAssets(GioKitImpl.APPLICATION,"giokit.min.js"))
+            hookWebView(WEBJS_HOOK_JAVASCRIPT)
+        } catch (e: Exception) {
+            Log.e("GIOKIT", "WebJs Giokit Hook Failed")
+        }
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     @JvmStatic
     fun addCircleJsToWebView(webView: WebView, progress: Int) {
         val oldView = GioKitImpl.webView.get()
         if (oldView == null || oldView != webView) {
-            webView.addJavascriptInterface(GioWebView.VdsBridge(), "_gio_bridge")
+            webView.addJavascriptInterface(VdsBridge(), "_gio_bridge")
             GioKitImpl.webView = WeakReference(webView)
         }
         if (progress >= MIN_PROGRESS_FOR_HOOK) {
@@ -38,12 +56,14 @@ object GioWebView {
             val message = Message.obtain(webView.handler) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     webView.evaluateJavascript(
-                        GioWebView.getAssets(webView.context, "gio_hybrid.min.js"),
+                        getAssets(webView.context, "gio_hybrid.min.js"),
                         null
                     )
+
                 } else {
-                    webView.loadUrl(GioWebView.getAssets(webView.context, "gio_hybrid.min.js"))
+                    webView.loadUrl(getAssets(webView.context, "gio_hybrid.min.js"))
                 }
+
             }
             message.what = 0
             webView.handler?.sendMessageDelayed(message, HOOK_CIRCLE_DELAY)

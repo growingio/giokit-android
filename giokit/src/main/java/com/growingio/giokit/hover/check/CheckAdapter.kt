@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.github.ybq.android.spinkit.SpinKitView
 import com.growingio.giokit.R
 
 /**
@@ -89,7 +88,6 @@ class CheckAdapter(private val context: Context) : RecyclerView.Adapter<Recycler
     }
 
     class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val loadingView: SpinKitView = itemView.findViewById(R.id.loadingView)
         val loadingTv: TextView = itemView.findViewById(R.id.loadingTv)
     }
 

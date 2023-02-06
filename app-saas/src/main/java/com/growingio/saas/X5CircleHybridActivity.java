@@ -22,6 +22,7 @@ public class X5CircleHybridActivity extends Activity {
         setContentView(R.layout.activity_web_x5);
         webView = findViewById(R.id.x5_web_view);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {

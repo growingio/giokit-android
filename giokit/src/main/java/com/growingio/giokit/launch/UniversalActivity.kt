@@ -48,7 +48,6 @@ class UniversalActivity : AppCompatActivity() {
 
     fun showContent(target: Class<out BaseFragment>, bundle: Bundle? = null) {
         try {
-
             val fragment = target.newInstance()
             if (bundle != null) {
                 fragment.arguments = bundle

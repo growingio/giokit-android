@@ -20,6 +20,13 @@
     <string name="giokit_menu_http">网络记录</string>
     <string name="giokit_menu_monitor">实时事件</string>
     <string name="giokit_menu_monitor_running">实时事件监控正在显示中…</string>
+    <string name="giokit_menu_h5door">H5任意门</string>
+    <string name="giokit_menu_h5door_hint">请输入要跳转的网址</string>
+    <string name="giokit_menu_h5door_input">http://release-messages.growingio.cn/push/cdp/cdp.html</string>
+    <string name="giokit_menu_h5door_confirm">点击跳转</string>
+    <string name="giokit_menu_h5door_hybrid">注入Hybrid SDK</string>
+    <string name="giokit_menu_h5door_web_giokit">注入JS GioKit</string>
+    <string name="giokit_menu_h5door_error">请输入正确的链接地址</string>
     <string name="giokit_menu_setting">设置</string>
     <string name="giokit_menu_common_setting">通用设置</string>
     <string name="giokit_menu_performance">性能</string>
@@ -61,6 +68,10 @@
     <string name="giokit_pref_apm_crash">Java Crash 日志</string>
     <string name="giokit_pref_apm_anr">Anr 日志</string>
     <string name="giokit_pref_delete_message">是否清空性能监控下产生的所有历史数据？</string>
+    
+    <string name="giokit_pref_function">功能启用</string>
+    <string name="giokit_pref_function_jskit">WebView GioKit</string>
+    <string name="giokit_pref_function_jskit_desc">是否在网页中注入Web版本的Giokit</string>
 
     <string name="giokit_pref_app_cold">应用启动</string>
     <string name="giokit_pref_app_warm">应用恢复</string>

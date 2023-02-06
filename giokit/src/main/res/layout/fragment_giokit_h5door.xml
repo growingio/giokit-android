@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/GioHoverTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/giokit_item_background"
+    android:gravity="center"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/linkInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:hint="@string/giokit_menu_h5door_hint"
+        app:boxBackgroundMode="none"
+        app:boxCollapsedPaddingTop="4dp"
+        app:boxStrokeColor="@color/hover_accent"
+        app:hintTextColor="@color/hover_accent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderText="@string/giokit_menu_h5door_input"
+        app:placeholderTextColor="@color/giokit_text_grey">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@android:id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:minHeight="120dp"
+            android:scrollHorizontally="false"
+            android:singleLine="false"
+            android:textCursorDrawable="@drawable/giokit_edittext_cursor"
+            android:textSize="@dimen/giokit_text_body"
+            android:theme="@style/GioEdittextTheme"
+            tools:ignore="UnusedAttribute" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/hybridEnabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/giokit_menu_h5door_hybrid"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linkInputLayout" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/webGiokitEnabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/giokit_menu_h5door_web_giokit"
+        app:layout_constraintEnd_toEndOf="@+id/hybridEnabled"
+        app:layout_constraintTop_toBottomOf="@+id/hybridEnabled" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/linkJump"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:background="@color/hover_accent"
+        android:textStyle="bold"
+        android:layout_marginTop="4dp"
+        android:text="@string/giokit_menu_h5door_confirm"
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@+id/webGiokitEnabled" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

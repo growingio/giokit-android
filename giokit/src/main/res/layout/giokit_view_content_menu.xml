@@ -216,10 +216,40 @@
 
             </LinearLayout>
 
-            <View
+            <LinearLayout
+                android:id="@+id/sdkH5DoorLayout"
                 android:layout_width="0dp"
-                android:layout_height="10dp"
-                android:layout_weight="1" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/h5DoorLogo"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/giokit_check_menu_button_bg"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_giokit_menu_h5door" />
+
+                <TextView
+                    android:id="@+id/h5DoorTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:marqueeRepeatLimit="-1"
+                    android:maxWidth="80dp"
+                    android:singleLine="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:text="@string/giokit_menu_h5door"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/giokit_text_body" />
+
+            </LinearLayout>
 
             <View
                 android:layout_width="0dp"

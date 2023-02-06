@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.growingio.giokit.GioKitImpl
 import com.growingio.giokit.R
+import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.instant.InstantEventCache
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.UniversalActivity
@@ -46,6 +47,12 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
 
         val sdkInstantLayout = findViewById(R.id.sdkInstantLayout) as View
         sdkInstantLayout.setOnClickListener(this)
+
+        val sdkH5DoorLayout = findViewById<View>(R.id.sdkH5DoorLayout)
+        sdkH5DoorLayout.setOnClickListener(this)
+        if (GioPluginConfig.isSaasSdk) {
+            sdkH5DoorLayout.visibility = View.GONE
+        }
 
         val sdkCrashLayout = findViewById(R.id.sdkCrashLayout) as View
         sdkCrashLayout.setOnClickListener(this)
@@ -153,6 +160,13 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKHTTP_PAGE)
+                })
+            }
+            R.id.sdkH5DoorLayout -> {
+                GioKitImpl.gioKitHoverManager.hoverView?.collapse()
+                context.startActivity(Intent(context, UniversalActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKH5DOOR_PAGE)
                 })
             }
 

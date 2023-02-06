@@ -17,7 +17,11 @@
 
     <style name="GioTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-
         <item name="colorAccent">@color/hover_accent</item>
+    </style>
+
+    <style name="GioEdittextTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/hover_accent</item>
+        <item name="colorControlNormal">@color/giokit_bg_grey</item>
     </style>
 </resources>
