@@ -28,7 +28,7 @@ gradlePlugin{
 }
 
 dependencies{
-    implementation "com.growingio.android:growingio-plugin-library:3.4.2"
+    implementation "com.growingio.android:growingio-plugin-library:3.4.6"
     implementation gradleApi()
     compileOnly "com.android.tools.build:gradle:$agp_version"
     compileOnly "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

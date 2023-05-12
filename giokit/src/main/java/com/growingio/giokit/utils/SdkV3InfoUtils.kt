@@ -85,8 +85,6 @@ object SdkV3InfoUtils {
                     ConfigurationProvider.core().sessionInterval.toString() + "S"
                 )
             }
-            list.tryAdd { SdkInfo("事件过滤", getExcludeEvent()) }
-            list.tryAdd { SdkInfo("事件属性过滤", getIgnoreFiled()) }
             val scale = getImpressionScale()
             if (scale >= 0F) list.tryAdd { SdkInfo("曝光比例", scale.toString()) }
             list.tryAdd { SdkInfo("数据加密", getEncryptEnabled()) }
@@ -106,20 +104,6 @@ object SdkV3InfoUtils {
             return "启用"
         }
         return "未启用"
-    }
-
-    private fun getExcludeEvent(): String {
-        val excludeEventMask = ConfigurationProvider.core().excludeEvent
-        val events = EventExcludeFilter.getEventFilterLog(excludeEventMask)
-        if (events.isNullOrEmpty()) return "未设置"
-        return events.substringAfter("[").substringBefore("]")
-    }
-
-    private fun getIgnoreFiled(): String {
-        val ignoreMask = ConfigurationProvider.core().ignoreField
-        val fields = FieldIgnoreFilter.getFieldFilterLog(ignoreMask)
-        if (fields.isNullOrEmpty()) return "未设置"
-        return fields.substringAfter("[").substringBefore("]")
     }
 
     private fun getImpressionScale(): Float {

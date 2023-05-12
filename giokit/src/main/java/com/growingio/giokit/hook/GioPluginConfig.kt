@@ -19,13 +19,13 @@ object GioPluginConfig {
 
     @JvmStatic
     fun inject(config: Map<String, Any>) {
-        Log.d("GioPluginConfig",config.toString())
-        xmlScheme = config.getOrElse("xmlScheme"){""} as String
-        hasGioPlugin = config.getOrElse("gioPlugin"){true} as Boolean
-        isSaasSdk = config.getOrElse("isSaasSdk"){ false } as Boolean
-        val dependStr = config.getOrElse("gioDepend"){""} as String
+        Log.d("GioPluginConfig", config.toString())
+        xmlScheme = config.getOrElse("xmlScheme") { "" } as String
+        hasGioPlugin = config.getOrElse("gioPlugin") { true } as Boolean
+        isSaasSdk = config.getOrElse("isSaasSdk") { false } as Boolean
+        val dependStr = config.getOrElse("gioDepend") { "" } as String
         dependLibs = dependStr.split("##")
-        Log.d("GioPluginConfig","$xmlScheme-$hasGioPlugin-$isSaasSdk-$dependLibs")
+        Log.d("GioPluginConfig", "$xmlScheme-$hasGioPlugin-$isSaasSdk-$dependLibs")
     }
 
     //由插件注入配置信息
@@ -50,20 +50,28 @@ object GioPluginConfig {
         if (dependLibs.isEmpty()) return Triple("SDK版本", "未集成GrowingIO SDK，请按照官方文档集成", true)
         var coreLibrary: String? = null
         var autoCoreLibrary: String? = null
+        var bomVersion: String
+        dependLibs.first { it.startsWith("com.growingio.android:") && it.contains(":autotracker-bom:") }
+            .apply {
+                bomVersion = substringAfterLast(":")
+            }
+
         for (depend in dependLibs) {
             if (depend.startsWith("com.growingio.android:")
                 || depend.contains(":gio-sdk:")
                 || depend.contains(":growingio")
             ) {
+                var version = depend.substringAfterLast(":")
+                if (version == "undefined") version = bomVersion
                 if (depend.contains(":autotracker-cdp:") || depend.contains(":autotracker:")) {
-                    return Triple("无埋点SDK", depend.substringAfter(":"), false)
+                    return Triple("无埋点SDK", version, false)
                 } else if (depend.contains(":tracker-cdp:") || depend.contains(":tracker:")) {
                     isAutoTrack = false
-                    return Triple("埋点SDK", depend.substringAfter(":"), false)
+                    return Triple("埋点SDK", version, false)
                 } else if (depend.contains("tracker-core:")) {
-                    coreLibrary = depend.substringAfter(":")
+                    coreLibrary = version
                 } else if (depend.contains("autotracker-core:")) {
-                    autoCoreLibrary = depend.substringAfter(":")
+                    autoCoreLibrary = version
                 }
             }
         }
