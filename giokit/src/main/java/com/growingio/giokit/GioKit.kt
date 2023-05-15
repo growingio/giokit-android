@@ -41,20 +41,14 @@ public class GioKit private constructor() {
     class Builder(private val app: Application) {
 
         private var attach = true
-        private var gmonitorOption: GMonitorOption? = null
 
         fun attach(attach: Boolean): Builder {
             this.attach = attach
             return this
         }
 
-        fun setGMonitorOption(option: GMonitorOption): Builder {
-            this.gmonitorOption = option
-            return this
-        }
-
         fun build() {
-            val gioKitOption = GioKitOption(attach, gmonitorOption)
+            val gioKitOption = GioKitOption(attach)
             GioKitImpl.install(app, gioKitOption)
         }
     }
