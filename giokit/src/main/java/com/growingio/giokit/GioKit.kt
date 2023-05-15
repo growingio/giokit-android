@@ -3,6 +3,7 @@ package com.growingio.giokit
 import android.app.Activity
 import android.app.Application
 import android.util.Log
+import com.growingio.android.gmonitor.GMonitorOption
 
 /**
  * <p>
@@ -40,20 +41,20 @@ public class GioKit private constructor() {
     class Builder(private val app: Application) {
 
         private var attach = true
-        private var bindWindow = true
+        private var gmonitorOption: GMonitorOption? = null
 
         fun attach(attach: Boolean): Builder {
             this.attach = attach
             return this
         }
 
-        fun bindWindow(bind: Boolean): Builder {
-            this.bindWindow = bind
+        fun setGMonitorOption(option: GMonitorOption): Builder {
+            this.gmonitorOption = option
             return this
         }
 
         fun build() {
-            val gioKitOption = GioKitOption(attach, bindWindow)
+            val gioKitOption = GioKitOption(attach, gmonitorOption)
             GioKitImpl.install(app, gioKitOption)
         }
     }

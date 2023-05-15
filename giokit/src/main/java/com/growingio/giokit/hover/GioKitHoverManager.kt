@@ -31,22 +31,27 @@ class GioKitHoverManager(val app: Application, val gioKitOption: GioKitOption) {
     var anchorView: CircleAnchorView? = null
     var instantEventView: InstantEventView? = null
 
+    var attachActivity: WeakReference<Activity>? = null
+
     init {
         if (gioKitOption.attach) app.registerActivityLifecycleCallbacks(AttachActivityLifecycleCallbacks())
+        else app.registerActivityLifecycleCallbacks(AbsoluteActivityLifecycleCallbacks())
     }
 
 
     fun attach(activity: Activity) {
-        if (gioKitOption.attach || gioKitOption.bindWindow) return
+        if (gioKitOption.attach) return
         attachToActivity(activity)
-
+        attachActivity = WeakReference(activity)
     }
 
     fun detach(activity: Activity) {
-        if (gioKitOption.attach || gioKitOption.bindWindow) return
+        if (gioKitOption.attach) return
         detachFromActivity(activity)
         removeCircle()
         removeInstantMonitor()
+        attachActivity?.clear()
+        attachActivity = null
     }
 
     fun startCircle(context: Context) {
@@ -82,15 +87,14 @@ class GioKitHoverManager(val app: Application, val gioKitOption: GioKitOption) {
     }
 
     private fun checkOverlayPermission(): Boolean {
-        return OverlayPermission.hasRuntimePermissionToDrawOverlay(app) && gioKitOption.bindWindow
+        return OverlayPermission.hasRuntimePermissionToDrawOverlay(app) && gioKitOption.attach
     }
 
 
     fun notifyOverlay(context: Context) {
-        if (context is Activity && gioKitOption.bindWindow) {
+        if (context is Activity && gioKitOption.attach) {
             //将 hover 切换至悬浮窗
             detachFromActivity(context)
-
             notifyForeground(context)
         }
     }
@@ -184,10 +188,24 @@ class GioKitHoverManager(val app: Application, val gioKitOption: GioKitOption) {
 
     }
 
-    inner class AttachActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
-        private var startedActivityCounts: Int = 0
-
+    open class DefaultLifeCycleCallbacks : ActivityLifecycleCallbacks {
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+
+        override fun onActivityStarted(activity: Activity) {}
+
+        override fun onActivityResumed(activity: Activity) {}
+
+        override fun onActivityPaused(activity: Activity) {}
+
+        override fun onActivityStopped(activity: Activity) {}
+
+        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+
+        override fun onActivityDestroyed(activity: Activity) {}
+    }
+
+    inner class AttachActivityLifecycleCallbacks : DefaultLifeCycleCallbacks() {
+        private var startedActivityCounts: Int = 0
 
         override fun onActivityStarted(activity: Activity) {
             try {
@@ -210,8 +228,6 @@ class GioKitHoverManager(val app: Application, val gioKitOption: GioKitOption) {
             attachToActivity(activity)
         }
 
-        override fun onActivityPaused(activity: Activity) {}
-
         override fun onActivityStopped(activity: Activity) {
             try {
                 startedActivityCounts--
@@ -222,11 +238,18 @@ class GioKitHoverManager(val app: Application, val gioKitOption: GioKitOption) {
                 e.printStackTrace()
             }
         }
+    }
 
-        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+    inner class AbsoluteActivityLifecycleCallbacks : DefaultLifeCycleCallbacks() {
+        override fun onActivityStopped(activity: Activity) {
+            super.onActivityStopped(activity)
+            if (attachActivity?.get() == activity) removeFloatingView()
+        }
 
-        override fun onActivityDestroyed(activity: Activity) {}
-
+        override fun onActivityStarted(activity: Activity) {
+            super.onActivityStarted(activity)
+            if (attachActivity?.get() == activity) restoreFloatingView()
+        }
     }
 }
 

@@ -132,14 +132,14 @@ class GMonitorManager private constructor(
         @JvmStatic
         fun getInstance(application: Application? = null): GMonitorManager =
             instance ?: synchronized(this) {
-                instance ?: initGMonitor(application ?: GioKitImpl.APPLICATION).apply {
+                instance ?: initGMonitor(application ?: GioKitImpl.APPLICATION, null).apply {
                     instance = this
                 }
             }
 
-
-        fun initGMonitor(application: Application): GMonitorManager {
-            val option = GMonitorOption()
+        @JvmStatic
+        fun initGMonitor(application: Application, gOption: GMonitorOption?): GMonitorManager {
+            val option = gOption ?: GMonitorOption()
             option.debug = true
 
             val sp = PreferenceManager.getDefaultSharedPreferences(application)
@@ -149,7 +149,7 @@ class GMonitorManager private constructor(
             option.enableUncaughtExceptionHandler = sp.getBoolean(APM_JAVA_CRASH_ENABLED, true)
             option.printUncaughtStackTrace = false
             option.enableFragmentXLifecycleTracing = sp.getBoolean(APM_FRAGMENT_ENABLED, true)
-            option.enableFragmentSupportLifecycleTracing = sp.getBoolean(APM_FRAGMENT_ENABLED, true)
+            option.enableFragmentSupportLifecycleTracing = sp.getBoolean(APM_FRAGMENT_ENABLED, false)
             option.enableFragmentSystemLifecycleTracing = false
             option.enableAnr = sp.getBoolean(APM_ANR_ENABLED, true)
             option.anrInDebug = true

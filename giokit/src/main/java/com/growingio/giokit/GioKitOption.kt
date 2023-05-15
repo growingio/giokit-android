@@ -1,5 +1,7 @@
 package com.growingio.giokit
 
+import com.growingio.android.gmonitor.GMonitorOption
+
 /**
  * <p>
  *
@@ -7,5 +9,5 @@ package com.growingio.giokit
  */
 data class GioKitOption(
     val attach: Boolean = true,
-    val bindWindow: Boolean = true
+    val gmonitorOption: GMonitorOption? = null
 )

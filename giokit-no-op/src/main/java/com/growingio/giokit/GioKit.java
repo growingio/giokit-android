@@ -26,7 +26,7 @@ public class GioKit {
             return this;
         }
 
-        public Builder bindWindow(boolean bind) {
+        public Builder setGMonitorOption(Object option) {
             return this;
         }
 

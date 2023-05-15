@@ -36,11 +36,11 @@ internal object GioKitImpl {
 
         GioKitDatabase.initDb(app)
 
-        gioKitHoverManager = GioKitHoverManager(app,gioKitOption)
+        gioKitHoverManager = GioKitHoverManager(app, gioKitOption)
 
         initWithGrowingIOSDK()
 
-        GMonitorManager.getInstance(app)
+        GMonitorManager.initGMonitor(app, gioKitOption.gmonitorOption)
 
         inited = true
     }
