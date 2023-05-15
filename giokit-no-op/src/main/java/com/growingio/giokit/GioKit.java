@@ -26,10 +26,6 @@ public class GioKit {
             return this;
         }
 
-        public Builder setGMonitorOption(Object option) {
-            return this;
-        }
-
         public void build() {
         }
     }
