@@ -14,8 +14,8 @@ import java.lang.ref.WeakReference
  */
 object InstantEventCache {
     private val cacheEvent = arrayListOf<GioKitEventBean>()
-    private const val INSTANT_BUNDLE_WAIT_TIME = 500L
-    private const val INSTANT_DISPLAY_TIME = 15000L
+    private const val INSTANT_BUNDLE_WAIT_TIME = 300L
+    private const val INSTANT_DISPLAY_TIME = 10000L
     const val INSTANT_DISPLAY_MAX_COUNT = 8
     private val observers: ArrayList<WeakReference<InstantDataObserver>> = arrayListOf()
 
