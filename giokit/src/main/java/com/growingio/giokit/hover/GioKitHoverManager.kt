@@ -164,6 +164,10 @@ class GioKitHoverManager(val app: Application, val gioKitOption: GioKitOption) {
             unAttachHoverView.layoutParams = hoverParam
             hoverView = unAttachHoverView
         }
+        if (hoverView?.parent != null) {
+            (hoverView?.parent as ViewGroup).removeView(hoverView)
+        }
+        hoverView?.collapse()
         decorView.addView(hoverView)
     }
 
