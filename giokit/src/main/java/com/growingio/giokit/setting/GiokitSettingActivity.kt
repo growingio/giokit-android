@@ -10,7 +10,6 @@ import com.growingio.giokit.R
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_INDEX
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_TITLE
-import com.growingio.giokit.utils.SdkV3InfoUtils
 
 /**
  * <p>

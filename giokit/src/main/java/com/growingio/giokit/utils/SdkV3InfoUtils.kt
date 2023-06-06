@@ -8,8 +8,6 @@ import android.content.res.Resources
 import android.os.Build
 import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfig
-import com.growingio.android.sdk.autotrack.IgnorePolicy
-import com.growingio.android.sdk.autotrack.page.PageProvider
 import com.growingio.android.sdk.track.events.AutotrackEventType
 import com.growingio.android.sdk.track.events.TrackEventType
 import com.growingio.android.sdk.track.middleware.http.EventEncoder

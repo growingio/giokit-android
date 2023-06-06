@@ -16,7 +16,7 @@ ext {
             okhttp_v4                 : "4.7.0",
 
             growingio                 : "3.5.0",
-            growingio_v2              : "2.9.15",
+            growingio_v2              : "2.9.17",
     ]
 
     growingio = [
