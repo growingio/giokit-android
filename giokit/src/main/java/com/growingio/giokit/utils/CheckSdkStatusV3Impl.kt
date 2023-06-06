@@ -1,16 +1,12 @@
 package com.growingio.giokit.utils
 
 import com.growingio.android.sdk.TrackerContext
-import com.growingio.android.sdk.autotrack.CdpAutotrackConfig
-import com.growingio.android.sdk.track.CdpConfig
 import com.growingio.android.sdk.track.middleware.OaidHelper
 import com.growingio.android.sdk.track.middleware.advert.Activate
 import com.growingio.android.sdk.track.middleware.format.EventFormatData
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
 import com.growingio.android.sdk.track.middleware.hybrid.HybridBridge
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
-import com.growingio.android.sdk.track.webservices.Circler
-import com.growingio.android.sdk.track.webservices.Debugger
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hover.check.CheckItem
 
@@ -86,24 +82,13 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     override fun getDataSourceID(index: Int): CheckItem {
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
             if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.autotrack.CdpAutotrackConfig")) {
-                val config = ConfigurationProvider.get()
-                    .getConfiguration<CdpAutotrackConfig>(CdpAutotrackConfig::class.java)
+                val dataSourceId = ConfigurationProvider.core().dataSourceId
                 return CheckItem(
                     index,
                     "正在获取数据源ID",
                     "Datasource ID",
-                    config?.dataSourceId ?: "未配置",
-                    config?.dataSourceId == null
-                )
-            } else if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.CdpConfig")) {
-                val config = ConfigurationProvider.get()
-                    .getConfiguration<CdpConfig>(CdpConfig::class.java)
-                return CheckItem(
-                    index,
-                    "正在获取数据源ID",
-                    "Datasource ID",
-                    config?.dataSourceId ?: "未配置",
-                    config?.dataSourceId == null
+                    dataSourceId ?: "未配置",
+                    dataSourceId == null
                 )
             }
             return CheckItem(

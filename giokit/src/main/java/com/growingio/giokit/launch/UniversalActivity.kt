@@ -21,7 +21,6 @@ class UniversalActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTitle(R.string.giokit_universal_title)
-        SdkV3InfoUtils.ignoreActivity(this)
         val bundle = intent.extras
         if (bundle == null) {
             finish()

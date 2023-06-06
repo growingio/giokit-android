@@ -23,7 +23,6 @@ class GiokitSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_giokit_base)
-        SdkV3InfoUtils.ignoreActivity(this)
         val bundle = intent.extras
         if (bundle == null) {
             finish()

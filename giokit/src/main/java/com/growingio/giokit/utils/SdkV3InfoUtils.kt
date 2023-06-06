@@ -12,8 +12,6 @@ import com.growingio.android.sdk.autotrack.IgnorePolicy
 import com.growingio.android.sdk.autotrack.page.PageProvider
 import com.growingio.android.sdk.track.events.AutotrackEventType
 import com.growingio.android.sdk.track.events.TrackEventType
-import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
-import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.android.sdk.track.providers.DeviceInfoProvider
@@ -209,12 +207,6 @@ object SdkV3InfoUtils {
             }
         }
         return list
-    }
-
-    fun ignoreActivity(activity: Activity) {
-        if (hasClass("com.growingio.android.sdk.autotrack.page.PageProvider")) {
-            PageProvider.get().addIgnoreActivity(activity, IgnorePolicy.IGNORE_ALL)
-        }
     }
 
     fun getEventAlphaBet(eventType: String): String {

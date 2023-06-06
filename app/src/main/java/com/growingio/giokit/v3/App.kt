@@ -6,8 +6,6 @@ import com.growingio.android.hybrid.HybridLibraryGioModule
 import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.CdpAutotrackConfiguration
 import com.growingio.android.sdk.autotrack.GrowingAutotracker
-import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
-import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
 import com.growingio.giokit.GioKit
 
 /**
