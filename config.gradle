@@ -6,7 +6,7 @@ ext {
             targetSdkVersion          : 30,
             //app版本号
             versionCode               : 10,
-            versionName               : "1.4.0",
+            versionName               : "1.4.0-SNAPSHOT",
 
             kotlin_version            : "1.7.10",
             kotlinx_coroutines_version: "1.6.2",
@@ -16,7 +16,7 @@ ext {
             okhttp_v4                 : "4.7.0",
 
             growingio                 : "3.5.0",
-            growingio_v2              : "2.9.17",
+            growingio_v2              : "2.9.18",
     ]
 
     growingio = [
