@@ -3,7 +3,7 @@ ext {
             compileSdkVersion         : 32,
             applicationId             : "com.growingio.giokit",
             minSdkVersion             : 17,
-            targetSdkVersion          : 30,
+            targetSdkVersion          : 32,
             //app版本号
             versionCode               : 14,
             versionName               : "1.4.0",
@@ -11,7 +11,7 @@ ext {
             kotlin_version            : "1.7.10",
             kotlinx_coroutines_version: "1.6.2",
             gradle_plugin_version     : "4.2.2",
-            giokit_plugin_version     : "7.2.2",
+            giokit_plugin_version     : "7.4.2",
             okhttp_v3                 : "3.14.7",
             okhttp_v4                 : "4.7.0",
 

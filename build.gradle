@@ -3,7 +3,7 @@ buildscript {
     apply from: "config.gradle"
     ext {
         kotlin_version = "1.7.10"
-        agp_version = System.getenv('AGP_VERSION') ?: "7.3.0"
+        agp_version = System.getenv('AGP_VERSION') ?: "7.4.2"
     }
 }
 
