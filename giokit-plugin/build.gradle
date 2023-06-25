@@ -1,8 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        kotlin_version = "1.6.21"
-        agp_version = System.getenv('AGP_VERSION') ?: "7.2.1"
+        kotlin_version = "1.7.10"
+        agp_version = System.getenv('AGP_VERSION') ?: "7.4.2"
     }
 }
 
@@ -28,7 +28,7 @@ gradlePlugin{
 }
 
 dependencies{
-    implementation "com.growingio.android:growingio-plugin-library:3.4.6"
+    implementation "com.growingio.android:growingio-plugin-library:3.5.0"
     implementation gradleApi()
     compileOnly "com.android.tools.build:gradle:$agp_version"
     compileOnly "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
