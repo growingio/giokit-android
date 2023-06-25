@@ -84,6 +84,7 @@ object SdkV3InfoUtils {
             val scale = getImpressionScale()
             if (scale >= 0F) list.tryAdd { SdkInfo("曝光比例", scale.toString()) }
             list.tryAdd { SdkInfo("数据加密", getEncryptEnabled()) }
+            list.tryAdd { SdkInfo("Imei开关", ConfigurationProvider.core().isDebugEnabled.toString()) }
 
             list.tryAdd { SdkInfo("登录账户", getLoginUser()) }
             list.tryAdd { SdkInfo("位置信息", getLocation()) }
@@ -115,7 +116,11 @@ object SdkV3InfoUtils {
     private fun getLoginUser(): String {
         if (hasClass("com.growingio.android.sdk.track.providers.UserInfoProvider")) {
             val userId = UserInfoProvider.get().loginUserId
-            return if (userId.isNullOrEmpty()) "未配置" else userId
+            val userKey = UserInfoProvider.get().loginUserKey
+            var userInfo = "未配置"
+            if (!userId.isNullOrEmpty()) userInfo = userId
+            if (!userKey.isNullOrEmpty()) userInfo = "$userInfo-$userId"
+            return userInfo
         }
         return "未配置"
     }

@@ -1,8 +1,10 @@
 package com.growingio.giokit.utils
 
 import com.growingio.android.sdk.TrackerContext
+import com.growingio.android.sdk.track.middleware.EventFlutter
 import com.growingio.android.sdk.track.middleware.OaidHelper
 import com.growingio.android.sdk.track.middleware.advert.Activate
+import com.growingio.android.sdk.track.middleware.apm.EventApm
 import com.growingio.android.sdk.track.middleware.format.EventFormatData
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
 import com.growingio.android.sdk.track.middleware.hybrid.HybridBridge
@@ -81,22 +83,13 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
     override fun getDataSourceID(index: Int): CheckItem {
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.autotrack.CdpAutotrackConfig")) {
-                val dataSourceId = ConfigurationProvider.core().dataSourceId
-                return CheckItem(
-                    index,
-                    "正在获取数据源ID",
-                    "Datasource ID",
-                    dataSourceId ?: "未配置",
-                    dataSourceId == null
-                )
-            }
+            val dataSourceId = ConfigurationProvider.core().dataSourceId
             return CheckItem(
                 index,
                 "正在获取数据源ID",
                 "Datasource ID",
-                "非Cdp无需配置",
-                false
+                dataSourceId ?: "未配置",
+                dataSourceId == null
             )
         }
         return CheckItem(
@@ -169,20 +162,47 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     override fun getSdkModules(index: Int): CheckItem {
         val modules = arrayListOf<String>()
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.TrackerContext")) {
-            // oaid模块
-            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.OaidHelper")) {
-                with(TrackerContext.get().registry.getModelLoader(OaidHelper::class.java)) {
-                    if (this != null) modules.add("oaid")
+            // advert
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.advert.Activate")) {
+                with(TrackerContext.get().registry.getModelLoader(Activate::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.android.advert.AdvertActivateDataLoader") {
+                        modules.add("广告")
+                    }
                 }
-
             }
 
+            // apm
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.apm.EventApm")) {
+                with(TrackerContext.get().registry.getModelLoader(EventApm::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.android.apm.ApmLibraryGioModule") {
+                        modules.add("APM")
+                    }
+                }
+            }
+
+            // encoder
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.http.EventEncoder")) {
+                with(TrackerContext.get().registry.getModelLoader(EventEncoder::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.android.encoder.EncoderDataLoader") {
+                        modules.add("加密")
+                    }
+                }
+            }
 
             // protobuf 模块
             if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.format.EventFormatData")) {
                 with(TrackerContext.get().registry.getModelLoader(EventFormatData::class.java)) {
                     if (this != null && this.javaClass.name == "com.growingio.protobuf.ProtobufDataLoader") {
                         modules.add("protobuf")
+                    }
+                }
+            }
+
+            // flutter 模块
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.EventFlutter")) {
+                with(TrackerContext.get().registry.getModelLoader(EventFlutter::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.flutter.FlutterDataLoader") {
+                        modules.add("flutter")
                     }
                 }
             }
@@ -196,13 +216,12 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
                 }
             }
 
-            // encoder
-            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.http.EventEncoder")) {
-                with(TrackerContext.get().registry.getModelLoader(EventEncoder::class.java)) {
-                    if (this != null && this.javaClass.name == "com.growingio.android.encoder.EncoderDataLoader") {
-                        modules.add("加密")
-                    }
+            // oaid模块
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.OaidHelper")) {
+                with(TrackerContext.get().registry.getModelLoader(OaidHelper::class.java)) {
+                    if (this != null) modules.add("oaid")
                 }
+
             }
 
             // debugger
@@ -219,14 +238,6 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
                 }
             }
 
-            // advert
-            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.advert.Activate")) {
-                with(TrackerContext.get().registry.getModelLoader(Activate::class.java)) {
-                    if (this != null && this.javaClass.name == "com.growingio.android.advert.AdvertActivateDataLoader") {
-                        modules.add("广告")
-                    }
-                }
-            }
             val checkItem = CheckItem(
                 index, "正在查询集成模块", "已集成模块", modules.joinToString("，"), false
             )
