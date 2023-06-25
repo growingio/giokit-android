@@ -29,11 +29,9 @@ class InstantEventView(context: Context) : FloatViewContainer(context) {
     init {
         LayoutInflater.from(getContext()).inflate(R.layout.giokit_view_instant_event_container, this, true)
         instantEventList = findViewById(R.id.view_instant_event_list)
-        instantEventList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        instantAdapter = InstantDataAdapter(instantEventList, context)
+        instantEventList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+        instantAdapter = InstantDataAdapter(context)
         instantEventList.adapter = instantAdapter
-
-        //instantEventList.itemAnimator = null
 
         InstantEventCache.addInstantObserver(instantAdapter)
     }
@@ -71,11 +69,11 @@ class InstantEventView(context: Context) : FloatViewContainer(context) {
         InstantEventCache.removeInstantObserver(instantAdapter)
     }
 
-
-    class InstantDataAdapter internal constructor(val recyclerView: RecyclerView, val context: Context) :
+    class InstantDataAdapter internal constructor(val context: Context) :
         RecyclerView.Adapter<RecyclerView.ViewHolder>(), InstantEventCache.InstantDataObserver {
 
         private val dataList: ArrayList<InstantEventCache.InstantData> = arrayListOf()
+        private var visibleCount = 0
 
         init {
             InstantEventCache.addInstantObserver(this)
@@ -83,18 +81,26 @@ class InstantEventView(context: Context) : FloatViewContainer(context) {
 
         override fun dispatchInstantData(data: InstantEventCache.InstantData) {
             if (dataList.size >= INSTANT_DISPLAY_MAX_COUNT) {
-                dataList.removeFirst()
-                notifyItemRemoved(0)
+                notifyItemRemoved(dataList.size - 1)
+                dataList.removeLast()
+                visibleCount -= 1
             }
-            dataList.add(data)
-            notifyItemInserted(dataList.size)
+            visibleCount += 1
+            dataList.add(0, data)
+            notifyItemInserted(0)
         }
 
         override fun removeInstantData(data: InstantEventCache.InstantData) {
             if (dataList.contains(data)) {
                 val index = dataList.indexOf(data)
                 data.isVisible = false
+                visibleCount -= 1
+                //dataList.remove(data)
                 notifyItemChanged(index)
+            }
+            if (visibleCount == 0) {
+                notifyItemRangeRemoved(0, dataList.size)
+                dataList.clear()
             }
         }
 
@@ -152,7 +158,7 @@ class InstantEventView(context: Context) : FloatViewContainer(context) {
             val descTv = itemView.findViewById<TextView>(R.id.desc)
 
             fun setVisible(visible: Boolean) {
-                itemView.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+                itemView.visibility = if (visible) View.VISIBLE else View.GONE
             }
 
             fun click(context: Context, start: Long, end: Long) {
@@ -172,7 +178,7 @@ class InstantEventView(context: Context) : FloatViewContainer(context) {
             val idsTv = itemView.findViewById<TextView>(R.id.ids)
 
             fun setVisible(visible: Boolean) {
-                itemView.visibility = if (visible) View.VISIBLE else View.INVISIBLE
+                itemView.visibility = if (visible) View.VISIBLE else View.GONE
             }
 
             fun click(context: Context, start: Long, end: Long) {

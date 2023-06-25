@@ -1,6 +1,9 @@
 package com.growingio.giokit
 
+import android.app.Activity
 import android.app.Application
+import android.util.Log
+import com.growingio.android.gmonitor.GMonitorOption
 
 /**
  * <p>
@@ -16,12 +19,37 @@ public class GioKit private constructor() {
         fun with(app: Application): Builder {
             return Builder(app)
         }
+
+        @JvmStatic
+        fun attach(activity: Activity) {
+            if (!GioKitImpl.inited) {
+                Log.e(TAG, "GioKit not init")
+            }
+            GioKitImpl.gioKitHoverManager.attach(activity)
+        }
+
+        @JvmStatic
+        fun detach(activity: Activity) {
+            if (!GioKitImpl.inited) {
+                Log.e(TAG, "GioKit not init")
+            }
+            GioKitImpl.gioKitHoverManager.detach(activity)
+        }
     }
+
 
     class Builder(private val app: Application) {
 
+        private var attach = true
+
+        fun attach(attach: Boolean): Builder {
+            this.attach = attach
+            return this
+        }
+
         fun build() {
-            GioKitImpl.install(app)
+            val gioKitOption = GioKitOption(attach)
+            GioKitImpl.install(app, gioKitOption)
         }
     }
 }

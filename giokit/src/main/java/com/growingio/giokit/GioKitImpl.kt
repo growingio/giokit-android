@@ -26,7 +26,7 @@ internal object GioKitImpl {
     var inited = false
     var launchTime: Long = System.currentTimeMillis()
 
-    fun install(app: Application) {
+    fun install(app: Application, gioKitOption: GioKitOption) {
         APPLICATION = app
         launchTime = System.currentTimeMillis()
         curActivity = WeakReference(null)
@@ -36,7 +36,7 @@ internal object GioKitImpl {
 
         GioKitDatabase.initDb(app)
 
-        gioKitHoverManager = GioKitHoverManager(app)
+        gioKitHoverManager = GioKitHoverManager(app, gioKitOption)
 
         initWithGrowingIOSDK()
 

@@ -1,5 +1,6 @@
 package com.growingio.giokit;
 
+import android.app.Activity;
 import android.app.Application;
 
 /**
@@ -21,7 +22,17 @@ public class GioKit {
         Builder(Application app) {
         }
 
+        public Builder attach(boolean attach) {
+            return this;
+        }
+
         public void build() {
         }
+    }
+
+    public static void attach(Activity activity) {
+    }
+
+    public static void detach(Activity activity) {
     }
 }

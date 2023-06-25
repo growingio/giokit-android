@@ -10,7 +10,6 @@ import com.growingio.giokit.R
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_INDEX
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_TITLE
-import com.growingio.giokit.utils.SdkV3InfoUtils
 
 /**
  * <p>
@@ -23,7 +22,6 @@ class GiokitSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_giokit_base)
-        SdkV3InfoUtils.ignoreActivity(this)
         val bundle = intent.extras
         if (bundle == null) {
             finish()

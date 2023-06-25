@@ -2,7 +2,6 @@ package com.growingio.giokit.hook
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.growingio.android.sdk.track.log.Logger
 import com.growingio.giokit.launch.db.GioKitDbManager
 import com.growingio.giokit.launch.db.GioKitHttpBean
 import com.growingio.snappy.XORUtils
@@ -193,7 +192,7 @@ class GioHttpCaptureInterceptor @JvmOverloads constructor() : Interceptor {
     }
 
     fun log(message: String) {
-        Logger.d("HttpCapture", message)
+        //Log.d("HttpCapture", message)
     }
 
     internal fun Buffer.isProbablyUtf8(): Boolean {

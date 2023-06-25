@@ -8,12 +8,8 @@ import android.content.res.Resources
 import android.os.Build
 import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfig
-import com.growingio.android.sdk.autotrack.IgnorePolicy
-import com.growingio.android.sdk.autotrack.page.PageProvider
 import com.growingio.android.sdk.track.events.AutotrackEventType
 import com.growingio.android.sdk.track.events.TrackEventType
-import com.growingio.android.sdk.track.events.helper.EventExcludeFilter
-import com.growingio.android.sdk.track.events.helper.FieldIgnoreFilter
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
 import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.android.sdk.track.providers.DeviceInfoProvider
@@ -85,11 +81,10 @@ object SdkV3InfoUtils {
                     ConfigurationProvider.core().sessionInterval.toString() + "S"
                 )
             }
-            list.tryAdd { SdkInfo("事件过滤", getExcludeEvent()) }
-            list.tryAdd { SdkInfo("事件属性过滤", getIgnoreFiled()) }
             val scale = getImpressionScale()
             if (scale >= 0F) list.tryAdd { SdkInfo("曝光比例", scale.toString()) }
             list.tryAdd { SdkInfo("数据加密", getEncryptEnabled()) }
+            list.tryAdd { SdkInfo("Imei开关", ConfigurationProvider.core().isDebugEnabled.toString()) }
 
             list.tryAdd { SdkInfo("登录账户", getLoginUser()) }
             list.tryAdd { SdkInfo("位置信息", getLocation()) }
@@ -108,20 +103,6 @@ object SdkV3InfoUtils {
         return "未启用"
     }
 
-    private fun getExcludeEvent(): String {
-        val excludeEventMask = ConfigurationProvider.core().excludeEvent
-        val events = EventExcludeFilter.getEventFilterLog(excludeEventMask)
-        if (events.isNullOrEmpty()) return "未设置"
-        return events.substringAfter("[").substringBefore("]")
-    }
-
-    private fun getIgnoreFiled(): String {
-        val ignoreMask = ConfigurationProvider.core().ignoreField
-        val fields = FieldIgnoreFilter.getFieldFilterLog(ignoreMask)
-        if (fields.isNullOrEmpty()) return "未设置"
-        return fields.substringAfter("[").substringBefore("]")
-    }
-
     private fun getImpressionScale(): Float {
         if (hasClass("com.growingio.android.sdk.autotrack.AutotrackConfig")) {
             val config = ConfigurationProvider.get()
@@ -135,7 +116,11 @@ object SdkV3InfoUtils {
     private fun getLoginUser(): String {
         if (hasClass("com.growingio.android.sdk.track.providers.UserInfoProvider")) {
             val userId = UserInfoProvider.get().loginUserId
-            return if (userId.isNullOrEmpty()) "未配置" else userId
+            val userKey = UserInfoProvider.get().loginUserKey
+            var userInfo = "未配置"
+            if (!userKey.isNullOrEmpty() && !userId.isNullOrEmpty()) userInfo = "$userKey-$userId"
+            else if (!userId.isNullOrEmpty()) userInfo = userId
+            return userInfo
         }
         return "未配置"
     }
@@ -225,12 +210,6 @@ object SdkV3InfoUtils {
             }
         }
         return list
-    }
-
-    fun ignoreActivity(activity: Activity) {
-        if (hasClass("com.growingio.android.sdk.autotrack.page.PageProvider")) {
-            PageProvider.get().addIgnoreActivity(activity, IgnorePolicy.IGNORE_ALL)
-        }
     }
 
     fun getEventAlphaBet(eventType: String): String {

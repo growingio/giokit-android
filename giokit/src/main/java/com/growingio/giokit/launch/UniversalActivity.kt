@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_INDEX
-import com.growingio.giokit.utils.SdkV3InfoUtils
 import java.util.ArrayDeque
 
 /**
@@ -21,7 +20,6 @@ class UniversalActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTitle(R.string.giokit_universal_title)
-        SdkV3InfoUtils.ignoreActivity(this)
         val bundle = intent.extras
         if (bundle == null) {
             finish()

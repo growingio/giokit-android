@@ -29,7 +29,7 @@ object GioTrackInfo {
                 inject(obj as Set<String>)
             }
         } catch (ignored: ClassNotFoundException) {
-            Log.e("GioTrackInfo", "don't find GioCode", ignored)
+            Log.e("GioTrackInfo", "don't find GioCode")
         }
     }
 }
