@@ -250,6 +250,10 @@ object SdkV3InfoUtils {
                 return jsonObj.optString("domain")
             }
 
+            // view_click view_change
+            val text = jsonObj.optString("textValue")
+            if (text.isNotEmpty()) return text
+
             if (eventType == TrackEventType.APP_CLOSED) {
                 return jsonObj.optString("timestamp")
             }
