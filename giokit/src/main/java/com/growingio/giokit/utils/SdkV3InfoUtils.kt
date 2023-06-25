@@ -118,8 +118,8 @@ object SdkV3InfoUtils {
             val userId = UserInfoProvider.get().loginUserId
             val userKey = UserInfoProvider.get().loginUserKey
             var userInfo = "未配置"
-            if (!userId.isNullOrEmpty()) userInfo = userId
-            if (!userKey.isNullOrEmpty()) userInfo = "$userInfo-$userId"
+            if (!userKey.isNullOrEmpty() && !userId.isNullOrEmpty()) userInfo = "$userKey-$userId"
+            else if (!userId.isNullOrEmpty()) userInfo = userId
             return userInfo
         }
         return "未配置"
