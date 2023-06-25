@@ -7,6 +7,8 @@ plugins {
 }
 
 android {
+    compileSdk rootProject.ext.android.compileSdkVersion
+
     defaultConfig {
         applicationId "com.growingio.saas"
         minSdkVersion 21
