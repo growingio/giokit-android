@@ -5,8 +5,8 @@ ext {
             minSdkVersion             : 17,
             targetSdkVersion          : 32,
             //app版本号
-            versionCode               : 14,
-            versionName               : "1.4.0",
+            versionCode               : 20,
+            versionName               : "2.0.0",
 
             kotlin_version            : "1.7.10",
             kotlinx_coroutines_version: "1.6.2",
@@ -15,7 +15,7 @@ ext {
             okhttp_v3                 : "3.14.7",
             okhttp_v4                 : "4.7.0",
 
-            growingio                 : "3.5.0",
+            growingio                 : "4.0.0",
             growingio_v2              : "2.9.18",
     ]
 

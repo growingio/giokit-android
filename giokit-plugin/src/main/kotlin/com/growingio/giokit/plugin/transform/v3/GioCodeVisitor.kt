@@ -33,6 +33,7 @@ class GioCodeVisitor(api: Int, ncv: ClassVisitor, val context: GioTransformConte
         GioTrackHook("com.growingio.android.sdk.track.CdpTracker", "trackCustomEvent"),
         GioTrackHook("com.growingio.android.sdk.autotrack.Autotracker", "trackCustomEvent"),
         GioTrackHook("com.growingio.android.sdk.track.Tracker", "trackCustomEvent"),
+        GioTrackHook("com.growingio.android.sdk.autotrack.Autotracker", "autotrackPage"),
     )
 
     init {
