@@ -4,13 +4,14 @@ plugins {
     id 'kotlin-kapt'
 }
 android {
-    compileSdk rootProject.ext.android.compileSdkVersion
+    namespace 'com.growingio.giokit'
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        minSdkVersion libs.versions.minSdkVersion.get().toInteger()
+        targetSdkVersion libs.versions.compileSdk.get().toInteger()
+        versionCode libs.versions.giokitCode.get().toInteger()
+        versionName libs.versions.giokit.get()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"

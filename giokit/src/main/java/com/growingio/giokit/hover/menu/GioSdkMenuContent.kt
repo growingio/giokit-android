@@ -15,6 +15,7 @@ import com.growingio.giokit.instant.InstantEventCache
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.UniversalActivity
 import com.growingio.giokit.setting.GiokitSettingActivity
+import com.growingio.giokit.utils.CheckSdkStatusManager
 import io.mattcarroll.hover.Content
 import io.mattcarroll.hover.overlay.OverlayPermission
 
@@ -90,6 +91,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
     }
 
     override fun onClick(v: View) {
+        CheckSdkStatusManager.getInstance().ignoreViewClick(v)
         when (v.id) {
             R.id.sdkInfoLayout -> {
                 GioKitImpl.gioKitHoverManager.hoverView?.collapse()
@@ -98,6 +100,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKINFO_PAGE)
                 })
             }
+
             R.id.sdkCodeLayout -> {
                 GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
@@ -105,6 +108,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKCODE_PAGE)
                 })
             }
+
             R.id.sdkDataLayout -> {
                 GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
@@ -112,6 +116,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKDATA_PAGE)
                 })
             }
+
             R.id.sdkTrackLayout -> {
                 if (OverlayPermission.hasRuntimePermissionToDrawOverlay(context)) {
                     GioKitImpl.gioKitHoverManager.hoverView?.collapse()
@@ -127,6 +132,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                     context.startActivity(intent)
                 }
             }
+
             R.id.sdkInstantLayout -> {
                 if (InstantEventCache.isInstantEventMonitorEnable()) {
                     InstantEventCache.disableInstantEventMonitor()
@@ -148,6 +154,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                     context.startActivity(intent)
                 }
             }
+
             R.id.sdkHttpLayout -> {
                 GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {
@@ -163,6 +170,7 @@ class GioSdkMenuContent(context: Context) : FrameLayout(context), Content, View.
                     putExtra(LaunchPage.LAUNCH_FRAGMENT_INDEX, LaunchPage.SDKERROR_PAGE)
                 })
             }
+
             R.id.sdkPrefLayout -> {
                 GioKitImpl.gioKitHoverManager.hoverView?.collapse()
                 context.startActivity(Intent(context, UniversalActivity::class.java).apply {

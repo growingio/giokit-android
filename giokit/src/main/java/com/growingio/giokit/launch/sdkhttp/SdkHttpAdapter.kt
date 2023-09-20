@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.db.GioKitHttpBean
+import com.growingio.giokit.utils.CheckSdkStatusManager
 import com.growingio.giokit.utils.MeasureUtils
 import com.growingio.giokit.utils.MeasureUtils.getDefaultTime
 import com.growingio.giokit.utils.MeasureUtils.getHttpMessage
@@ -86,6 +87,10 @@ class SdkHttpAdapter(val httpClick: (Int) -> Unit) :
         val httpCost = itemView.findViewById<TextView>(R.id.httpCost)
         val httpMethod = itemView.findViewById<TextView>(R.id.httpMethod)
         val httpSize = itemView.findViewById<TextView>(R.id.httpSize)
+
+        init {
+            CheckSdkStatusManager.getInstance().ignoreViewClick(itemView)
+        }
 
     }
 

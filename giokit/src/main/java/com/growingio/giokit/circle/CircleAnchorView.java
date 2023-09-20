@@ -1,7 +1,6 @@
 package com.growingio.giokit.circle;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
@@ -18,11 +17,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
-import android.widget.AdapterView;
 
 import androidx.core.content.ContextCompat;
-import androidx.room.util.StringUtil;
 
+import com.growingio.android.sdk.autotrack.GrowingAutotracker;
+import com.growingio.android.sdk.autotrack.view.ViewNode;
+import com.growingio.android.sdk.autotrack.view.ViewNodeProvider;
+import com.growingio.android.sdk.track.view.DecorView;
 import com.growingio.giokit.R;
 import com.growingio.giokit.utils.DeviceUtils;
 
@@ -31,14 +32,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import io.mattcarroll.hover.HoverView;
+
 public class CircleAnchorView extends FloatViewContainer {
 
     final static String TAG = "GrowingIO.FloatView";
-    private final int MAX_OVERLAP_EDGE_DISTANCE = 10;
     static int ANCHOR_VIEW_SIZE;
     // calc the point
-    private float xInScreen;
-    private float yInScreen;
     private float xDownInScreen;
     private float yDownInScreen;
     private float xInView;
@@ -46,16 +46,12 @@ public class CircleAnchorView extends FloatViewContainer {
     private boolean mIsInTouch = false;
     private View mShowingMaskInWebView;
 
-    private Point mLastMovePoint = null;
     private CircleMagnifierView mMagnifierView;
     private CircleExitView mExitView;
     private FloatViewContainer mMaskView;
-    private Rect mHitRect;
-    private ViewNode mTopsideHitView;
-    private Rect mVisibleRectBuffer = new Rect();
-    private List<ViewNode> mHitViewNodes = new ArrayList<ViewNode>();
-    private View[] mWindowRootViews;
     private int mMinMoveDistance;
+
+    private final List<View> windowDecorViews = new ArrayList<>();
 
     public CircleAnchorView(Context context) {
         super(context);
@@ -65,10 +61,46 @@ public class CircleAnchorView extends FloatViewContainer {
     public void init() {
         ANCHOR_VIEW_SIZE = DeviceUtils.dp2Px(getContext(), 48);
         setBackgroundResource(R.drawable.giokit_circle_anchor_bg);
-        mMinMoveDistance = DeviceUtils.dp2Px(getContext(), 4);
+        mMinMoveDistance = DeviceUtils.dp2Px(getContext(), 8);
         initMaskView();
         mMagnifierView = new CircleMagnifierView(getContext());
         initExitView();
+    }
+
+    private final List<ViewNode> hitViewNodes = new ArrayList<>();
+    private ViewNode targetNode = null;
+    private final Rect visibleRectBuffer = new Rect();
+
+    private void initDecorViews() {
+        windowDecorViews.clear();
+        List<DecorView> decorViews = com.growingio.android.sdk.track.view.WindowHelper.get().getTopActivityViews();
+        for (DecorView decorView : decorViews) {
+            if (decorView.getView().getClass() == HoverView.class) {
+                continue;
+            }
+            if (decorView.getView().getClass() == CircleAnchorView.class) {
+                continue;
+            }
+            if (decorView.getView().getClass() == CircleExitView.class) {
+                continue;
+            }
+            if (decorView.getView().getClass() == CircleMagnifierView.class) {
+                continue;
+            }
+            if (decorView.getView().getClass() == FloatViewContainer.class) {
+                continue;
+            }
+            windowDecorViews.add(decorView.getView());
+        }
+
+        if (!mIsInTouch) return;
+        hitViewNodes.clear();
+        ViewNodeProvider viewNodeProvider = GrowingAutotracker.get().getContext().getProvider(ViewNodeProvider.class);
+        for (int i = 0; i < windowDecorViews.size(); i++) {
+            List<ViewNode> viewNodes = viewNodeProvider.findViewNodesWithinCircle(windowDecorViews.get(i));
+            hitViewNodes.addAll(viewNodes);
+        }
+        Collections.sort(hitViewNodes, viewNodeXPathComparator);
     }
 
     private void initExitView() {
@@ -137,6 +169,7 @@ public class CircleAnchorView extends FloatViewContainer {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean handled = false;
@@ -146,26 +179,23 @@ public class CircleAnchorView extends FloatViewContainer {
                 yInView = event.getY();
                 xDownInScreen = event.getRawX();
                 yDownInScreen = event.getRawY();
-                xInScreen = event.getRawX();
-                yInScreen = event.getRawY();
-
                 mIsInTouch = true;
-                mWindowRootViews = WindowHelper.getSortedWindowViews();
+                initDecorViews();
                 break;
             case MotionEvent.ACTION_MOVE:
+                float xInScreen = event.getRawX();
+                float yInScreen = event.getRawY();
                 if (mIsInTouch) {
-                    xInScreen = event.getRawX();
-                    yInScreen = event.getRawY();
                     if (Math.abs(xInScreen - xDownInScreen) < mMinMoveDistance
                             && Math.abs(yInScreen - yDownInScreen) < mMinMoveDistance) {
                         break;
                     }
-                    updateViewPosition();
+                    updateViewPosition(xInScreen, yInScreen);
+
                     Rect rect = new Rect();
                     getGlobalVisibleRect(rect);
                     if (!rect.contains((int) xDownInScreen, (int) yDownInScreen)) {
-                        mLastMovePoint = new Point((int) xInScreen, (int) yInScreen);
-                        findTopsideHitView();
+                        findNodeViewWithMove((int) xInScreen, (int) yInScreen);
                     } else {
                         mMagnifierView.setVisibility(GONE);
                     }
@@ -175,38 +205,9 @@ public class CircleAnchorView extends FloatViewContainer {
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
-
                 mIsInTouch = false;
-                mMaskView.setVisibility(GONE);
-                mMagnifierView.setVisibility(GONE);
-                mMaskView.getLayoutParams().width = 0;
-                hideMaskInWebView();
-
-                if (mHitRect != null) {
-                    mHitViewNodes.clear();
-                    reverseArray(mWindowRootViews);
-                    ViewHelper.traverseWindows(mWindowRootViews, mTraverseMask);
-                    if (mHitViewNodes.size() > 0) {
-                        View first = mHitViewNodes.get(0).mView;
-                        if (first instanceof WebView) {
-                            findElementAt(first);
-                        } else {
-                            Collections.sort(mHitViewNodes, mViewNodeComparator);
-                            setCircleInfo(mHitViewNodes);
-
-                            //showEventDetailDialog("elem", mHitViewNodes);
-                        }
-                    }
-                    mHitRect = null;
-                    handled = true;
-                } else {
-                    if (Math.abs(xInScreen - xDownInScreen) < mMinMoveDistance
-                            && Math.abs(yInScreen - yDownInScreen) < mMinMoveDistance) {
-                        performClick();
-                    }
-                }
-                mWindowRootViews = null;
-
+                findNodeViewWithUp((int) event.getRawX(), (int) event.getRawY());
+                handled = true;
                 break;
             default:
                 break;
@@ -214,53 +215,36 @@ public class CircleAnchorView extends FloatViewContainer {
         return handled;
     }
 
-    public void setCircleInfo(List<ViewNode> nodes) {
+    public void setCircleInfo(ViewNode node) {
+        setCircleInfo(node, null);
+    }
+
+    public void setCircleInfo(ViewNode node, String url) {
         SpannableStringBuilder ssb = new SpannableStringBuilder();
         int start = 0;
-        if (nodes.size() > 0) {
-            ViewNode node = nodes.get(0);
-            try {
-                ssb.append("当前：").append(node.mViewName).append("\n");
-                ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                start = ssb.length();
-                ssb.append("内容：").append(node.mViewContent == null ? "未定义" : node.mViewContent.length() > 200 ? node.mViewContent.substring(0, 200)+"..." : node.mViewContent).append("\n");
-                ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                start = ssb.length();
-                if (node.mHasListParent) {
-                    ssb.append("列表：").append(node.mHasListParent ? "是" : "否").append("\n");
-                    ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    start = ssb.length();
-                    ssb.append("位置：").append(String.valueOf(node.mViewPosition)).append("\n");
-                    ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    start = ssb.length();
-                }
-                if (node.mIsWeb && node.mOriginalParentXpath.length() > 0) {
-                    ssb.append("path：").append(node.mOriginalParentXpath.toString()).append("\n");
-                    ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    start = ssb.length();
-                }
-                ssb.append("xpath：").append(node.mParentXPath.toString()).append("\n");
-                ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            } catch (Exception e) {
-
-            }
+        ssb.append("当前：").append(url == null ? node.getView().getClass().getSimpleName() : url).append("\n");
+        ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        start = ssb.length();
+        ssb.append("内容：").append(TextUtils.isEmpty(node.getViewContent()) ? "未定义" : node.getViewContent().length() > 120 ? node.getViewContent().substring(0, 120) + "..." : node.getViewContent()).append("\n");
+        ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        start = ssb.length();
+        if (node.getViewPosition() != -1) {
+            ssb.append("列表序号：").append(String.valueOf(node.getViewPosition())).append("\n");
+            ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            start = ssb.length();
+        }
+        ssb.append("路径：").append(node.getXPath()).append("\n");
+        ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        start = ssb.length();
+        if (node.getXIndex() != null) {
+            ssb.append("位置：").append(node.getXIndex()).append("\n");
+            ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         post(() -> mExitView.setNodeInfo(ssb));
     }
 
-    private void reverseArray(Object[] array) {
-        if (array == null || array.length <= 1) {
-            return;
-        }
-        for (int i = 0; i < array.length / 2; i++) {
-            Object temp = array[i];
-            array[i] = array[array.length - i - 1];
-            array[array.length - i - 1] = temp;
-        }
-    }
-
     // update this view position
-    private void updateViewPosition() {
+    private void updateViewPosition(float xInScreen, float yInScreen) {
         WindowManager.LayoutParams params = (WindowManager.LayoutParams) this.getLayoutParams();
         int x = (int) (xInScreen - xInView);
         int y = (int) (yInScreen - yInView);
@@ -280,33 +264,6 @@ public class CircleAnchorView extends FloatViewContainer {
         FloatWindowManager.getInstance().updateViewLayout(this, params);
     }
 
-    private Comparator<ViewNode> mViewNodeComparator = (lhs, rhs) -> {
-        int l = lhs.mView instanceof AdapterView ? -1 : 1;
-        int r = rhs.mView instanceof AdapterView ? -1 : 1;
-        return r - l;
-    };
-
-    // the first traverse, used to get the topside view
-    private ViewTraveler mTraverseHover = new ViewTraveler() {
-        @Override
-        public boolean needTraverse(ViewNode viewNode) {
-            if (ViewHelper.isViewSelfVisible(viewNode.mView)) {
-                getVisibleRectOnScreen(viewNode.mView, mVisibleRectBuffer, viewNode.mFullScreen, null);
-                return mVisibleRectBuffer.contains(mLastMovePoint.x, mLastMovePoint.y);
-            }
-            return false;
-        }
-
-        @Override
-        public void traverseCallBack(ViewNode viewNode) {
-            boolean isClickable = ClassExistHelper.isViewClickable(viewNode.mView);
-            if (!isClickable && (viewNode.mInClickableGroup || TextUtils.isEmpty(viewNode.mViewContent))) {
-                return;
-            }
-            mHitViewNodes.add(0, viewNode);
-        }
-    };
-
     public static void getVisibleRectOnScreen(View view, Rect rect, boolean ignoreOffset, int[] screenLocation) {
         if (ignoreOffset) {
             view.getGlobalVisibleRect(rect);
@@ -320,84 +277,97 @@ public class CircleAnchorView extends FloatViewContainer {
         }
     }
 
-    // the second traverse, used to get all views under the topside
-    private ViewTraveler mTraverseMask = new ViewTraveler() {
-
-        @Override
-        public void traverseCallBack(ViewNode viewNode) {
-            boolean isClickable = ClassExistHelper.isViewClickable(viewNode.mView);
-            if (!isClickable && (viewNode.mInClickableGroup || TextUtils.isEmpty(viewNode.mViewContent))) {
-                return;
-            }
-            getVisibleRectOnScreen(viewNode.mView, mVisibleRectBuffer, viewNode.mFullScreen, null);
-            if (isFuzzyContainRect(mHitRect, mVisibleRectBuffer)) {
-                mHitViewNodes.add(0, viewNode);
-            }
+    private void findNodeViewWithMove(int x, int y) {
+        if (hitViewNodes.isEmpty()) return;
+        targetNode = null;
+        for (ViewNode viewNode : hitViewNodes) {
+            getVisibleRectOnScreen(viewNode.getView(), visibleRectBuffer, true, null);
+            boolean pointerInRect = visibleRectBuffer.contains(x, y);
+            if (!pointerInRect) continue;
+            targetNode = viewNode;
+            break;
         }
-    };
-
-    private boolean isFuzzyContainRect(Rect parent, Rect child) {
-        return parent.contains(child) && parent.width() - child.width() < MAX_OVERLAP_EDGE_DISTANCE
-                && parent.height() - child.height() < MAX_OVERLAP_EDGE_DISTANCE;
-    }
-
-    private void findTopsideHitView() {
-        mTopsideHitView = null;
-        mHitRect = null;
-        mHitViewNodes.clear();
-        ViewHelper.traverseWindows(mWindowRootViews, mTraverseHover);
-        updateMaskViewPosition();
-    }
-
-    private void updateMaskViewPosition() {
-        if (mHitViewNodes.size() > 0) {
-            mTopsideHitView = mHitViewNodes.get(0);
-            mHitRect = new Rect();
-            getVisibleRectOnScreen(mTopsideHitView.mView, mHitRect, mTopsideHitView.mFullScreen, null);
-            if (mTopsideHitView.mView instanceof WebView) {
-                mMaskView.setVisibility(GONE);
-                mMagnifierView.setVisibility(GONE);
-                int[] loc = new int[2];
-                mTopsideHitView.mView.getLocationOnScreen(loc);
-                hoverOn(mTopsideHitView.mView, xInScreen - loc[0], yInScreen - loc[1]);
-                mShowingMaskInWebView = mTopsideHitView.mView;
+        if (targetNode != null) {
+            if (targetNode.getView() instanceof WebView) {
+                callWebViewHoverOn(targetNode, x, y);
             } else {
-                WindowManager.LayoutParams params = (WindowManager.LayoutParams) mMaskView.getLayoutParams();
-                mMaskView.setVisibility(VISIBLE);
-                if (mHitRect.left != params.x
-                        || mHitRect.top != params.y
-                        || mHitRect.width() != params.width
-                        || mHitRect.height() != params.height) {
-                    params.width = mHitRect.width();
-                    params.height = mHitRect.height();
-                    params.x = mHitRect.left;
-                    params.y = mHitRect.top;
-
-                    FloatWindowManager.getInstance().removeView(mMaskView);
-                    FloatWindowManager.getInstance().addView(mMaskView, params);
-                }
-                mMagnifierView.showIfNeed(mHitRect, (int) (xInScreen - xInView + ANCHOR_VIEW_SIZE / 2), (int) (yInScreen - yInView + ANCHOR_VIEW_SIZE / 2));
+                showMaskView(targetNode, x, y);
             }
         } else {
-            mMaskView.setVisibility(GONE);
-            mMaskView.getLayoutParams().width = 0;
-            mMagnifierView.setVisibility(GONE);
-            hideMaskInWebView();
+            disableMaskView();
         }
     }
 
+    private void findNodeViewWithUp(int x, int y) {
+        if (targetNode == null) {
+            disableMaskView();
+            return;
+        }
+        if (targetNode.getView() instanceof WebView) {
+            findElementAt(targetNode.getView());
+        } else {
+            showMaskView(targetNode, x, y);
+            setCircleInfo(targetNode);
+        }
+    }
+
+
+    private void callWebViewHoverOn(ViewNode viewNode, int x, int y) {
+        mMaskView.setVisibility(GONE);
+        mMagnifierView.setVisibility(GONE);
+        int[] loc = new int[2];
+        viewNode.getView().getLocationOnScreen(loc);
+        hoverOn(viewNode.getView(), x - loc[0], y - loc[1]);
+        mShowingMaskInWebView = viewNode.getView();
+    }
+
+    private void showMaskView(ViewNode viewNode, int xInScreen, int yInScreen) {
+        Rect viewRect = new Rect();
+        getVisibleRectOnScreen(viewNode.getView(), viewRect, true, null);
+
+        WindowManager.LayoutParams params = (WindowManager.LayoutParams) mMaskView.getLayoutParams();
+        mMaskView.setVisibility(VISIBLE);
+        if (viewRect.left != params.x
+                || viewRect.top != params.y
+                || viewRect.width() != params.width
+                || viewRect.height() != params.height) {
+            params.width = viewRect.width();
+            params.height = viewRect.height();
+            params.x = viewRect.left;
+            params.y = viewRect.top;
+
+            FloatWindowManager.getInstance().removeView(mMaskView);
+            FloatWindowManager.getInstance().addView(mMaskView, params);
+        }
+        mMagnifierView.showIfNeed(viewRect, (int) (xInScreen - xInView + ANCHOR_VIEW_SIZE / 2), (int) (yInScreen - yInView + ANCHOR_VIEW_SIZE / 2));
+    }
+
+    private void disableMaskView() {
+        mMaskView.setVisibility(GONE);
+        mMaskView.getLayoutParams().width = 0;
+        mMagnifierView.setVisibility(GONE);
+        hideMaskInWebView();
+    }
+
+    private final Comparator<ViewNode> viewNodeXPathComparator = (lhs, rhs) -> {
+        int l = lhs.getXPath().length();
+        int r = rhs.getXPath().length();
+        return r - l;
+    };
+
     public void hoverOn(View webView, float x, float y) {
-        ViewHelper.callJavaScript(webView, "_gio_hybrid.hoverOn", x, y);
+        ViewHelper.callJavaScript(webView, "GiokitTouchJavascriptBridge.hoverOn", webView.getWidth(), x, y);
+        mShowingMaskInWebView = webView;
     }
 
     public void findElementAt(View webView) {
-        ViewHelper.callJavaScript(webView, "_gio_hybrid.findElementAtPoint");
+        ViewHelper.callJavaScript(webView, "GiokitTouchJavascriptBridge.highLightElementAtPoint");
         mShowingMaskInWebView = webView;
     }
 
     public void hideMaskInWebView() {
         if (mShowingMaskInWebView != null) {
-            ViewHelper.callJavaScript(mShowingMaskInWebView, "_gio_hybrid.cancelHover");
+            ViewHelper.callJavaScript(mShowingMaskInWebView, "GiokitTouchJavascriptBridge.cancelHover");
             mShowingMaskInWebView = null;
         }
     }
@@ -409,6 +379,7 @@ public class CircleAnchorView extends FloatViewContainer {
         if (mMagnifierView != null) {
             mMagnifierView.remove();
         }
+        hideMaskInWebView();
     }
 
     public boolean isMoving() {

@@ -58,6 +58,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
     }

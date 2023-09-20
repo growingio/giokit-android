@@ -28,27 +28,16 @@ class SdkHttpHeaderAdapter(val searchListener: SdkSearchView.OnSearchListener) :
 
 
     override fun onBindViewHolder(holder: DataHeaderViewHolder, position: Int) {
-        if (GioPluginConfig.isSaasSdk) {
-            holder.searchView.setEventData(
-                arrayListOf(
-                    "page", "vst",
-                    "cstm","clck",
-                    "imp", "chng",
-                    "reengage", "activate"
-                )
+        holder.searchView.setEventData(
+            arrayListOf(
+                "PAGE", "CUSTOM",
+                "VISIT", "VIEW_CLICK",
+                "APP_CLOSED", "VIEW_CHANGE",
+                "FORM_SUBMIT", "PAGE_ATTRIBUTES",
+                "CONVERSION_VARIABLES", "LOGIN_USER_ATTRIBUTES",
+                "VISITOR_ATTRIBUTES"
             )
-        } else {
-            holder.searchView.setEventData(
-                arrayListOf(
-                    "PAGE", "CUSTOM",
-                    "VISIT", "VIEW_CLICK",
-                    "APP_CLOSED", "VIEW_CHANGE",
-                    "FORM_SUBMIT", "PAGE_ATTRIBUTES",
-                    "CONVERSION_VARIABLES", "LOGIN_USER_ATTRIBUTES",
-                    "VISITOR_ATTRIBUTES"
-                )
-            )
-        }
+        )
     }
 
 

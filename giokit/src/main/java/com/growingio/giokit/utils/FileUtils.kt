@@ -75,3 +75,10 @@ fun Context.cleanOutDatedFile(time: Long) {
         }
     }
 }
+
+fun String.limitLength(length: Int): String {
+    if (this.length > length) {
+        return this.substring(0, length) + "..."
+    }
+    return this
+}

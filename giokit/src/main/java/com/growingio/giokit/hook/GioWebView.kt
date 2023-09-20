@@ -5,14 +5,19 @@ import android.content.Context
 import android.os.Build
 import android.os.Message
 import android.util.Log
+import android.view.View
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import com.growingio.android.sdk.autotrack.AutotrackConfig
+import com.growingio.android.sdk.autotrack.GrowingAutotracker
+import com.growingio.android.sdk.autotrack.view.ViewNode
 import com.growingio.giokit.GioKitImpl
-import com.growingio.giokit.circle.ViewNode
-import com.growingio.giokit.circle.ViewNode.getWebNodesFromEvent
+import com.growingio.giokit.utils.limitLength
 import org.json.JSONObject
 import java.lang.ref.WeakReference
-import androidx.webkit.WebViewCompat
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.Charset
 
 /**
  * <p>
@@ -24,13 +29,15 @@ object GioWebView {
     private const val MIN_PROGRESS_FOR_HOOK = 60
     private const val HOOK_CIRCLE_DELAY = 500L
 
+    private var currentUrl: String? = null
+
     /*************************** Webview inject ****************************/
     @SuppressLint("SetJavaScriptEnabled")
     @JvmStatic
     fun addCircleJsToWebView(webView: WebView, progress: Int) {
         val oldView = GioKitImpl.webView.get()
         if (oldView == null || oldView != webView) {
-            webView.addJavascriptInterface(GioWebView.VdsBridge(), "_gio_bridge")
+            webView.addJavascriptInterface(GioWebView.VdsBridge(), "GiokitTouchJavascriptBridge")
             GioKitImpl.webView = WeakReference(webView)
         }
         if (progress >= MIN_PROGRESS_FOR_HOOK) {
@@ -38,15 +45,16 @@ object GioWebView {
             val message = Message.obtain(webView.handler) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     webView.evaluateJavascript(
-                        GioWebView.getAssets(webView.context, "gio_hybrid.min.js"),
+                        GioWebView.getAssets(webView.context, "giokit_touch.js"),
                         null
                     )
                 } else {
-                    webView.loadUrl(GioWebView.getAssets(webView.context, "gio_hybrid.min.js"))
+                    webView.loadUrl(GioWebView.getAssets(webView.context, "giokit_touch.js"))
                 }
             }
             message.what = 0
             webView.handler?.sendMessageDelayed(message, HOOK_CIRCLE_DELAY)
+            currentUrl = getWebUrl()
         }
     }
 
@@ -55,7 +63,7 @@ object GioWebView {
     fun addCircleJsToX5(webView: com.tencent.smtt.sdk.WebView, progress: Int) {
         val oldView = GioKitImpl.webView.get()
         if (oldView == null || oldView != webView) {
-            webView.addJavascriptInterface(VdsBridge(), "_gio_bridge")
+            webView.addJavascriptInterface(VdsBridge(), "GiokitTouchJavascriptBridge")
             GioKitImpl.webView = WeakReference(webView)
         }
         if (progress >= MIN_PROGRESS_FOR_HOOK) {
@@ -63,15 +71,16 @@ object GioWebView {
             val message = Message.obtain(webView.handler) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     webView.evaluateJavascript(
-                        getAssets(webView.context, "gio_hybrid.min.js"),
+                        getAssets(webView.context, "giokit_touch.js"),
                         null
                     )
                 } else {
-                    webView.loadUrl(getAssets(webView.context, "gio_hybrid.min.js"))
+                    webView.loadUrl(getAssets(webView.context, "giokit_touch.js"))
                 }
             }
             message.what = 0
             webView.handler?.sendMessageDelayed(message, HOOK_CIRCLE_DELAY)
+            currentUrl = getWebUrl()
         }
     }
 
@@ -80,7 +89,7 @@ object GioWebView {
     fun addCircleJsToUc(webView: com.uc.webview.export.WebView, progress: Int) {
         val oldView = GioKitImpl.webView.get()
         if (oldView == null || oldView != webView) {
-            webView.addJavascriptInterface(VdsBridge(), "_gio_bridge")
+            webView.addJavascriptInterface(VdsBridge(), "GiokitTouchJavascriptBridge")
             GioKitImpl.webView = WeakReference(webView)
         }
         if (progress >= MIN_PROGRESS_FOR_HOOK) {
@@ -88,16 +97,25 @@ object GioWebView {
             val message = Message.obtain(webView.handler) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     webView.evaluateJavascript(
-                        getAssets(webView.context, "gio_hybrid.min.js"),
+                        getAssets(webView.context, "giokit_touch.js"),
                         null
                     )
                 } else {
-                    webView.loadUrl(getAssets(webView.context, "gio_hybrid.min.js"))
+                    webView.loadUrl(getAssets(webView.context, "giokit_touch.js"))
                 }
             }
             message.what = 0
             webView.handler?.sendMessageDelayed(message, HOOK_CIRCLE_DELAY)
+            currentUrl = getWebUrl()
         }
+    }
+
+    fun getWebUrl(): String? {
+        val webView = GioKitImpl.webView.get() ?: return null
+        if (webView is WebView) return webView.url
+        if (webView is com.tencent.smtt.sdk.WebView) return webView.url
+        if (webView is com.uc.webview.export.WebView) return webView.url
+        return null
     }
 
 
@@ -125,16 +143,43 @@ object GioWebView {
     }
 
     open class VdsBridge {
+        @com.uc.webview.export.JavascriptInterface
         @JavascriptInterface
-        open fun hoverNodes(message: String?) {
+        open fun hoverNodes(message: String) {
             Log.d("hoverNodes", message ?: "")
             try {
-                val `object` = JSONObject(message ?: "{}")
-                val type = `object`.getString("t")
-                if (type == "snap") {
-                    val nodes: List<ViewNode> = getWebNodesFromEvent(`object`)
-                    GioKitImpl.gioKitHoverManager.anchorView?.setCircleInfo(nodes)
+                val nodeJson = JSONObject(message)
+                val autotrackConfig =
+                    GrowingAutotracker.get().context.configurationProvider.getConfiguration<AutotrackConfig>(
+                        AutotrackConfig::class.java
+                    )
+                val isV3 = autotrackConfig.isDowngrade
+                val node: ViewNode = object : ViewNode {
+                    override fun getView(): View? {
+                        return GioKitImpl.webView.get()
+                    }
+
+                    override fun getXPath(): String {
+                        return if (isV3) {
+                            nodeJson.optString("xpath")
+                        } else {
+                            nodeJson.optString("skeleton")
+                        }
+                    }
+
+                    override fun getViewContent(): String {
+                        return nodeJson.optString("content")
+                    }
+
+                    override fun getViewPosition(): Int {
+                        return nodeJson.optInt("index", -1)
+                    }
+
+                    override fun getXIndex(): String? {
+                        return if (isV3) null else nodeJson.optString("xcontent")
+                    }
                 }
+                GioKitImpl.gioKitHoverManager.anchorView?.setCircleInfo(node, URLDecoder.decode(currentUrl, "UTF-8").limitLength(50))
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -4,9 +4,9 @@ import android.app.Application
 import com.growingio.android.encoder.EncoderLibraryGioModule
 import com.growingio.android.hybrid.HybridLibraryGioModule
 import com.growingio.android.sdk.TrackerContext
-import com.growingio.android.sdk.autotrack.CdpAutotrackConfiguration
+import com.growingio.android.sdk.autotrack.AutotrackConfiguration
 import com.growingio.android.sdk.autotrack.GrowingAutotracker
-import com.growingio.giokit.GioKit
+import com.growingio.giokit.hook.GioPluginConfig
 
 /**
  * <p>
@@ -20,7 +20,12 @@ class App : Application() {
 
         initGioSdk()
 
-        GioKit.with(this).build()
+        //GioKit.with(this).attach(true).build()
+
+        val map = hashMapOf<String, Any>()
+        map["attach"] = true
+        map["xmlScheme"] = "growingio.1234567678"
+        GioPluginConfig.inject(this, map)
     }
 
     fun onTest() {
@@ -29,7 +34,7 @@ class App : Application() {
     }
 
     fun initGioSdk() {
-        val config = CdpAutotrackConfiguration("91eaf9b283361032", "growing.8226cee4b794ebd0")
+        val config = AutotrackConfiguration("91eaf9b283361032", "growing.8226cee4b794ebd0")
             .setDataSourceId("951f87ed30c9d9a3")
             .setDebugEnabled(true)
             .setDataCollectionServerHost("http://117.50.105.254:8080")

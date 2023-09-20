@@ -17,7 +17,6 @@ class SdkCommonSettingFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
-        preferenceManager
         setPreferencesFromResource(R.xml.common_setting_pref, rootKey)
 
         val clearEventPref: Preference? = findPreference("giokit_event_clear")

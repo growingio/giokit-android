@@ -22,7 +22,7 @@ class SdkDataSearchSource(val event: String) : PagingSource<Int, GioKitEventBean
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GioKitEventBean> {
         val page = params.key ?: 0
         val start = params.loadSize * page
-        val searchEvent = if (GioPluginConfig.isSaasSdk) event.lowercase() else event.uppercase()
+        val searchEvent = event.uppercase()
         return try {
             val dataList = arrayListOf<GioKitEventBean>()
             if (start == 0) {

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.db.GioKitEventBean
+import com.growingio.giokit.utils.CheckSdkStatusManager
 import com.growingio.giokit.utils.MeasureUtils.getCurrentTime
 
 /**
@@ -73,6 +74,7 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
                     )
                     "未发送"
                 }
+
                 -1 -> {
                     holder.statusTv.setTextColor(
                         ContextCompat.getColor(
@@ -82,6 +84,7 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
                     )
                     "过期"
                 }
+
                 else -> {
                     holder.statusTv.setTextColor(
                         ContextCompat.getColor(
@@ -126,6 +129,10 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
         val statusTv = itemView.findViewById<TextView>(R.id.statusTv)
         val timeTv = itemView.findViewById<TextView>(R.id.timeTv)
         val pathTv = itemView.findViewById<TextView>(R.id.pathTv)
+
+        init {
+            CheckSdkStatusManager.getInstance().ignoreViewClick(itemView)
+        }
 
     }
 

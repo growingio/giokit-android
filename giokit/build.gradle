@@ -5,13 +5,14 @@ plugins {
 }
 
 android {
-    compileSdk rootProject.ext.android.compileSdkVersion
+    namespace 'com.growingio.giokit'
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        minSdkVersion libs.versions.minSdkVersion.get().toInteger()
+        targetSdkVersion libs.versions.compileSdk.get().toInteger()
+        versionCode libs.versions.giokitCode.get().toInteger()
+        versionName libs.versions.giokit.get()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -34,41 +35,33 @@ android {
 
 dependencies {
 
-    implementation rootProject.ext.dependencies["kotlin-stdlib"]
-    implementation rootProject.ext.dependencies["core-ktx"]
-    implementation rootProject.ext.dependencies["appcompat"]
-    implementation rootProject.ext.dependencies["material"]
-    implementation rootProject.ext.dependencies["constraintLayout"]
-    implementation rootProject.ext.dependencies["paging3"]
-    implementation rootProject.ext.dependencies["swiperefreshlayout"]
-    implementation rootProject.ext.dependencies["preference"]
+    implementation libs.kotlin.stdlib
 
-    implementation rootProject.ext.dependencies["coroutines-core"]
-    implementation rootProject.ext.dependencies["coroutines-android"]
+    implementation libs.google.material
+    implementation libs.bundles.androidx
+    implementation libs.kotlin.coroutines.core
+    implementation libs.kotlin.coroutines.android
 
-    implementation rootProject.ext.dependencies["room-runtime"]
-    implementation rootProject.ext.dependencies["room-ktx"]
-    implementation rootProject.ext.dependencies["webkit"]
+    implementation libs.room.ktx
+    implementation libs.room.runtime
 
-    implementation rootProject.ext.growingio["gmonitor"]
+    implementation libs.growingio.gmonitor
 
-    kapt rootProject.ext.dependencies["room-compiler"]
+    kapt libs.room.compiler
 
     compileOnly fileTree(include: ['*.jar'], dir: '../thirdLibs')
-    compileOnly rootProject.ext.growingio["autotracker-cdp"]
-    compileOnly rootProject.ext.growingio["tracker-cdp"]
-    compileOnly rootProject.ext.growingio["autotrack-saas"]
-    compileOnly rootProject.ext.growingio["track-saas-cdp"]
-    compileOnly rootProject.ext.dependencies["appcompat-v7"]
-    compileOnly rootProject.ext.dependencies["recyclerview-v7"]
-    compileOnly rootProject.ext.dependencies["volley"]
+    compileOnly libs.growingio.autotracker
+    compileOnly libs.growingio.tracker
+
+    compileOnly libs.bundles.android.support
+    compileOnly libs.google.volley
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':uikit')
 
-    testImplementation rootProject.ext.dependencies["junit"]
-    androidTestImplementation rootProject.ext.dependencies["androidx-junit"]
-    androidTestImplementation rootProject.ext.dependencies["espresso-core"]
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.junit
+    androidTestImplementation libs.espresso.core
 }
 
 apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"

@@ -10,18 +10,15 @@ import com.growingio.android.sdk.autotrack.GrowingAutotracker
 class SecondActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_second)
 
         val tv = findViewById<TextView>(R.id.track)
         tv.text = "custom track"
-        tv.setOnClickListener {
+
+        val btn = findViewById<Button>(R.id.custom)
+        btn.setOnClickListener {
             GrowingAutotracker.get().trackCustomEvent("custom")
-            startActivity(Intent(this, MainActivity::class.java))
         }
-
-        val webBtn = findViewById<Button>(R.id.web)
-        webBtn.setOnClickListener { startActivity(Intent(this, WebCircleHybridActivity::class.java)) }
-
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -29,8 +26,6 @@ class SecondActivity : AppCompatActivity() {
     }
 
     fun justislongmethod() {
-        GrowingAutotracker.get().trackCustomEvent("longmethod")
-        GrowingAutotracker.get().trackCustomEvent("longmethod")
         GrowingAutotracker.get().trackCustomEvent("longmethod")
     }
 }

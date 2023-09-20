@@ -1,32 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    apply from: "config.gradle"
-    ext {
-        kotlin_version = "1.7.10"
-        agp_version = System.getenv('AGP_VERSION') ?: "7.4.2"
-    }
-}
-
 plugins {
-    id 'com.android.application' version "$agp_version" apply false
-    id 'com.android.library' version "$agp_version" apply false
-    id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
-    id 'org.jetbrains.kotlin.jvm' version "$kotlin_version" apply false
+    alias libs.plugins.android.application apply false
+    alias libs.plugins.android.library apply false
+    alias libs.plugins.kotlin.android apply false
+    alias libs.plugins.kotlin.jvm apply false
 
-    id 'com.growingio.android.autotracker' version "3.5.0" apply false
-    id "io.codearte.nexus-staging" version "0.30.0"
+    alias libs.plugins.nexus.staging apply false
+    alias libs.plugins.growingio.plugin apply false
 
-//    classpath growingio["autotracker-plugin"]
-
-//    id 'com.android.application' version '7.2.1' apply false
-//    id 'com.android.library' version '7.2.1' apply false
-//    id 'org.jetbrains.kotlin.android' version '1.6.21' apply false
-//    id 'org.jetbrains.kotlin.jvm' version '1.6.21' apply false
-//    id 'com.google.devtools.ksp' version '1.6.21-1.0.5' apply false
+    alias libs.plugins.spotless apply false
 }
 
 apply from: "${rootProject.projectDir}/gradle/stagingMaven.gradle"
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}

@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.db.GioKitDbManager
+import com.growingio.giokit.utils.CheckSdkStatusManager
 import java.lang.StringBuilder
 
 /**
@@ -44,6 +45,7 @@ class SdkDataInfoFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val close = view.findViewById<ImageView>(R.id.close)
+        CheckSdkStatusManager.getInstance().ignoreViewClick(close)
         close.setOnClickListener { dismiss() }
 
         val infoTv = view.findViewById<TextView>(R.id.info)

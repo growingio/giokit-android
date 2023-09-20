@@ -10,7 +10,6 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.Nullable;
 
-import com.growingio.android.sdk.autotrack.CdpAutotracker;
 import com.growingio.android.sdk.autotrack.GrowingAutotracker;
 
 /**
@@ -27,6 +26,8 @@ public class WebCircleHybridActivity extends Activity {
         setContentView(R.layout.activity_web_circle);
         webView = findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
+        webView.setWebContentsDebuggingEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {

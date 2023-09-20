@@ -1,7 +1,4 @@
 package com.growingio.giokit
-
-import com.growingio.android.gmonitor.GMonitorOption
-
 /**
  * <p>
  *

@@ -38,8 +38,6 @@ internal object GioKitImpl {
 
         gioKitHoverManager = GioKitHoverManager(app, gioKitOption)
 
-        initWithGrowingIOSDK()
-
         GMonitorManager.getInstance(app)
 
         inited = true
@@ -50,13 +48,4 @@ internal object GioKitImpl {
 
         GioTrackInfo.initGioTrack()
     }
-
-    private fun initWithGrowingIOSDK() {
-        // deal v3sdk with EventFilter
-        CheckSdkStatusManager.getInstance().eventFilterProxy()
-
-        // monitor insert events
-
-    }
-
 }

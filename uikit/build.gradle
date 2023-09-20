@@ -3,13 +3,14 @@ plugins {
 }
 
 android {
-    compileSdk rootProject.ext.android.compileSdkVersion
+    namespace 'com.growingio.uikit'
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
-        minSdkVersion rootProject.ext.android.minSdkVersion
-        targetSdkVersion rootProject.ext.android.targetSdkVersion
-        versionCode rootProject.ext.android.versionCode
-        versionName rootProject.ext.android.versionName
+        minSdkVersion libs.versions.minSdkVersion.get().toInteger()
+        targetSdkVersion libs.versions.compileSdk.get().toInteger()
+        versionCode libs.versions.giokitCode.get().toInteger()
+        versionName libs.versions.giokit.get()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -29,13 +30,13 @@ android {
 
 dependencies {
 
-    implementation rootProject.ext.dependencies["appcompat"]
-    implementation rootProject.ext.dependencies["material"]
-    implementation rootProject.ext.dependencies["recyclerview"]
+    implementation libs.androidx.appcompat
+    implementation libs.google.material
+    implementation libs.androidx.recyclerview
 
-    testImplementation rootProject.ext.dependencies["junit"]
-    androidTestImplementation rootProject.ext.dependencies["androidx-junit"]
-    androidTestImplementation rootProject.ext.dependencies["espresso-core"]
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.junit
+    androidTestImplementation libs.espresso.core
 }
 
 apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"
