@@ -281,7 +281,7 @@ public class CircleAnchorView extends FloatViewContainer {
         if (hitViewNodes.isEmpty()) return;
         targetNode = null;
         for (ViewNode viewNode : hitViewNodes) {
-            getVisibleRectOnScreen(viewNode.getView(), visibleRectBuffer, true, null);
+            getVisibleRectOnScreen(viewNode.getView(), visibleRectBuffer, false, null);
             boolean pointerInRect = visibleRectBuffer.contains(x, y);
             if (!pointerInRect) continue;
             targetNode = viewNode;
@@ -299,14 +299,14 @@ public class CircleAnchorView extends FloatViewContainer {
     }
 
     private void findNodeViewWithUp(int x, int y) {
+        disableMaskView();
         if (targetNode == null) {
-            disableMaskView();
             return;
         }
         if (targetNode.getView() instanceof WebView) {
             findElementAt(targetNode.getView());
         } else {
-            showMaskView(targetNode, x, y);
+            //showMaskView(targetNode, x, y);
             setCircleInfo(targetNode);
         }
     }
@@ -323,7 +323,7 @@ public class CircleAnchorView extends FloatViewContainer {
 
     private void showMaskView(ViewNode viewNode, int xInScreen, int yInScreen) {
         Rect viewRect = new Rect();
-        getVisibleRectOnScreen(viewNode.getView(), viewRect, true, null);
+        getVisibleRectOnScreen(viewNode.getView(), viewRect, false, null);
 
         WindowManager.LayoutParams params = (WindowManager.LayoutParams) mMaskView.getLayoutParams();
         mMaskView.setVisibility(VISIBLE);
