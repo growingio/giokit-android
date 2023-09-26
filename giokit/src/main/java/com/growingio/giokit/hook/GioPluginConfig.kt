@@ -39,15 +39,6 @@ object GioPluginConfig {
         Log.d("[GioKit]", "GioKit init with $config")
     }
 
-    @JvmStatic
-    fun inject(config: Map<String, Any>) {
-        Log.d("GioPluginConfig", config.toString())
-        xmlScheme = config.getOrElse("xmlScheme") { "" } as String
-        val dependStr = config.getOrElse("gioDepend") { "" } as String
-        dependLibs = dependStr.split("##")
-        Log.d("GioPluginConfig", "$xmlScheme-$dependLibs")
-    }
-
     //由插件注入配置信息
     @JvmStatic
     fun initGioKitConfig() {
