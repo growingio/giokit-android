@@ -4,12 +4,11 @@ import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.GrowingAutotracker
 import com.growingio.android.sdk.track.middleware.EventFlutter
 import com.growingio.android.sdk.track.middleware.OaidHelper
-import com.growingio.android.sdk.track.middleware.advert.Activate
+import com.growingio.android.sdk.track.middleware.ads.Activate
 import com.growingio.android.sdk.track.middleware.apm.EventApm
 import com.growingio.android.sdk.track.middleware.format.EventFormatData
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
 import com.growingio.android.sdk.track.middleware.hybrid.HybridBridge
-import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hover.check.CheckItem
 
@@ -163,10 +162,10 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     override fun getSdkModules(index: Int): CheckItem {
         val modules = arrayListOf<String>()
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.TrackerContext")) {
-            // advert
-            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.advert.Activate")) {
+            // ads
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.ads.Activate")) {
                 with(GrowingAutotracker.get().context.registry.getModelLoader(Activate::class.java)) {
-                    if (this != null && this.javaClass.name == "com.growingio.android.advert.AdvertActivateDataLoader") {
+                    if (this != null && this.javaClass.name == "com.growingio.android.ads.AdsActivateDataLoader") {
                         modules.add("广告")
                     }
                 }

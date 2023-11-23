@@ -32,9 +32,9 @@ protobuf = "3.22.3"
 powermock = "2.0.9"
 
 # !!! SDK VERSION !!!
-growingio = "4.0.0"
-growingioPlugin = "4.0.0"
-giokit = "2.0.0-SNAPSHOT"
+growingio = "4.0.0-SNAPSHOT"
+growingioPlugin = "4.0.0-SNAPSHOT"
+giokit = "2.0.0"
 giokitCode = "20"
 
 [plugins]
@@ -73,7 +73,7 @@ growingio-json = { module = "com.growingio.android:json", version.ref = "growing
 growingio-protobuf = { module = "com.growingio.android:protobuf", version.ref = "growingio" }
 growingio-encoder = { module = "com.growingio.android:encoder", version.ref = "growingio" }
 growingio-oaid = { module = "com.growingio.android:oaid", version.ref = "growingio" }
-growingio-advert = { module = "com.growingio.android:advert", version.ref = "growingio" }
+growingio-ads = { module = "com.growingio.android:ads", version.ref = "growingio" }
 growingio-flutter = { module = "com.growingio.android:flutter", version.ref = "growingio" }
 growingio-apm = { module = "com.growingio.android:apm", version.ref = "growingio" }
 growingio-gmonitor = "com.growingio.android:gmonitor:2.0.0"
