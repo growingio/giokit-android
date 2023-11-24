@@ -228,8 +228,8 @@ public class CircleAnchorView extends FloatViewContainer {
         ssb.append("内容：").append(TextUtils.isEmpty(node.getViewContent()) ? "未定义" : node.getViewContent().length() > 120 ? node.getViewContent().substring(0, 120) + "..." : node.getViewContent()).append("\n");
         ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 3, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         start = ssb.length();
-        if (node.getViewPosition() != -1) {
-            ssb.append("列表序号：").append(String.valueOf(node.getViewPosition())).append("\n");
+        if (node.getIndex() > 0) {
+            ssb.append("列表序号：").append(String.valueOf(node.getIndex())).append("\n");
             ssb.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.hover_mask)), start, start + 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             start = ssb.length();
         }
