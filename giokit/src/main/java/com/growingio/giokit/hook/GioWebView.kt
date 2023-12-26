@@ -171,7 +171,7 @@ object GioWebView {
                         return nodeJson.optString("content")
                     }
 
-                    override fun getViewPosition(): Int {
+                    override fun getIndex(): Int {
                         return nodeJson.optInt("index", -1)
                     }
 

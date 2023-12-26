@@ -7,91 +7,74 @@ GioKit 是一个辅助客户快速接入我们SDK的一个功能，它能够让�
 
 ## 集成GioKit
 
-GioKit 代码已托管在 [Github](https://github.com/growingio/giokit-android) 上，欢迎 star,fork 一波。
+GioKit 代码已托管在 [Github](https://github.com/growingio/giokit-android) 上，欢迎 star,fork。
 
 > **Gradle插件版本**： 4.0.1及以上  
 > **Android系统版本**：Android 5.0及以上
 > **仅支持AndroidX**
 
-### 添加依赖
-在 project 级别的build.gradle文件中添加giokit-plugin依赖和maven仓库。
 
-```groovy
-buildscript {
-    repositories {
-        // 添加maven仓库
-        mavenCentral()
-        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-        
-    }
-    dependencies {
-        
-        //GioKit plugin
-        classpath "com.growingio.giokit:giokit-plugin:1.1.0"
+为了方便能够快速配置Giokit,现在可以直接在 [GrowingIO SDK的plugin](https://github.com/growingio/growingio-sdk-android-plugin)中直接通过配置集成。
+
+| Extension                    | 参数类型         | 是否必填 | 默认值 | 说明 |  版本 |
+| :-------------------------   | :------         | :----:  |:------  |:------| --------------------------   |
+| logEnabled                 | _Boolean_       | 否      | `false`  | 编译时是否输出log日志          |  |
+| skipDependencyCheck       | _Boolean_       | 否      | `false`  | 编译时检测当前project是否配置SDK依赖（模块中依赖时配置为true）          |  |
+| includePackages            | _Array<String\>_ | 否      | `null`   | 需要额外包含编译的包名          |  |
+| excludePackages            | _Array<String\>_ | 否      | `null`   | 需要跳过编译的包名             |  |
+| giokit                     | _GiokitExtension_ | 否    | `null`   | 可以用来配置是否引入 Giokit | | 
+
+配置代码示例
+```groony
+plugins {
+    ···
+    // 使用 GrowingIO 无埋点 SDK 插件
+    id 'com.growingio.android.autotracker'
+}
+
+growingAutotracker {
+    logEnabled false
+    includePackages "com.growingio.xxx1","com.growingio.xxx2"
+    excludePackages "com.cpacm.xxx1"
+    giokit {
+        //...
     }
 }
 
-allprojects {
-    repositories {
-        // 添加maven仓库
-        mavenCentral()
-        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-    }
-}
-```
-
-在 app级别的 `build.gradle` 文件中添加 `com.growingio.giokit` 插件、`giokit`依赖。
-```groovy
-apply plugin: 'com.android.application'
-
-//添加 GioKit 插件，针对SDK 3.0
-apply plugin: 'com.growingio.giokit'
-//或者如果是SDK2.0
-apply plugin: 'com.growingio.giokit.saas'
-//以上二者根据相应的sdk选择对应的插件，请不要一起使用！！
-...
 
 dependencies {
-    ...
-    //GioKit
-    debugImplementation "com.growingio.giokit:giokit:1.1.0"
-    releaseImplementation "com.growingio.giokit:giokit-no-op:1.1.0"
-}
-
-```
-> 为了避免在正式环境下出现不必要的错误，请务必只在Debug环境下使用 GioKit 工具。
-
-### 初始化
-请将 GioKit 的初始化代码放入 `Application` 的 `onCreate` 中。
-
-```java
-public class MyApplication extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        GioKit.with(this).build();
-    }
+  ···
 }
 ```
 
-### 插件配置
-为了满足用户的需求，我们在 Giokit 插件中添加了多项配置。
+### Giokit 配置
+
+| Extension                    | 参数类型         | 是否必填 | 默认值 | 说明 |
+| :-------------------------   | :------         | :----:  |:------  |:------|
+| enabled                   | _Boolean_       | 否      | `false`  |  是否添加 Giokit        |
+| trackerFinderEnabled      | _Boolean_       | 否      | `true`  | 查找App下调用App埋点接口的信息      |
+| trackerFinderDomain        | _Array<String\>_ | 否      | 默认为应用 ApplicationId   | 查找的范围  |
+| trackerCalledMethod        | _Array<String\>_ | 否      | 默认为SDK相应接口   | 要查找的类和方法,类名与方法名使用#连接  |
+| autoAttachEnabled          | _Boolean_       | 否      | `true`  |  GioKit 是否自动依附在Activity上，若设为false，需要自行调用api打开GioKit  |
+| releaseEnabled             | _Boolean_       | 否      | `false`   |  **请不要打开**，否则会在 Release 打包中包含 GioKit 代码    |
+| autoInstallVersion         | _String_        | 否      | `2.0.0`   |  自动依赖的GioKit版本号             |
+
+现在SDK不用再额外引入 Giokit，只需要在插件中开启即可。示例如下：
+
 ```groovy
-giokitExt {
-    debugMode false
-    enableRelease false
-    // 统计该域值下所有埋点信息，如 com.growingio 表示统计 com.growingio 包名下的埋点代码
-    trackFinder {
-        domain = ["com.growingio.giokit.demo"]
-        // 若用户自己封装了SDK customEvent 方法，可通过在此设置来查找封装类调用的代码
-        // className "com.growingio.giokit.demo.AutotrackerUtils"
-        // methodName "trackCustomEvent"
+growingAutotracker {
+    logEnabled true
+    giokit {
+        enabled false  //开启则可引入 GioKit
+        trackerFinderEnabled true
+        trackerFinderDomain "com.xxxx.yourapplication"
+        trackerCalledMethod "com.growingio.android.tracker#trackCumtomEvent"
+        autoAttachEnabled true
+        releaseEnabled false
+        autoInstallVersion "2.0.0"
     }
 }
 ```
-1. debugMode 为true时，项目编译的时候会输出相应的 Debug 信息；
-3. enableRelease 是否支持release打包。giokit 是只推荐在 debug 环境下使用，若一定要在release环境下使用，则需要打开此开关来使插件生效；
-4. 为了方便统一查看用户的手动埋点信息，我们通过 trackFinder 配置来查找在应用中手动埋点调用的位置。默认查找域名为项目的`ApplicationId`
 
 ## 功能
 
