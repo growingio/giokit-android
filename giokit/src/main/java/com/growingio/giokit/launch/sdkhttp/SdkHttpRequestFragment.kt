@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.db.GioKitDbManager
+import com.growingio.giokit.utils.CheckSdkStatusManager
 import com.growingio.giokit.utils.MeasureUtils
 import com.growingio.snappy.XORUtils
 import org.iq80.snappy.Snappy
@@ -51,6 +52,7 @@ class SdkHttpRequestFragment : Fragment() {
         bodyTv.text = http.requestBody
 
         val encode = view.findViewById<ImageView>(R.id.requestConvert)
+        CheckSdkStatusManager.getInstance().ignoreViewClick(encode)
         encode.setOnClickListener {
             if (isCompress) {
                 bodyTv.text = http.requestBody

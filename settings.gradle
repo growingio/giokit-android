@@ -7,15 +7,6 @@ pluginManagement {
         mavenCentral()
     }
 
-    // 设置插件解析策略
-    resolutionStrategy {
-        eachPlugin {
-            // 解析GrowingIO 插件
-            if (requested.id.id == "com.growingio.android") {
-                useModule("com.growingio.android:vds-gradle-plugin:autotrack-2.9.18")
-            }
-        }
-    }
 }
 dependencyResolutionManagement {
     //repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -29,10 +20,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "GioKit"
 
-includeBuild 'giokit-plugin'
-
 include ':app'
-include ':app-saas'
 include ':uikit'
 include ':giokit'
 include ':giokit-no-op'

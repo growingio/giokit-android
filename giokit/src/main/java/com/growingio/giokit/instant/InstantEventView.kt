@@ -157,11 +157,16 @@ class InstantEventView(context: Context) : FloatViewContainer(context) {
             val typeTv = itemView.findViewById<TextView>(R.id.type)
             val descTv = itemView.findViewById<TextView>(R.id.desc)
 
+            init {
+                CheckSdkStatusManager.getInstance().ignoreViewClick(itemView)
+            }
+
             fun setVisible(visible: Boolean) {
                 itemView.visibility = if (visible) View.VISIBLE else View.GONE
             }
 
             fun click(context: Context, start: Long, end: Long) {
+
                 itemView.setOnClickListener {
                     context.startActivity(Intent(context, UniversalActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -176,6 +181,10 @@ class InstantEventView(context: Context) : FloatViewContainer(context) {
         class InstantBundleViewHolder(val itemView: View) : RecyclerView.ViewHolder(itemView) {
             val list = itemView.findViewById<TextView>(R.id.eventList)
             val idsTv = itemView.findViewById<TextView>(R.id.ids)
+
+            init {
+                CheckSdkStatusManager.getInstance().ignoreViewClick(itemView)
+            }
 
             fun setVisible(visible: Boolean) {
                 itemView.visibility = if (visible) View.VISIBLE else View.GONE

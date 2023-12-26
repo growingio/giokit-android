@@ -5,7 +5,11 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
+import com.growingio.android.sdk.TrackerContext;
 import com.growingio.android.sdk.autotrack.GrowingAutotracker;
+import com.growingio.giokit.hook.GioPluginConfig;
+
+import java.util.HashMap;
 
 /**
  * <p>
@@ -13,6 +17,14 @@ import com.growingio.android.sdk.autotrack.GrowingAutotracker;
  * @author cpacm 2021/8/23
  */
 public class LambdaTest {
+
+
+    public void startAfterSdkSetup(TrackerContext context) {
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("xmlScheme", "growing.1234567");
+        GioPluginConfig.inject(context.getBaseContext(), map);
+    }
 
     public void test(Button button) {
         button.setOnClickListener(v -> {
@@ -31,7 +43,7 @@ public class LambdaTest {
         GrowingAutotracker.get().trackCustomEvent("double3");
     }
 
-    public void webText(Context context){
+    public void webText(Context context) {
         WebView webView = new WebView(context);
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("https://www.baidu.com");

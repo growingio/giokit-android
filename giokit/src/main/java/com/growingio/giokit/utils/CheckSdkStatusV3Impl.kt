@@ -1,14 +1,14 @@
 package com.growingio.giokit.utils
 
 import com.growingio.android.sdk.TrackerContext
+import com.growingio.android.sdk.autotrack.GrowingAutotracker
 import com.growingio.android.sdk.track.middleware.EventFlutter
 import com.growingio.android.sdk.track.middleware.OaidHelper
-import com.growingio.android.sdk.track.middleware.advert.Activate
+import com.growingio.android.sdk.track.middleware.ads.Activate
 import com.growingio.android.sdk.track.middleware.apm.EventApm
 import com.growingio.android.sdk.track.middleware.format.EventFormatData
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
 import com.growingio.android.sdk.track.middleware.hybrid.HybridBridge
-import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hover.check.CheckItem
 
@@ -20,7 +20,7 @@ import com.growingio.giokit.hover.check.CheckItem
 class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     override fun getProjectStatus(index: Int): CheckItem {
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.TrackerContext")) {
-            val hasInited = TrackerContext.get() != null
+            val hasInited = TrackerContext.initializedSuccessfully()
             val lazyInit = GioPluginConfig.isInitLazy
             return CheckItem(
                 index,
@@ -44,7 +44,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     override fun getURLScheme(index: Int): CheckItem {
         val xmlScheme = GioPluginConfig.xmlScheme
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            val urlScheme = ConfigurationProvider.core().urlScheme
+            val urlScheme = GrowingAutotracker.get().context.configurationProvider.core().urlScheme
             // 插件未找到 urlscheme 时不做校验
             if (xmlScheme.isNullOrEmpty() || urlScheme == xmlScheme) {
                 return CheckItem(
@@ -83,7 +83,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
     override fun getDataSourceID(index: Int): CheckItem {
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            val dataSourceId = ConfigurationProvider.core().dataSourceId
+            val dataSourceId = GrowingAutotracker.get().context.configurationProvider.core().dataSourceId
             return CheckItem(
                 index,
                 "正在获取数据源ID",
@@ -107,7 +107,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
                 index,
                 "正在获取项目ID",
                 "项目ID",
-                ConfigurationProvider.core().projectId,
+                GrowingAutotracker.get().context.configurationProvider.core().projectId,
                 false
             )
         }
@@ -116,7 +116,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
     override fun getDataServerHost(index: Int): CheckItem {
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            return with(ConfigurationProvider.core().dataCollectionServerHost) {
+            return with(GrowingAutotracker.get().context.configurationProvider.core().dataCollectionServerHost) {
                 CheckItem(
                     index,
                     "正在获取ServerHost",
@@ -131,7 +131,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
     override fun getDataCollectionEnable(index: Int): CheckItem {
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            return with(ConfigurationProvider.core().isDataCollectionEnabled) {
+            return with(GrowingAutotracker.get().context.configurationProvider.core().isDataCollectionEnabled) {
                 CheckItem(
                     index,
                     "正在获取数据采集是否打开",
@@ -146,7 +146,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
     override fun getSdkDebug(index: Int): CheckItem {
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")) {
-            return with(ConfigurationProvider.core().isDebugEnabled) {
+            return with(GrowingAutotracker.get().context.configurationProvider.core().isDebugEnabled) {
                 CheckItem(
                     index,
                     "正在处于Debug调试模式",
@@ -162,10 +162,10 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
     override fun getSdkModules(index: Int): CheckItem {
         val modules = arrayListOf<String>()
         if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.TrackerContext")) {
-            // advert
-            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.advert.Activate")) {
-                with(TrackerContext.get().registry.getModelLoader(Activate::class.java)) {
-                    if (this != null && this.javaClass.name == "com.growingio.android.advert.AdvertActivateDataLoader") {
+            // ads
+            if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.ads.Activate")) {
+                with(GrowingAutotracker.get().context.registry.getModelLoader(Activate::class.java)) {
+                    if (this != null && this.javaClass.name == "com.growingio.android.ads.AdsActivateDataLoader") {
                         modules.add("广告")
                     }
                 }
@@ -173,7 +173,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
             // apm
             if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.apm.EventApm")) {
-                with(TrackerContext.get().registry.getModelLoader(EventApm::class.java)) {
+                with(GrowingAutotracker.get().context.registry.getModelLoader(EventApm::class.java)) {
                     if (this != null && this.javaClass.name == "com.growingio.android.apm.ApmLibraryGioModule") {
                         modules.add("APM")
                     }
@@ -182,7 +182,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
             // encoder
             if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.http.EventEncoder")) {
-                with(TrackerContext.get().registry.getModelLoader(EventEncoder::class.java)) {
+                with(GrowingAutotracker.get().context.registry.getModelLoader(EventEncoder::class.java)) {
                     if (this != null && this.javaClass.name == "com.growingio.android.encoder.EncoderDataLoader") {
                         modules.add("加密")
                     }
@@ -191,7 +191,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
             // protobuf 模块
             if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.format.EventFormatData")) {
-                with(TrackerContext.get().registry.getModelLoader(EventFormatData::class.java)) {
+                with(GrowingAutotracker.get().context.registry.getModelLoader(EventFormatData::class.java)) {
                     if (this != null && this.javaClass.name == "com.growingio.protobuf.ProtobufDataLoader") {
                         modules.add("protobuf")
                     }
@@ -200,7 +200,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
             // flutter 模块
             if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.EventFlutter")) {
-                with(TrackerContext.get().registry.getModelLoader(EventFlutter::class.java)) {
+                with(GrowingAutotracker.get().context.registry.getModelLoader(EventFlutter::class.java)) {
                     if (this != null && this.javaClass.name == "com.growingio.flutter.FlutterDataLoader") {
                         modules.add("flutter")
                     }
@@ -209,7 +209,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
             // hybrid
             if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.hybrid.HybridBridge")) {
-                with(TrackerContext.get().registry.getModelLoader(HybridBridge::class.java)) {
+                with(GrowingAutotracker.get().context.registry.getModelLoader(HybridBridge::class.java)) {
                     if (this != null && this.javaClass.name == "com.growingio.android.hybrid.HybridBridgeLoader") {
                         modules.add("hybrid")
                     }
@@ -218,7 +218,7 @@ class CheckSdkStatusV3Impl : CheckSdkStatusInterface {
 
             // oaid模块
             if (CheckSdkStatusManager.hasClass("com.growingio.android.sdk.track.middleware.OaidHelper")) {
-                with(TrackerContext.get().registry.getModelLoader(OaidHelper::class.java)) {
+                with(GrowingAutotracker.get().context.registry.getModelLoader(OaidHelper::class.java)) {
                     if (this != null) modules.add("oaid")
                 }
 

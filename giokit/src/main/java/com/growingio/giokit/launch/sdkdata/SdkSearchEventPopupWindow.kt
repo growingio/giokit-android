@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.growingio.giokit.R
+import com.growingio.giokit.utils.CheckSdkStatusManager
 
 /**
  *
@@ -115,5 +116,8 @@ class EventAdapter(val eventClick: (String) -> Unit) :
 
     inner class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val eventTv: TextView = itemView.findViewById(R.id.event)
+        init {
+            CheckSdkStatusManager.getInstance().ignoreViewClick(itemView)
+        }
     }
 }

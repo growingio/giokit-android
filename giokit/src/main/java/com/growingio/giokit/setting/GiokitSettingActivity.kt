@@ -10,6 +10,7 @@ import com.growingio.giokit.R
 import com.growingio.giokit.launch.LaunchPage
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_INDEX
 import com.growingio.giokit.launch.LaunchPage.LAUNCH_FRAGMENT_TITLE
+import com.growingio.giokit.utils.CheckSdkStatusManager
 
 /**
  * <p>
@@ -49,6 +50,7 @@ class GiokitSettingActivity : AppCompatActivity() {
     fun showContent(target: Class<out PreferenceFragmentCompat>, bundle: Bundle? = null) {
 
         val closeIv = findViewById<View>(R.id.close)
+        CheckSdkStatusManager.getInstance().ignoreViewClick(closeIv)
         closeIv.setOnClickListener {
             onBackPressed()
         }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.growingio.giokit.R
 import com.growingio.giokit.launch.db.GioKitBreadCrumb
+import com.growingio.giokit.utils.CheckSdkStatusManager
 import com.growingio.giokit.utils.MeasureUtils.getCurrentTime
 
 /**
@@ -45,7 +46,7 @@ class SdkErrorAdapter(val errorClick: (Long) -> Unit) :
         if (holder is ErrorViewHolder) {
             if (error == null) return
             holder.errorDate.text = getCurrentTime(error.time)
-            holder.errorType.text  = error.category
+            holder.errorType.text = error.category
             holder.errorMessage.text = error.message
             holder.errorAt.text = error.content
 
@@ -60,6 +61,9 @@ class SdkErrorAdapter(val errorClick: (Long) -> Unit) :
         val errorType = itemView.findViewById<TextView>(R.id.errorType)
         val errorMessage = itemView.findViewById<TextView>(R.id.errorMessage)
         val errorAt = itemView.findViewById<TextView>(R.id.errorAt)
+        init {
+            CheckSdkStatusManager.getInstance().ignoreViewClick(itemView)
+        }
     }
 
     inner class DateViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

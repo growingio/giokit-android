@@ -8,6 +8,7 @@ import android.content.res.Resources
 import android.os.Build
 import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfig
+import com.growingio.android.sdk.autotrack.GrowingAutotracker
 import com.growingio.android.sdk.track.events.AutotrackEventType
 import com.growingio.android.sdk.track.events.TrackEventType
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
@@ -32,28 +33,29 @@ object SdkV3InfoUtils {
         list.add(SdkInfo("GrowingIO SDK信息", isHeader = true))
         val hasDepend = hasClass("com.growingio.android.sdk.track.providers.ConfigurationProvider")
         if (hasDepend) {
+            val configurationProvider = GrowingAutotracker.get().context.configurationProvider
             val (_, sdkVersion, _) = GioPluginConfig.analyseDepend()
             list.tryAdd { SdkInfo("SDK版本", sdkVersion) }
-            list.tryAdd { SdkInfo("项目ID", ConfigurationProvider.core().projectId) }
-            list.tryAdd { SdkInfo("URLScheme", ConfigurationProvider.core().urlScheme) }
+            list.tryAdd { SdkInfo("项目ID", configurationProvider.core().projectId) }
+            list.tryAdd { SdkInfo("URLScheme", configurationProvider.core().urlScheme) }
             val checkItem = CheckSdkStatusManager.getInstance().getDataSourceID(0)
             list.tryAdd { SdkInfo("DataSource ID", checkItem.content) }
             list.tryAdd {
                 SdkInfo(
                     "DataServerHost",
-                    ConfigurationProvider.core().dataCollectionServerHost
+                    configurationProvider.core().dataCollectionServerHost
                 )
             }
             list.tryAdd {
                 SdkInfo(
                     "数据收集",
-                    if (ConfigurationProvider.core().isDataCollectionEnabled) "打开" else "关闭"
+                    if (configurationProvider.core().isDataCollectionEnabled) "打开" else "关闭"
                 )
             }
             list.tryAdd {
                 SdkInfo(
                     "Debug测试",
-                    if (ConfigurationProvider.core().isDebugEnabled) "是" else "否"
+                    if (configurationProvider.core().isDebugEnabled) "是" else "否"
                 )
             }
             list.tryAdd {
@@ -62,33 +64,34 @@ object SdkV3InfoUtils {
                     CheckSdkStatusManager.getInstance().getSdkModules(0).content
                 )
             }
-            list.tryAdd { SdkInfo("分发渠道", ConfigurationProvider.core().channel) }
+            list.tryAdd { SdkInfo("分发渠道", configurationProvider.core().channel) }
             list.tryAdd {
                 SdkInfo(
                     "每日流量限制",
-                    ConfigurationProvider.core().cellularDataLimit.toString() + "M"
+                    configurationProvider.core().cellularDataLimit.toString() + "M"
                 )
             }
             list.tryAdd {
                 SdkInfo(
                     "数据发送间隔",
-                    ConfigurationProvider.core().dataUploadInterval.toString() + "S"
+                    configurationProvider.core().dataUploadInterval.toString() + "S"
                 )
             }
             list.tryAdd {
                 SdkInfo(
                     "访问会话时长",
-                    ConfigurationProvider.core().sessionInterval.toString() + "S"
+                    configurationProvider.core().sessionInterval.toString() + "S"
                 )
             }
             val scale = getImpressionScale()
             if (scale >= 0F) list.tryAdd { SdkInfo("曝光比例", scale.toString()) }
             list.tryAdd { SdkInfo("数据加密", getEncryptEnabled()) }
-            list.tryAdd { SdkInfo("Imei开关", ConfigurationProvider.core().isDebugEnabled.toString()) }
+            list.tryAdd { SdkInfo("Imei开关", configurationProvider.core().isDebugEnabled.toString()) }
 
             list.tryAdd { SdkInfo("登录账户", getLoginUser()) }
             list.tryAdd { SdkInfo("位置信息", getLocation()) }
-            list.tryAdd { SdkInfo("设备ID", DeviceInfoProvider.get().deviceId) }
+            val deviceInfoProvider = GrowingAutotracker.get().context.deviceInfoProvider
+            list.tryAdd { SdkInfo("设备ID", deviceInfoProvider.deviceId) }
         } else {
             list.add(SdkInfo("SDK", "SDK未集成"))
         }
@@ -97,7 +100,7 @@ object SdkV3InfoUtils {
     }
 
     private fun getEncryptEnabled(): String {
-        if (TrackerContext.get().registry.getModelLoader(EventEncoder::class.java) != null) {
+        if (GrowingAutotracker.get().context.registry.getModelLoader(EventEncoder::class.java) != null) {
             return "启用"
         }
         return "未启用"
@@ -105,8 +108,8 @@ object SdkV3InfoUtils {
 
     private fun getImpressionScale(): Float {
         if (hasClass("com.growingio.android.sdk.autotrack.AutotrackConfig")) {
-            val config = ConfigurationProvider.get()
-                .getConfiguration<AutotrackConfig>(AutotrackConfig::class.java)
+            val configurationProvider = GrowingAutotracker.get().context.configurationProvider
+            val config = configurationProvider.getConfiguration<AutotrackConfig>(AutotrackConfig::class.java)
             return config.impressionScale
 
         }
@@ -115,8 +118,9 @@ object SdkV3InfoUtils {
 
     private fun getLoginUser(): String {
         if (hasClass("com.growingio.android.sdk.track.providers.UserInfoProvider")) {
-            val userId = UserInfoProvider.get().loginUserId
-            val userKey = UserInfoProvider.get().loginUserKey
+            val userInfoProvider = GrowingAutotracker.get().context.userInfoProvider
+            val userId = userInfoProvider.loginUserId
+            val userKey = userInfoProvider.loginUserKey
             var userInfo = "未配置"
             if (!userKey.isNullOrEmpty() && !userId.isNullOrEmpty()) userInfo = "$userKey-$userId"
             else if (!userId.isNullOrEmpty()) userInfo = userId
@@ -127,8 +131,9 @@ object SdkV3InfoUtils {
 
     private fun getLocation(): String {
         if (hasClass("com.growingio.android.sdk.track.providers.SessionProvider")) {
-            val la = SessionProvider.get().latitude
-            val lo = SessionProvider.get().longitude
+            val deviceInfoProvider = GrowingAutotracker.get().context.deviceInfoProvider
+            val la = deviceInfoProvider.latitude
+            val lo = deviceInfoProvider.longitude
             if (la == 0.0 && lo == 0.0) return "未配置"
             return "$la,$lo"
         }
@@ -199,13 +204,10 @@ object SdkV3InfoUtils {
         list.tryAdd { SdkInfo("DENSITY", Resources.getSystem().displayMetrics.density.toString()) }
         list.tryAdd { SdkInfo("IP", DeviceUtils.getIPAddress(true)) }
         if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
-            list.tryAdd { SdkInfo("IMEI", DeviceInfoProvider.get().deviceId) }
-        }
-        if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
-            list.tryAdd { SdkInfo("AndroidId", DeviceInfoProvider.get().androidId) }
-        }
-        if (hasClass("com.growingio.android.sdk.track.providers.DeviceInfoProvider")) {
-            DeviceInfoProvider.get().googleAdId?.let {
+            val deviceInfoProvider = GrowingAutotracker.get().context.deviceInfoProvider
+            list.tryAdd { SdkInfo("IMEI", deviceInfoProvider.deviceId) }
+            list.tryAdd { SdkInfo("AndroidId", deviceInfoProvider.androidId) }
+            deviceInfoProvider.googleAdId?.let {
                 list.tryAdd { SdkInfo("GoogleId", it) }
             }
         }

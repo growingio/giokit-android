@@ -1,9 +1,10 @@
 package com.growingio.giokit.utils
 
+import android.view.View
 import com.growingio.android.sdk.TrackerContext
-import com.growingio.android.sdk.collection.GInternal
+import com.growingio.android.sdk.autotrack.GrowingAutotracker
+import com.growingio.android.sdk.autotrack.view.ViewAttributeUtil
 import com.growingio.android.sdk.track.events.helper.DefaultEventFilterInterceptor
-import com.growingio.android.sdk.track.providers.ConfigurationProvider
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.hook.GioTrackInfo
 import com.growingio.giokit.hover.check.CheckItem
@@ -17,27 +18,28 @@ class CheckSdkStatusManager private constructor(val checkSdkStatus: CheckSdkStat
     CheckSdkStatusInterface by checkSdkStatus {
 
     fun getEventAlphaBet(eventType: String): String {
-        return if (GioPluginConfig.isSaasSdk) {
-            SdkSaasInfoUtils.getEventAlphaBet(eventType)
-        } else {
-            SdkV3InfoUtils.getEventAlphaBet(eventType)
-        }
+        return SdkV3InfoUtils.getEventAlphaBet(eventType)
     }
 
     fun getEventDesc(eventType: String, data: String): String {
-        return if (GioPluginConfig.isSaasSdk) {
-            SdkSaasInfoUtils.getEventDesc(eventType, data)
-        } else {
-            SdkV3InfoUtils.getEventDesc(eventType, data)
-        }
+        return SdkV3InfoUtils.getEventDesc(eventType, data)
+
     }
 
+    fun ignoreViewClick(view: View) {
+        ViewAttributeUtil.setIgnoreViewClick(view, true)
+    }
+
+
     fun eventFilterProxy() {
-        if (!GioPluginConfig.isSaasSdk && checkSdkInit()) {
+        if (checkSdkInit()) {
             if (!hasClass("com.growingio.android.sdk.track.events.EventFilterInterceptor")) return
-            val sdkEventFilter = ConfigurationProvider.core().eventFilterInterceptor;
-            ConfigurationProvider.core().eventFilterInterceptor =
-                GiokitEventFilterProxy(sdkEventFilter ?: DefaultEventFilterInterceptor())
+            val configurationProvider = GrowingAutotracker.get().context.configurationProvider
+            if (configurationProvider != null) {
+                val sdkEventFilter = configurationProvider.core().eventFilterInterceptor
+                configurationProvider.core().eventFilterInterceptor =
+                    GiokitEventFilterProxy(sdkEventFilter ?: DefaultEventFilterInterceptor())
+            }
         }
     }
 
@@ -68,11 +70,7 @@ class CheckSdkStatusManager private constructor(val checkSdkStatus: CheckSdkStat
         fun getInstance(): CheckSdkStatusManager =
             instance ?: synchronized(this) {
                 instance ?: CheckSdkStatusManager(
-                    if (GioPluginConfig.isSaasSdk) {
-                        CheckSdkStatusSaasImpl()
-                    } else {
-                        CheckSdkStatusV3Impl()
-                    }
+                    CheckSdkStatusV3Impl()
                 ).apply {
                     instance = this
                 }
@@ -81,9 +79,6 @@ class CheckSdkStatusManager private constructor(val checkSdkStatus: CheckSdkStat
         fun checkSdkInit(): Boolean {
             if (hasClass("com.growingio.android.sdk.TrackerContext")) {
                 return TrackerContext.initializedSuccessfully()
-            }
-            if (hasClass("com.growingio.android.sdk.collection.GInternal")) {
-                return !GInternal.getInstance().featuresVersionJson.isNullOrEmpty()
             }
             return false
         }
@@ -140,5 +135,5 @@ interface CheckSdkStatusInterface {
     fun getDataServerHost(index: Int): CheckItem
     fun getDataCollectionEnable(index: Int): CheckItem
     fun getSdkDebug(index: Int): CheckItem
-    fun getSdkModules(index:Int):CheckItem
+    fun getSdkModules(index: Int): CheckItem
 }
