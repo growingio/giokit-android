@@ -6,7 +6,6 @@ import com.growingio.android.hybrid.HybridLibraryGioModule
 import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfiguration
 import com.growingio.android.sdk.autotrack.GrowingAutotracker
-import com.growingio.giokit.hook.GioPluginConfig
 
 /**
  * <p>
@@ -21,11 +20,6 @@ class App : Application() {
         initGioSdk()
 
         //GioKit.with(this).attach(true).build()
-
-        val map = hashMapOf<String, Any>()
-        map["attach"] = true
-        map["xmlScheme"] = "growingio.1234567678"
-        GioPluginConfig.inject(this, map)
     }
 
     fun onTest() {

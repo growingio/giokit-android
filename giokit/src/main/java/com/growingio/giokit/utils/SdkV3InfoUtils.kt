@@ -6,16 +6,11 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
-import com.growingio.android.sdk.TrackerContext
 import com.growingio.android.sdk.autotrack.AutotrackConfig
 import com.growingio.android.sdk.autotrack.GrowingAutotracker
 import com.growingio.android.sdk.track.events.AutotrackEventType
 import com.growingio.android.sdk.track.events.TrackEventType
 import com.growingio.android.sdk.track.middleware.http.EventEncoder
-import com.growingio.android.sdk.track.providers.ConfigurationProvider
-import com.growingio.android.sdk.track.providers.DeviceInfoProvider
-import com.growingio.android.sdk.track.providers.SessionProvider
-import com.growingio.android.sdk.track.providers.UserInfoProvider
 import com.growingio.giokit.hook.GioPluginConfig
 import com.growingio.giokit.launch.sdkinfo.SdkInfo
 import org.json.JSONException

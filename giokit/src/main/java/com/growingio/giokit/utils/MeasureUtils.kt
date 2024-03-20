@@ -1,8 +1,6 @@
 package com.growingio.giokit.utils
 
 import android.annotation.SuppressLint
-import android.util.Log
-import com.growingio.android.gmonitor.utils.ILogger
 import com.growingio.giokit.GioKitImpl
 import java.text.SimpleDateFormat
 import java.util.*

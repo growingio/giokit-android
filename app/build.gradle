@@ -34,22 +34,14 @@ android {
         jvmTarget = '11'
     }
 }
-//
-//giokitExt {
-//    debugMode true
-//    enableRelease false
-//    trackFinder {
-//        enable = true
-//        domain = ["com.growingio.giokit.v3"]
-//    }
-//}
-//
+
 growingAutotracker {
     logEnabled true
     includePackages "com.growingio.giokit.v3"
     giokit{
         enabled true
         trackerFinderDomain "com.growingio.giokit.v3"
+        autoInstallVersion "2.1.0-SNAPSHOT"
     }
 }
 
@@ -60,10 +52,12 @@ dependencies {
     implementation libs.growingio.autotracker
     implementation libs.growingio.encoder
 
+    //implementation "com.github.ybq:Android-SpinKit:1.4.0"
+
     //implementation rootProject.ext.growingio["protobuf"]
-    //debugImplementation "com.growingio.giokit:giokit:1.2.0-SNAPSHOT"
-    //releaseImplementation "com.growingio.giokit:giokit-no-op:1.2.0-SNAPSHOT"
-    implementation project(":giokit")
+    //debugImplementation "com.growingio.giokit:giokit:2.1.0"
+    //releaseImplementation "com.growingio.giokit:giokit-no-op:2.1.0"
+    //implementation project(":giokit")
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.junit

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import com.growingio.android.sdk.autotrack.GrowingAutotracker
-import com.growingio.giokit.utils.NotificationUtils
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,12 +42,12 @@ class MainActivity : AppCompatActivity() {
         val notifyBtn = findViewById<Button>(R.id.notify)
         notifyBtn.setOnClickListener {
 
-            NotificationUtils.notify(1) {
-                it.setContentText("这是测试通知,内容为空")
-                    .setContentTitle("Test")
-                    .setSmallIcon(R.mipmap.ic_launcher_round)
-                    .build()
-            }
+//            NotificationUtils.notify(1) {
+//                it.setContentText("这是测试通知,内容为空")
+//                    .setContentTitle("Test")
+//                    .setSmallIcon(R.mipmap.ic_launcher_round)
+//                    .build()
+//            }
         }
 
         val crashBtn = findViewById<Button>(R.id.crash)
