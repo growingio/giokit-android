@@ -7,7 +7,6 @@ import android.widget.Button;
 
 import com.growingio.android.sdk.TrackerContext;
 import com.growingio.android.sdk.autotrack.GrowingAutotracker;
-import com.growingio.giokit.hook.GioPluginConfig;
 
 import java.util.HashMap;
 
@@ -18,13 +17,6 @@ import java.util.HashMap;
  */
 public class LambdaTest {
 
-
-    public void startAfterSdkSetup(TrackerContext context) {
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("xmlScheme", "growing.1234567");
-        GioPluginConfig.inject(context.getBaseContext(), map);
-    }
 
     public void test(Button button) {
         button.setOnClickListener(v -> {

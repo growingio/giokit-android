@@ -149,22 +149,17 @@ object GioWebView {
             Log.d("hoverNodes", message ?: "")
             try {
                 val nodeJson = JSONObject(message)
-                val autotrackConfig =
-                    GrowingAutotracker.get().context.configurationProvider.getConfiguration<AutotrackConfig>(
-                        AutotrackConfig::class.java
-                    )
-                val isV3 = autotrackConfig.isDowngrade
                 val node: ViewNode = object : ViewNode {
                     override fun getView(): View? {
                         return GioKitImpl.webView.get()
                     }
 
                     override fun getXPath(): String {
-                        return if (isV3) {
-                            nodeJson.optString("xpath")
-                        } else {
-                            nodeJson.optString("skeleton")
+                        val xpath = nodeJson.optString("skeleton")
+                        if (xpath.isEmpty()) {
+                            return nodeJson.optString("xpath")
                         }
+                        return xpath
                     }
 
                     override fun getViewContent(): String {
@@ -176,7 +171,8 @@ object GioWebView {
                     }
 
                     override fun getXIndex(): String? {
-                        return if (isV3) null else nodeJson.optString("xcontent")
+                        val xindex = nodeJson.optString("xindex")
+                        return if (xindex.isEmpty()) null else xindex
                     }
                 }
                 GioKitImpl.gioKitHoverManager.anchorView?.setCircleInfo(node, URLDecoder.decode(currentUrl, "UTF-8").limitLength(50))

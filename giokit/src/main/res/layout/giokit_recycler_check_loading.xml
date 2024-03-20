@@ -8,12 +8,11 @@
     android:gravity="center"
     android:orientation="horizontal">
 
-    <com.github.ybq.android.spinkit.SpinKitView
+    <ProgressBar
+        android:theme="@style/GioTheme"
         android:id="@+id/loadingView"
         android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:SpinKit_Color="@color/hover_dark"
-        app:SpinKit_Style="Pulse" />
+        android:layout_height="20dp" />
 
     <TextView
         android:id="@+id/loadingTv"
