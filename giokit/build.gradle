@@ -35,12 +35,8 @@ android {
 
 dependencies {
 
-    implementation libs.kotlin.stdlib
-
     implementation libs.google.material
     implementation libs.bundles.androidx
-    implementation libs.kotlin.coroutines.core
-    implementation libs.kotlin.coroutines.android
 
     implementation libs.room.ktx
     implementation libs.room.runtime
@@ -53,7 +49,6 @@ dependencies {
     compileOnly libs.growingio.autotracker
     compileOnly libs.growingio.tracker
 
-    compileOnly libs.bundles.android.support
     compileOnly libs.google.volley
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')

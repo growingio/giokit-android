@@ -6,7 +6,6 @@ import android.os.Environment
 import java.io.File
 
 import java.io.RandomAccessFile
-import java.nio.charset.Charset
 
 const val ERROR_CACHE_DIR = "error"
 

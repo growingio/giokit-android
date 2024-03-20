@@ -2,17 +2,20 @@ package com.growingio.giokit.utils;
 
 import static android.Manifest.permission.EXPAND_STATUS_BAR;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.RequiresPermission;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -30,16 +33,16 @@ import java.lang.reflect.Method;
  */
 public class NotificationUtils {
 
-    public interface NotifyBuilder<T>{
+    public interface NotifyBuilder<T> {
         void build(T builder);
     }
 
     public static final int IMPORTANCE_UNSPECIFIED = -1000;
-    public static final int IMPORTANCE_NONE        = 0;
-    public static final int IMPORTANCE_MIN         = 1;
-    public static final int IMPORTANCE_LOW         = 2;
-    public static final int IMPORTANCE_DEFAULT     = 3;
-    public static final int IMPORTANCE_HIGH        = 4;
+    public static final int IMPORTANCE_NONE = 0;
+    public static final int IMPORTANCE_MIN = 1;
+    public static final int IMPORTANCE_LOW = 2;
+    public static final int IMPORTANCE_DEFAULT = 3;
+    public static final int IMPORTANCE_HIGH = 4;
 
     @IntDef({IMPORTANCE_UNSPECIFIED, IMPORTANCE_NONE, IMPORTANCE_MIN, IMPORTANCE_LOW, IMPORTANCE_DEFAULT, IMPORTANCE_HIGH})
     @Retention(RetentionPolicy.SOURCE)
@@ -96,7 +99,10 @@ public class NotificationUtils {
      * @param consumer      The consumer of create the builder of notification.
      */
     public static void notify(String tag, int id, ChannelConfig channelConfig, NotifyBuilder<NotificationCompat.Builder> consumer) {
-        NotificationManagerCompat.from(GioKitImpl.APPLICATION).notify(tag, id, getNotification(channelConfig, consumer));
+        Context context = GioKitImpl.APPLICATION;
+        if (context != null && ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            NotificationManagerCompat.from(GioKitImpl.APPLICATION).notify(tag, id, getNotification(channelConfig, consumer));
+        }
     }
 
 

@@ -3,7 +3,6 @@ package com.growingio.giokit
 import android.app.Activity
 import android.app.Application
 import android.util.Log
-import com.growingio.android.gmonitor.GMonitorOption
 
 /**
  * <p>
