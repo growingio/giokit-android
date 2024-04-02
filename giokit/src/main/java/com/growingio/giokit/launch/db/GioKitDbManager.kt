@@ -12,7 +12,7 @@ import com.growingio.giokit.utils.cleanOutDatedFile
  */
 class GioKitDbManager private constructor() {
 
-    private val EVENT_VALID_PERIOD_MILLS = 7L * 24 * 60 * 60000
+    private val EVENT_VALID_PERIOD_MILLS = 10L * 24 * 60 * 60000
     private val HTTP_VALID_PERIOD_MILLS = 24 * 60 * 60000L
 
     init {

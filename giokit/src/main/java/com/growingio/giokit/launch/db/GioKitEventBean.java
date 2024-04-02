@@ -21,6 +21,8 @@ public class GioKitEventBean {
     public static final int STATUS_SENDED = 1;
     @Ignore
     public static final int STATUS_OUTDATE = -1;
+    @Ignore
+    public static final int STATUS_DROP = -2;
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -32,7 +34,7 @@ public class GioKitEventBean {
     private String type;
 
     @ColumnInfo(name = "status")
-    private int status;//0，1，-1=>未发送，已发送，过期
+    private int status;//0，1，-1, -2=>未发送，已发送，过期, 废弃
 
     @ColumnInfo(name = "data")
     private String data;//数据内容
