@@ -79,7 +79,7 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
                     holder.statusTv.setTextColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.hover_primary
+                            R.color.giokit_text_grey
                         )
                     )
                     "过期"
@@ -89,7 +89,7 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
                     holder.statusTv.setTextColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.hover_primary
+                            R.color.giokit_text_grey
                         )
                     )
                     "丢弃"
