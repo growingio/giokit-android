@@ -171,7 +171,7 @@ object GioWebView {
                     }
 
                     override fun getXIndex(): String? {
-                        val xindex = nodeJson.optString("xindex")
+                        val xindex = nodeJson.optString("xcontent")
                         return if (xindex.isEmpty()) null else xindex
                     }
                 }
