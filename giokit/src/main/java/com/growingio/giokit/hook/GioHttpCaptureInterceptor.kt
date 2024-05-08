@@ -70,19 +70,19 @@ class GioHttpCaptureInterceptor @JvmOverloads constructor() : Interceptor {
             log("--> END ${request.method()} (encoded body omitted)")
         } else if (bodyHasSnappyEncoding(request.headers())) {
             val buffer = Buffer()
-            requestBody!!.writeTo(buffer)
+            requestBody?.writeTo(buffer)
 
             log("")
             val byteArray = buffer.readByteArray()
             val compressedOut = XORUtils.encrypt(byteArray, (gioHttp.httpTime and 0xFF).toInt())
             gioHttp.requestBody = String(Snappy.uncompress(compressedOut, 0, compressedOut.size))
             log(gioHttp.requestBody)
-            log("--> END ${request.method()} (${requestBody.contentLength()}-byte body)")
+            log("--> END ${request.method()} (${requestBody?.contentLength() ?: 0}-byte body)")
         } else {
             val buffer = Buffer()
-            requestBody!!.writeTo(buffer)
+            requestBody?.writeTo(buffer)
 
-            val contentType = requestBody.contentType()
+            val contentType = requestBody?.contentType()
             val charset: Charset =
                 contentType?.charset(StandardCharsets.UTF_8) ?: StandardCharsets.UTF_8
 
@@ -90,11 +90,11 @@ class GioHttpCaptureInterceptor @JvmOverloads constructor() : Interceptor {
             if (buffer.isProbablyUtf8()) {
                 gioHttp.requestBody = buffer.readString(charset)
                 log(gioHttp.requestBody)
-                log("--> END ${request.method()} (${requestBody.contentLength()}-byte body)")
+                log("--> END ${request.method()} (${requestBody?.contentLength() ?: 0}-byte body)")
             } else {
                 gioHttp.requestBody = buffer.readString(charset)
                 //gioHttp.requestBody = "encoded body omitted (e.g. protobuf)"
-                log("--> END ${request.method()} (binary ${requestBody.contentLength()}-byte body omitted. e.g. protobuf)")
+                log("--> END ${request.method()} (binary ${requestBody?.contentLength() ?: 0}-byte body omitted. e.g. protobuf)")
             }
         }
 
@@ -113,8 +113,8 @@ class GioHttpCaptureInterceptor @JvmOverloads constructor() : Interceptor {
         val tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs)
         gioHttp.httpCost = tookMs
 
-        val responseBody = response.body()!!
-        val contentLength = responseBody.contentLength()
+        val responseBody = response.body()
+        val contentLength = responseBody?.contentLength() ?: 0
         val bodySize = if (contentLength != -1L) "$contentLength-byte" else "unknown-length"
         gioHttp.responseCode = response.code()
         gioHttp.responseSize = contentLength
@@ -137,7 +137,7 @@ class GioHttpCaptureInterceptor @JvmOverloads constructor() : Interceptor {
         if (bodyHasUnknownEncoding(response.headers())) {
             gioHttp.responseBody = "encoded body omitted"
             log("<-- END HTTP (encoded body omitted)")
-        } else {
+        } else if (responseBody != null) {
             val source = responseBody.source()
             source.request(Long.MAX_VALUE) // Buffer the entire body.
             var buffer = source.buffer()
