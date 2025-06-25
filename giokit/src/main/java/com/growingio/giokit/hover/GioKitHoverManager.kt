@@ -129,13 +129,13 @@ class GioKitHoverManager(val app: Application, val gioKitOption: GioKitOption) {
 
     private fun detachFromActivity(activity: Activity) {
         val decorView = activity.window.decorView as ViewGroup
-        val attachHoverView = decorView.findViewById<HoverView>(R.id.content_hover_view) ?: return
+        val attachHoverView = decorView.findViewById<HoverView>(com.growingio.uikit.R.id.content_hover_view) ?: return
         decorView.removeView(attachHoverView)
     }
 
     private fun attachToActivity(activity: Activity) {
         val decorView = activity.window.decorView as ViewGroup
-        val attachHoverView = decorView.findViewById<HoverView>(R.id.content_hover_view)
+        val attachHoverView = decorView.findViewById<HoverView>(com.growingio.uikit.R.id.content_hover_view)
         if (attachHoverView != null) {
             return
         }
@@ -143,7 +143,7 @@ class GioKitHoverManager(val app: Application, val gioKitOption: GioKitOption) {
             val unAttachHoverView = HoverView.createForView(activity)
             unAttachHoverView.setMenu(GioHoverCreateFactory().createGioMenuFromCode(activity))
             unAttachHoverView.collapse()
-            unAttachHoverView.id = R.id.content_hover_view
+            unAttachHoverView.id = com.growingio.uikit.R.id.content_hover_view
             val hoverParam = RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT

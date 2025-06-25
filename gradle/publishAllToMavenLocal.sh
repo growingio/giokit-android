@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ./gradlew clean \
-&& ./gradlew :uikit:publishMavenAgentPublicationToMavenLocal \
-&& ./gradlew :giokit-no-op:publishMavenAgentPublicationToMavenLocal \
-&& ./gradlew :giokit:publishMavenAgentPublicationToMavenLocal \
+&& ./gradlew :uikit:publishMavenPublicationToMavenLocal \
+&& ./gradlew :giokit-no-op:publishMavenPublicationToMavenLocal \
+&& ./gradlew :giokit:publishMavenPublicationToMavenLocal \
 && ./gradlew clean

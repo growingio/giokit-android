@@ -41,7 +41,7 @@ growingAutotracker {
     giokit{
         enabled true
         trackerFinderDomain "com.growingio.giokit.v3"
-        autoInstallVersion "2.1.0-SNAPSHOT"
+        autoInstallVersion "2.1.0"
     }
 }
 

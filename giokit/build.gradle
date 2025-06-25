@@ -2,6 +2,8 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+
+    alias(libs.plugins.google.ksp)
 }
 
 android {
@@ -43,7 +45,7 @@ dependencies {
 
     implementation libs.growingio.gmonitor
 
-    kapt libs.room.compiler
+    ksp libs.room.compiler
 
     compileOnly fileTree(include: ['*.jar'], dir: '../thirdLibs')
     compileOnly libs.growingio.autotracker
@@ -59,4 +61,4 @@ dependencies {
     androidTestImplementation libs.espresso.core
 }
 
-apply from: "${rootProject.projectDir}/gradle/publishMaven.gradle"
+apply from: "${rootProject.projectDir}/gradle/publishMavenCentral.gradle"
