@@ -7,6 +7,7 @@ import android.os.Message
 import android.util.Log
 import android.view.View
 import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import com.growingio.android.sdk.autotrack.AutotrackConfig
 import com.growingio.android.sdk.autotrack.GrowingAutotracker
@@ -32,6 +33,10 @@ object GioWebView {
     private var currentUrl: String? = null
 
     /*************************** Webview inject ****************************/
+    fun addCircleJsToWebView(webChromeClient: WebChromeClient, webView: WebView, progress: Int) {
+        addCircleJsToWebView(webView, progress)
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     @JvmStatic
     fun addCircleJsToWebView(webView: WebView, progress: Int) {
@@ -58,6 +63,10 @@ object GioWebView {
         }
     }
 
+    fun addCircleJsToX5(webChromeClient: com.tencent.smtt.sdk.WebChromeClient, webView: com.tencent.smtt.sdk.WebView, progress: Int) {
+        addCircleJsToX5(webView, progress)
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     @JvmStatic
     fun addCircleJsToX5(webView: com.tencent.smtt.sdk.WebView, progress: Int) {
@@ -82,6 +91,10 @@ object GioWebView {
             webView.handler?.sendMessageDelayed(message, HOOK_CIRCLE_DELAY)
             currentUrl = getWebUrl()
         }
+    }
+
+    fun addCircleJsToUc(webChromeClient: com.uc.webview.export.WebChromeClient, webView: com.uc.webview.export.WebView, progress: Int) {
+        addCircleJsToUc(webView, progress)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
