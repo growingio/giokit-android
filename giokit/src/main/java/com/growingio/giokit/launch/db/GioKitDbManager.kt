@@ -118,6 +118,10 @@ class GioKitDbManager private constructor() {
         GioKitDatabase.instance.getEventDao().updateLastGsid(lastId, type)
     }
 
+    fun updateEvents(lastId: Long, type: String, newType: String) {
+        GioKitDatabase.instance.getEventDao().updateLastGsidFailed(lastId, type, newType)
+    }
+
     fun getEventList(start: Int, pageSize: Int): List<GioKitEventBean> {
         return GioKitDatabase.instance.getEventDao().getEventList(start, pageSize)
     }

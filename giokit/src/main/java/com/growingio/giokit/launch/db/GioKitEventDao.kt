@@ -34,6 +34,9 @@ interface GioKitEventDao {
     @Query("UPDATE events SET status=1 WHERE status=0 AND gsid<=:gsid AND type=:type")
     fun updateLastGsid(gsid: Long, type: String)
 
+    @Query("UPDATE events SET status=-2, type=:newType WHERE gsid<=:gsid AND type=:type")
+    fun updateLastGsidFailed(gsid: Long, type: String, newType:String)
+
     @Query("UPDATE events SET status=1 WHERE extra=:extra")
     fun updateLastExtra(extra: String)
 

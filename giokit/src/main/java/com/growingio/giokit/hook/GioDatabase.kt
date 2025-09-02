@@ -1,6 +1,8 @@
 package com.growingio.giokit.hook
 
 import android.net.Uri
+import com.growingio.android.sdk.track.events.AutotrackEventType
+import com.growingio.android.sdk.track.events.TrackEventType
 import com.growingio.android.sdk.track.events.base.BaseEvent
 import com.growingio.android.sdk.track.middleware.GEvent
 import com.growingio.android.sdk.track.providers.EventBuilderProvider
@@ -40,7 +42,7 @@ object GioDatabase {
             gioEvent.gsid = if (id == 0L) gEvent.eventSequenceId else id
             gioEvent.status = if (uri != null) GioKitEventBean.STATUS_READY else GioKitEventBean.STATUS_DROP
             gioEvent.time = gEvent.timestamp
-            gioEvent.type = gEvent.eventType
+            gioEvent.type = getDatabaseEventType(gEvent)
             gioEvent.extra = gEvent.eventType
 
             try {
@@ -78,4 +80,28 @@ object GioDatabase {
     fun removeEvents(lastId: Long, type: String) {
         GioKitDbManager.instance.removeEvents(lastId, type)
     }
+
+    @JvmStatic
+    fun delayEvents(lastId: Long, type: String) {
+        if (type == UNDELIVERED_EVENT_TYPE) {
+            return
+        }
+        GioKitDbManager.instance.updateEvents(lastId, type, UNDELIVERED_EVENT_TYPE)
+    }
+
+    private fun getDatabaseEventType(gEvent: GEvent): String {
+        val eventType = gEvent.eventType
+        return when (eventType) {
+            TrackEventType.VISIT, TrackEventType.ACTIVATE, TrackEventType.REENGAGE -> INSTANT_EVENT_TYPE
+            AutotrackEventType.PAGE, AutotrackEventType.PAGE_ATTRIBUTES, AutotrackEventType.VIEW_CLICK, AutotrackEventType.VIEW_CHANGE -> AUTOTRACK_EVENT_TYPE
+            TrackEventType.CUSTOM, TrackEventType.VISITOR_ATTRIBUTES, TrackEventType.LOGIN_USER_ATTRIBUTES, TrackEventType.CONVERSION_VARIABLES -> TRACK_EVENT_TYPE
+            else -> OTHER_EVENT_TYPE
+        }
+    }
+
+    private const val INSTANT_EVENT_TYPE: String = "INSTANT"
+    private const val AUTOTRACK_EVENT_TYPE: String = "AUTOTRACK"
+    private const val TRACK_EVENT_TYPE: String = "TRACK"
+    private const val OTHER_EVENT_TYPE: String = "OTHER"
+    private const val UNDELIVERED_EVENT_TYPE: String = "UNDELIVERED"
 }

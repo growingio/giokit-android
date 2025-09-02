@@ -92,7 +92,7 @@ class SdkDataAdapter(val context: Context, val eventClick: (Int) -> Unit) :
                             R.color.giokit_text_grey
                         )
                     )
-                    "丢弃"
+                    "失败"
                 }
 
                 else -> {

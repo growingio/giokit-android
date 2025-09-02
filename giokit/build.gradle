@@ -50,8 +50,7 @@ dependencies {
     compileOnly fileTree(include: ['*.jar'], dir: '../thirdLibs')
     compileOnly libs.growingio.autotracker
     compileOnly libs.growingio.tracker
-
-    compileOnly libs.google.volley
+    compileOnly libs.okhttp3
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':uikit')
