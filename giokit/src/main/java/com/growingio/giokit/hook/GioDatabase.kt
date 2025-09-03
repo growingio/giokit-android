@@ -42,8 +42,9 @@ object GioDatabase {
             gioEvent.gsid = if (id == 0L) gEvent.eventSequenceId else id
             gioEvent.status = if (uri != null) GioKitEventBean.STATUS_READY else GioKitEventBean.STATUS_DROP
             gioEvent.time = gEvent.timestamp
-            gioEvent.type = getDatabaseEventType(gEvent)
-            gioEvent.extra = gEvent.eventType
+            gioEvent.type = gEvent.eventType
+            // INSTANT, AUTOTRACK, TRACK, OTHER, UNDELIVERED
+            gioEvent.extra = getDatabaseEventType(gEvent)
 
             try {
                 val jsonObj = EventBuilderProvider.toJson(gEvent)
@@ -78,11 +79,13 @@ object GioDatabase {
 
     @JvmStatic
     fun removeEvents(lastId: Long, type: String) {
+        // type in INSTANT, AUTOTRACK, TRACK, OTHER, UNDELIVERED
         GioKitDbManager.instance.removeEvents(lastId, type)
     }
 
     @JvmStatic
     fun delayEvents(lastId: Long, type: String) {
+        // type in INSTANT, AUTOTRACK, TRACK, OTHER, UNDELIVERED
         if (type == UNDELIVERED_EVENT_TYPE) {
             return
         }
