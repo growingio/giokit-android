@@ -2,9 +2,6 @@ package com.growingio.giokit.hook
 
 import android.net.UrlQuerySanitizer
 import android.util.Log
-import com.android.volley.NetworkResponse
-import com.android.volley.Request
-import com.android.volley.VolleyError
 import com.growingio.giokit.launch.db.GioKitDbManager
 import com.growingio.giokit.launch.db.GioKitHttpBean
 import com.growingio.snappy.XORUtils
@@ -99,67 +96,5 @@ object GioHttp {
     private fun parseURLQuery(url: String, key: String): String {
         val uqs = UrlQuerySanitizer(url)
         return uqs.getValue(key) ?: "0"
-    }
-
-    private fun parseVolleyMethod(method: Int): String {
-        return when (method) {
-            Request.Method.GET -> "GET"
-            Request.Method.POST -> "POST"
-            Request.Method.PUT -> "PUT"
-            Request.Method.DELETE -> "DELETE"
-            Request.Method.HEAD -> "HEAD"
-            Request.Method.OPTIONS -> "OPTIONS"
-            Request.Method.PATCH -> "PATCH"
-            Request.Method.TRACE -> "TRACE"
-            else -> "UNKNOWN"
-        }
-    }
-
-    @JvmStatic
-    fun parseGioKitVolleySuccess(request: Request<ByteArray>, networkResponse: NetworkResponse) {
-        val gioHttp = GioKitHttpBean()
-        val httpUrl = request.url
-        gioHttp.requestUrl = httpUrl
-        gioHttp.httpTime = (parseURLQuery(httpUrl, "stm")).toLong()
-        val requestHeaderSb = StringBuilder()
-        request.headers.forEach {
-            requestHeaderSb.append(it.key).append(": ").append(it.value).append("\n")
-        }
-        gioHttp.requestSize = request.body.size.toLong()
-        gioHttp.requestHeader = requestHeaderSb.toString()
-        if (bodyHasSnappyEncoding(request.headers)) {
-            val compressedOut = XORUtils.encrypt(request.body, (gioHttp.httpTime and 0xFF).toInt())
-            gioHttp.requestBody = String(Snappy.uncompress(compressedOut, 0, compressedOut.size))
-        } else {
-            gioHttp.requestBody = String(request.body)
-        }
-        gioHttp.requestMethod = parseVolleyMethod(request.method)
-
-        gioHttp.responseCode = networkResponse.statusCode
-        gioHttp.responseUrl = httpUrl
-        val responseHeaderSb = StringBuilder()
-        networkResponse.headers?.forEach {
-            responseHeaderSb.append(it.key).append(": ").append(it.value).append("\n")
-        }
-        gioHttp.responseHeader = responseHeaderSb.toString()
-        if (networkResponse.data == null) {
-            gioHttp.responseBody = "No Content"
-        } else {
-            gioHttp.responseBody = String(networkResponse.data)
-        }
-        gioHttp.responseSize = networkResponse.data.size.toLong()
-        if (networkResponse.networkTimeMs != 0L) {
-            gioHttp.httpCost = networkResponse.networkTimeMs
-        } else {
-            gioHttp.httpCost = System.currentTimeMillis() - gioHttp.httpTime
-        }
-        GioKitDbManager.instance.insertHttp(gioHttp)
-        Log.d("Http", gioHttp.toString())
-    }
-
-    @JvmStatic
-    fun parseGioKitVolleyError(request: Request<ByteArray>, error: VolleyError) {
-        if (error.networkResponse == null) return
-        parseGioKitVolleySuccess(request, error.networkResponse)
     }
 }

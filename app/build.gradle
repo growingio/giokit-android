@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
 
     id 'com.growingio.android.autotracker'
-//    id 'com.growingio.giokit'
 }
 
 android {
@@ -41,7 +40,7 @@ growingAutotracker {
     giokit{
         enabled true
         trackerFinderDomain "com.growingio.giokit.v3"
-        autoInstallVersion "2.1.0-SNAPSHOT"
+        autoInstallVersion "2.1.3"
     }
 }
 

@@ -114,8 +114,12 @@ class GioKitDbManager private constructor() {
         }
     }
 
-    fun removeEvents(lastId: Long, type: String) {
-        GioKitDatabase.instance.getEventDao().updateLastGsid(lastId, type)
+    fun removeEvents(lastId: Long, extra: String) {
+        GioKitDatabase.instance.getEventDao().updateLastGsid(lastId, extra)
+    }
+
+    fun updateEvents(lastId: Long, extra: String, newExtra: String) {
+        GioKitDatabase.instance.getEventDao().updateLastGsidFailed(lastId, extra, newExtra)
     }
 
     fun getEventList(start: Int, pageSize: Int): List<GioKitEventBean> {

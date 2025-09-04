@@ -76,7 +76,7 @@ public class ToolbarNavigator extends Navigator implements Content {
 
     private Drawable createBackArrowDrawable() {
         // Load the desired back-arrow color from the theme that we're using.
-        int[] attrIds = new int[] { R.attr.colorControlNormal };
+        int[] attrIds = new int[] { com.google.android.material.R.attr.colorControlNormal };
         TypedArray attrs = getContext().obtainStyledAttributes(attrIds);
         int backArrowColor = attrs.getColor(attrs.getIndex(0), 0xFF000000);
         attrs.recycle();

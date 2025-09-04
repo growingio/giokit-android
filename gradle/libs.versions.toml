@@ -1,16 +1,16 @@
 [versions]
 
-compileSdk = "33"
+compileSdk = "35"
 minSdkVersion = "17"
 
 # https://developer.android.google.cn/jetpack/androidx/explorer?hl=en&case=all
 androidxlifecycle = "2.6.1"
 androidxtest = "1.5.2"
-room = "2.5.1"
+room = "2.7.1"
 navigation = "2.5.3"
 
-pluginGradle = "7.4.1" # 4.2.2-7.4.1
-kotlin = "1.8.20"
+pluginGradle = "8.7.3"
+kotlin = "2.1.20"
 
 spotless = "6.20.0"
 
@@ -32,22 +32,23 @@ protobuf = "3.22.3"
 powermock = "2.0.9"
 
 # !!! SDK VERSION !!!
-growingio = "4.1.0"
-growingioPlugin = "4.1.0"
-giokit = "2.1.2"
-giokitCode = "22"
+growingio = "4.4.4-SNAPSHOT"
+growingioPlugin = "4.5.0"
+giokit = "2.1.3"
+giokitCode = "23"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "pluginGradle" }
 android-library = { id = "com.android.library", version.ref = "pluginGradle" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-nexus-staging = { id = "io.codearte.nexus-staging", version = "0.30.0" }
 sonarqube = { id = "org.sonarqube", version = "3.4.0.2513" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+google-ksp = { id = "com.google.devtools.ksp", version = "2.1.20-1.0.31" }
 
 growingio-plugin = { id = "com.growingio.android.autotracker", version.ref = "growingioPlugin" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+maven-publish = { id = "com.vanniktech.maven.publish", version = "0.33.0" }
 
 [libraries]
 # [growingio]
@@ -78,6 +79,8 @@ growingio-flutter = { module = "com.growingio.android:flutter", version.ref = "g
 growingio-apm = { module = "com.growingio.android:apm", version.ref = "growingio" }
 growingio-gmonitor = "com.growingio.android:gmonitor:2.0.0"
 growingio-snappy = "com.growingio.android:snappy:1.1.0"
+
+growingio-vds-agent = "com.growingio.android:vds-android-agent:autotrack-2.10.4"
 
 # [AndroidX]
 # https://developer.android.google.cn/jetpack/androidx/releases/core?hl=en
