@@ -5,6 +5,7 @@ on: workflow_dispatch
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     # main 分支的发布请走正式流程，手动仅能发布其他分支的beta版本，用于测试
     if: ${{ github.ref != 'refs/heads/master' }}
     steps:
@@ -33,14 +34,12 @@ jobs:
 
       # 构建项目
       - name: Build with Gradle
+        env:
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
         run: |
           bash ./gradle/publishAllToMavenLocal.sh
-
-      # 解码秘钥
-      - name: Decode
-        run: |
-          echo "${{secrets.SIGNING_SECRET_KEY_RING_FILE}}" > ~/.gradle/secring.gpg.b64
-          base64 -d ~/.gradle/secring.gpg.b64 > ~/.gradle/secring.gpg
 
       - name: Publish to MavenCentral
         run: ./gradlew publishToMavenCentral --no-configuration-cache
