@@ -33,6 +33,8 @@ object GioWebView {
     private var currentUrl: String? = null
 
     /*************************** Webview inject ****************************/
+    @SuppressLint("SetJavaScriptEnabled")
+    @JvmStatic
     fun addCircleJsToWebView(webChromeClient: WebChromeClient, webView: WebView, progress: Int) {
         addCircleJsToWebView(webView, progress)
     }
@@ -63,6 +65,8 @@ object GioWebView {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    @JvmStatic
     fun addCircleJsToX5(webChromeClient: com.tencent.smtt.sdk.WebChromeClient, webView: com.tencent.smtt.sdk.WebView, progress: Int) {
         addCircleJsToX5(webView, progress)
     }
@@ -93,6 +97,8 @@ object GioWebView {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    @JvmStatic
     fun addCircleJsToUc(webChromeClient: com.uc.webview.export.WebChromeClient, webView: com.uc.webview.export.WebView, progress: Int) {
         addCircleJsToUc(webView, progress)
     }
