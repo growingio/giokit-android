@@ -48,6 +48,7 @@ class GioKitDbManager private constructor() {
     }
 
     fun outdatedBreadcrumb() {
+        if (!GioKitImpl.inited) return
         GioKitDatabase.instance.getBreadcrumbDao()
             .outdatedBreadCrumb(System.currentTimeMillis() - EVENT_VALID_PERIOD_MILLS)
     }
@@ -92,16 +93,18 @@ class GioKitDbManager private constructor() {
     }
 
     fun insertEvent(event: GioKitEventBean) {
+        if (!GioKitImpl.inited) return
         InstantEventCache.acceptEvent(event)
         GioKitDatabase.instance.getEventDao().insert(event)
     }
 
-
     fun deleteEvent(id: Long) {
+        if (!GioKitImpl.inited) return
         GioKitDatabase.instance.getEventDao().updateFromGsid(id)
     }
 
     fun outdatedEvents() {
+        if (!GioKitImpl.inited) return
         GioKitDatabase.instance.getEventDao()
             .outdatedEvent(System.currentTimeMillis() - EVENT_VALID_PERIOD_MILLS)
     }
@@ -109,16 +112,19 @@ class GioKitDbManager private constructor() {
     // saas sdk 数据库中没有对照的gsid
     // 所以直接删除对应所有类型所有事件
     fun removeSaasEvents(type: String, lastId: String) {
+        if (!GioKitImpl.inited) return
         lastId.toLongOrNull()?.let { _ ->
             GioKitDatabase.instance.getEventDao().updateLastExtra(type)
         }
     }
 
     fun removeEvents(lastId: Long, extra: String) {
+        if (!GioKitImpl.inited) return
         GioKitDatabase.instance.getEventDao().updateLastGsid(lastId, extra)
     }
 
     fun updateEvents(lastId: Long, extra: String, newExtra: String) {
+        if (!GioKitImpl.inited) return
         GioKitDatabase.instance.getEventDao().updateLastGsidFailed(lastId, extra, newExtra)
     }
 
@@ -131,6 +137,7 @@ class GioKitDbManager private constructor() {
     }
 
     fun cleanEvent() {
+        if (!GioKitImpl.inited) return
         GioKitDatabase.instance.getEventDao().clear()
     }
 
